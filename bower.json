@@ -1,0 +1,19 @@
+{
+	"name": "Pizzicato",
+	"main": "distr/pizzicato.js",
+	"version": "0.0.1",
+	"homepage": "https://github.com/alemangui/pizzicato",
+	"authors": [
+		"Alejandro Mantecon Guillen <alemangui@gmail.com>"
+	],
+	"description": "",
+	"moduleType": [
+		"globals"
+	],
+	"keywords": [
+		"audio",
+		"webaudio",
+		"sound"
+	],
+	"ignore": []
+}
