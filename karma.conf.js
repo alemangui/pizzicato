@@ -6,7 +6,7 @@ module.exports = function(config) {
 		frameworks: ['jasmine'],
 		files: [
 			'distr/Pizzicato.js',
-			'tests/Tests.js'
+			'tests/Pizzicato.Tests.js'
 		]
 
 	});
