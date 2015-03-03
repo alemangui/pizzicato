@@ -19,45 +19,51 @@
 	};
 
 	Pizzicato.Sound = function(options) {
+	
 		var self = this;
 		this.context = new AudioContext();
 	
 		if (Pz.Util.isString(options))
 			initializeWithUrl(options);
 	
-		if (Pz.Util.isObject(options) && Pz.Util.isString(options.source))
+		else if (Pz.Util.isObject(options) && Pz.Util.isString(options.source))
 			initializeWithUrl(options.source);
 	
-		var initializeWithUrl = function(url) {
+		else if (Pz.Util.isObject(options) && Pz.Util.isObject(options.wave))
+			initializeWithWave(options.wave);
+	
+		function initializeWithUrl(url) {
 			var request = new XMLHttpRequest();
 			request.open('GET', url, true);
 			request.responseType = 'arraybuffer';
-	
 			request.onload = function() {
-				self.context.decodeAudioData(request.response, self.onSourceLoad.bind(self));
+				self.context.decodeAudioData(request.response, (function(buffer) {
+					this.mainAudioNode = this.context.createBufferSource();
+					this.mainAudioNode.buffer = buffer;
+					this.mainAudioNode.connect(this.context.destination);
+				}).bind(self));
 			};
 	
 			request.send();
-		};
+		}
+	
+		function initializeWithWave(waveOptions) {
+			self.mainAudioNode = self.context.createOscillator();
+			self.mainAudioNode.type = waveOptions.type || 'sine';
+			self.mainAudioNode.frequency.value = waveOptions.frequency || 440;
+			self.mainAudioNode.connect(self.context.destination);
+		}
 	};
 	
 	
 	Pizzicato.Sound.prototype = {
 	
 		play: function() {
-			var audioBufferNode = this.context.createBufferSource();
-	
-			audioBufferNode.buffer = this.buffer;
-			audioBufferNode.connect(this.context.destination);
-			audioBufferNode.start(0);
+			this.mainAudioNode.start(0);
 		},
 	
 		stop: function() {
-	
-		},
-	
-		onSourceLoad: function(buffer) {
-			this.buffer = buffer;
+			this.mainAudioNode.stop();
 		}
 	};
 

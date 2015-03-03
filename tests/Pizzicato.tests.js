@@ -20,7 +20,7 @@ describe('Pizzicato', function() {
 
 describe('Util', function() {
 
-	it('Contains a working isString function', function() {
+	it('contains a working isString function', function() {
 		var isString = Pizzicato.Util.isString;
 
 		expect(typeof isString).toBe('function');
@@ -32,7 +32,7 @@ describe('Util', function() {
 		expect(isString(42)).toBe(false);
 	});
 
-	it('Contains a working isString function', function() {
+	it('contains a working isString function', function() {
 		var isObject = Pizzicato.Util.isObject;
 
 		expect(typeof isObject).toBe('function');
@@ -44,7 +44,7 @@ describe('Util', function() {
 		expect(isObject(42)).toBe(false);
 	});
 
-	it('Contains a working isFunction function', function() {
+	it('contains a working isFunction function', function() {
 		var isFunction = Pizzicato.Util.isFunction;
 
 		expect(typeof isFunction).toBe('function');
@@ -60,8 +60,15 @@ describe('Util', function() {
 
 describe('Sound', function() {
 
-	it('Should create an AudioContext', function() {
+	it('should create an AudioContext', function() {
 		var sound = new Pizzicato.Sound();
 		expect(toString.call(sound.context)).toBe('[object AudioContext]');
 	});
+
+	it('should create an oscillator mode when initialized with a wave option', function() {
+		var sound = new Pizzicato.Sound({
+			wave: { type: 'sine' }
+		});
+		expect(toString.call(sound.mainAudioNode)).toBe('[object OscillatorNode]')
+	})
 });
