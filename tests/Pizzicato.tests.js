@@ -69,6 +69,6 @@ describe('Sound', function() {
 		var sound = new Pizzicato.Sound({
 			wave: { type: 'sine' }
 		});
-		expect(toString.call(sound.mainAudioNode)).toBe('[object OscillatorNode]')
+		expect(toString.call(sound.getSourceNode())).toBe('[object OscillatorNode]')
 	})
 });
