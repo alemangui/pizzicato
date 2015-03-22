@@ -70,5 +70,12 @@ describe('Sound', function() {
 			wave: { type: 'sine' }
 		});
 		expect(toString.call(sound.getSourceNode())).toBe('[object OscillatorNode]')
-	})
+	});
+
+	it('should execute callback function when given one', function(done) {
+		var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
+			done();
+		});
+	}, 5000);
+
 });

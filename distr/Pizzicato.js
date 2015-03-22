@@ -18,25 +18,24 @@
 	
 	};
 
-	Pizzicato.Sound = function(options) {
-	
+	Pizzicato.Sound = function(options, callback) {
 		var self = this;
-		var initializeWithWave;
-		var initializeWithUrl;
 	
 		this.context = new AudioContext();
+		this.loop = Pz.Util.isObject(options) && options.loop;
+		this.lastTimePlayed = 0;
 	
 		if (Pz.Util.isString(options))
-			initializeWithUrl(options);
+			initializeWithUrl(options, callback);
 	
 		else if (Pz.Util.isObject(options) && Pz.Util.isString(options.source))
-			initializeWithUrl(options.source);
+			initializeWithUrl(options.source, callback);
 	
 		else if (Pz.Util.isObject(options) && Pz.Util.isObject(options.wave))
-			initializeWithWave(options.wave);
+			initializeWithWave(options.wave, callback);
 	
 		
-		function initializeWithWave(waveOptions) {
+		function initializeWithWave(waveOptions, callback) {
 			self.getSourceNode = function() {
 				var node = self.context.createOscillator();
 				node.type = waveOptions.type || 'sine';
@@ -44,42 +43,62 @@
 	
 				return node;
 			};
+			callback && callback();
 		}
 	
 	
-		function initializeWithUrl(url) {
+		function initializeWithUrl(url, callback) {
 			var request = new XMLHttpRequest();
+	
 			request.open('GET', url, true);
 			request.responseType = 'arraybuffer';
 			request.onload = function(progressEvent) {
-	
 				var response = progressEvent.target.response;
-	
 				self.context.decodeAudioData(response, (function(buffer) {
 					self.getSourceNode = function() {
 						var node = this.context.createBufferSource();
+						node.loop = this.loop;
 						node.buffer = buffer;
 						return node;
 					};
+					callback && callback();
 				}).bind(self));
 			};
-	
 			request.send();
 		}
-	
 	};
 	
 	
 	Pizzicato.Sound.prototype = {
 	
 		play: function() {
-			var sourceNode = this.getSourceNode();
-			sourceNode.connect(this.context.destination);
-			sourceNode.start(0);
+			if (this.playing) return;
+	
+			this.playing = true;
+			this.paused = false;
+	
+			this.sourceNode = this.getSourceNode();
+			this.sourceNode.onended = this.onEnded.bind(this);
+			this.sourceNode.connect(this.context.destination);
+	
+			this.lastTimePlayed = this.context.currentTime;
+	
+			this.sourceNode.start(0, this.startTime || 0);
 		},
 	
 		stop: function() {
-			this.mainAudioNode.stop();
+			this.paused = false;
+			this.sourceNode.stop();
+		},
+	
+		pause: function() {
+			this.paused = true;
+			this.sourceNode.stop();
+		},
+	
+		onEnded: function() {
+			this.playing = false;
+			this.startTime = this.paused ? this.context.currentTime - this.lastTimePlayed : 0;
 		}
 	};
 
