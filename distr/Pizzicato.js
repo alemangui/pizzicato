@@ -82,7 +82,6 @@
 			this.sourceNode.connect(this.context.destination);
 	
 			this.lastTimePlayed = this.context.currentTime;
-	
 			this.sourceNode.start(0, this.startTime || 0);
 		},
 	

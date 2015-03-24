@@ -78,4 +78,27 @@ describe('Sound', function() {
 		});
 	}, 5000);
 
+	it('Pausing, playing and stopping should update the corresponding properties', function() {
+		var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
+			expect(sound.playing).toBe(false);
+			expect(sound.paused).toBe(false);
+
+			sound.play();
+			expect(sound.playing).toBe(true);
+			expect(sound.paused).toBe(false);
+			
+			sound.pause();
+			expect(sound.playing).toBe(false);
+			expect(sound.paused).toBe(true);
+
+			sound.play();
+			expect(sound.playing).toBe(true);
+			expect(sound.paused).toBe(false);
+
+			sound.stop();
+			expect(sound.playing).toBe(false);
+			expect(sound.paused).toBe(false);
+		});
+	});
+
 });
