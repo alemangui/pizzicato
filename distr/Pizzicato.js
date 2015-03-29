@@ -24,6 +24,7 @@
 		this.context = new AudioContext();
 		this.loop = Pz.Util.isObject(options) && options.loop;
 		this.lastTimePlayed = 0;
+		this.effects = [];
 	
 		if (Pz.Util.isString(options))
 			initializeWithUrl(options, callback);
@@ -43,7 +44,8 @@
 	
 				return node;
 			};
-			callback && callback();
+			if (Pz.Util.isFunction(callback)) 
+				callback();
 		}
 	
 	
@@ -61,7 +63,8 @@
 						node.buffer = buffer;
 						return node;
 					};
-					callback && callback();
+					if (Pz.Util.isFunction(callback)) 
+						callback();
 				}).bind(self));
 			};
 			request.send();
@@ -79,7 +82,8 @@
 	
 			this.sourceNode = this.getSourceNode();
 			this.sourceNode.onended = this.onEnded.bind(this);
-			this.sourceNode.connect(this.context.destination);
+	
+			this.connectEffects(this.sourceNode).connect(this.context.destination);
 	
 			this.lastTimePlayed = this.context.currentTime;
 			this.sourceNode.start(0, this.startTime || 0);
@@ -98,18 +102,56 @@
 		onEnded: function() {
 			this.playing = false;
 			this.startTime = this.paused ? this.context.currentTime - this.lastTimePlayed : 0;
+		},
+	
+		addEffect: function(effect) {
+			this.effects.push(effect);
+		},
+	
+		removeEffect: function(effect) {
+			var index = this.effects.indexOf(effect);
+	
+			if (index !== -1)
+				this.effects.splice(index, 1);
+		},
+	
+		connectEffects: function(sourceNode) {
+			var currentNodes = sourceNode;
+	
+			for (var i = 0; i < this.effects.length; i++)
+				currentNode = this.effects[i].applyToNode(currentNode);
+	
+			return currentNode;
 		}
 	};
 
-	Pizzicato.Effect = function(options) {
-		this.options = options;
-	};
-	
-	Pizzicato.Effect.prototype = {
-	
-	};
+	Pizzicato.Effects = {};
 
+	Pizzicato.Effects.Delay = function(options) {
+		this.options = options = options || {};
+		options.repeats = options.repeats || 5;
+		options.time = options.time || 0.2;
+	};
 	
+	Pizzicato.Effects.Delay.prototype = {
+	
+		applyToNode: function(node) {
+			var context = node.context;
+			var currentNode = node;
+	
+			for (var i = 0; i < this.options.repeats; i++) {
+				var delayNode = context.createDelay();
+	
+				delayNode.delayTime.value = this.options.time;
+				currentNode.connect(delayNode);
+				delayNode.connect(context.destination);
+				currentNode = delayNode;
+			}
+			
+			return node;
+		}
+	
+	};
 
 	
 

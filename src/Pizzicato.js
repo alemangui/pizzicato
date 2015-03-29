@@ -5,7 +5,7 @@
 
 	//= include ./Util.js
 	//= include ./Sound.js
-	//= include ./Effect.js
+	//= include ./Effects.js
 	//= include ./Effects/Delay.js
 	//= include ./Instruments/Synth.js
 	

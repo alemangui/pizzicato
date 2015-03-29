@@ -4,8 +4,8 @@ describe('Pizzicato', function() {
 		expect(typeof Pizzicato.Sound).toBe('function');
 	});
 
-	it('Should contain Effect', function() {
-		expect(typeof Pizzicato.Effect).toBe('function');
+	it('Should contain Effects', function() {
+		expect(typeof Pizzicato.Effects).toBe('object');
 	});
 
 	it('Should contain Util', function() {
@@ -100,5 +100,18 @@ describe('Sound', function() {
 			expect(sound.paused).toBe(false);
 		});
 	});
-
 });
+
+
+// describe('Delay', function() {
+
+//  	it('should apply a delay effect to a context', function(done) {
+//  		var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
+//  		// 	sound.addEffect(new Pizzicato.Effects.Delay());
+//  		// 	sound.applyEffects();
+//  		// 	// has delay in context
+//  			done();
+//  		});
+//  	}, 5000);
+
+// });

@@ -4,6 +4,7 @@ Pizzicato.Sound = function(options, callback) {
 	this.context = new AudioContext();
 	this.loop = Pz.Util.isObject(options) && options.loop;
 	this.lastTimePlayed = 0;
+	this.effects = [];
 
 	if (Pz.Util.isString(options))
 		initializeWithUrl(options, callback);
@@ -23,7 +24,8 @@ Pizzicato.Sound = function(options, callback) {
 
 			return node;
 		};
-		callback && callback();
+		if (Pz.Util.isFunction(callback)) 
+			callback();
 	}
 
 
@@ -41,7 +43,8 @@ Pizzicato.Sound = function(options, callback) {
 					node.buffer = buffer;
 					return node;
 				};
-				callback && callback();
+				if (Pz.Util.isFunction(callback)) 
+					callback();
 			}).bind(self));
 		};
 		request.send();
@@ -59,7 +62,8 @@ Pizzicato.Sound.prototype = {
 
 		this.sourceNode = this.getSourceNode();
 		this.sourceNode.onended = this.onEnded.bind(this);
-		this.sourceNode.connect(this.context.destination);
+
+		this.connectEffects(this.sourceNode).connect(this.context.destination);
 
 		this.lastTimePlayed = this.context.currentTime;
 		this.sourceNode.start(0, this.startTime || 0);
@@ -78,5 +82,25 @@ Pizzicato.Sound.prototype = {
 	onEnded: function() {
 		this.playing = false;
 		this.startTime = this.paused ? this.context.currentTime - this.lastTimePlayed : 0;
+	},
+
+	addEffect: function(effect) {
+		this.effects.push(effect);
+	},
+
+	removeEffect: function(effect) {
+		var index = this.effects.indexOf(effect);
+
+		if (index !== -1)
+			this.effects.splice(index, 1);
+	},
+
+	connectEffects: function(sourceNode) {
+		var currentNodes = sourceNode;
+
+		for (var i = 0; i < this.effects.length; i++)
+			currentNode = this.effects[i].applyToNode(currentNode);
+
+		return currentNode;
 	}
 };
