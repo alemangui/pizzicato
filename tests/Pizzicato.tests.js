@@ -100,18 +100,16 @@ describe('Sound', function() {
 			expect(sound.paused).toBe(false);
 		});
 	});
+
+	it('Should add and remove effects from its effect list', function() {
+		var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
+			var delay = new Pizzicato.Effects.Delay();
+			
+			sound.addEffect(delay);
+			expect(sound.effects.indexOf(delay)).not.toBe(-1);
+
+			sound.removeEffect(delay);
+			expect(sound.effects.indexOf(delay).toBe(-1));
+		});
+		}, 5000);
 });
-
-
-// describe('Delay', function() {
-
-//  	it('should apply a delay effect to a context', function(done) {
-//  		var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
-//  		// 	sound.addEffect(new Pizzicato.Effects.Delay());
-//  		// 	sound.applyEffects();
-//  		// 	// has delay in context
-//  			done();
-//  		});
-//  	}, 5000);
-
-// });
