@@ -22,9 +22,13 @@
 		var self = this;
 	
 		this.context = new AudioContext();
-		this.loop = Pz.Util.isObject(options) && options.loop;
 		this.lastTimePlayed = 0;
 		this.effects = [];
+	
+		this.playing = false;
+		this.paused = false;
+	
+		this.loop = Pz.Util.isObject(options) && options.loop;
 	
 		if (Pz.Util.isString(options))
 			initializeWithUrl(options, callback);
@@ -83,9 +87,10 @@
 			this.sourceNode = this.getSourceNode();
 			this.sourceNode.onended = this.onEnded.bind(this);
 	
-			// connect sound to relevant tree segments
+	
 			var lastNode = this.connectEffects(this.sourceNode);
-			// place a master volume
+	
+			// TODO: add master volume
 			lastNode.connect(this.context.destination);
 	
 			this.lastTimePlayed = this.context.currentTime;
@@ -94,11 +99,13 @@
 	
 		stop: function() {
 			this.paused = false;
+			this.playing = false;
 			this.sourceNode.stop();
 		},
 	
 		pause: function() {
 			this.paused = true;
+			this.playing = false;
 			this.sourceNode.stop();
 		},
 	
@@ -155,7 +162,7 @@
 			var wetGainNode = context.createGain();
 			var masterGainNode = context.createGain();
 	
-			// do the mix
+			// TODO: do the mix
 	
 			node.connect(dryGainNode);
 	

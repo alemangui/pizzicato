@@ -78,7 +78,7 @@ describe('Sound', function() {
 		});
 	}, 5000);
 
-	it('Pausing, playing and stopping should update the corresponding properties', function() {
+	it('Pausing, playing and stopping should update the corresponding properties', function(done) {
 		var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
 			expect(sound.playing).toBe(false);
 			expect(sound.paused).toBe(false);
@@ -98,10 +98,12 @@ describe('Sound', function() {
 			sound.stop();
 			expect(sound.playing).toBe(false);
 			expect(sound.paused).toBe(false);
-		});
-	});
 
-	it('Should add and remove effects from its effect list', function() {
+			done();
+		});
+	}, 5000);
+
+	it('Should add and remove effects from its effect list', function(done) {
 		var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
 			var delay = new Pizzicato.Effects.Delay();
 			
@@ -109,7 +111,29 @@ describe('Sound', function() {
 			expect(sound.effects.indexOf(delay)).not.toBe(-1);
 
 			sound.removeEffect(delay);
-			expect(sound.effects.indexOf(delay).toBe(-1));
+			expect(sound.effects.indexOf(delay)).toBe(-1);
+
+			done();
 		});
 		}, 5000);
+});
+
+
+describe('Effects.Delay', function() {
+
+	it('Should override default options', function(done) {
+		var options = {
+			repetitions: 10,
+			time: 0.6,
+			mix: 0.7
+		};
+		var delay = new Pizzicato.Effects.Delay(options);
+
+		expect(delay.options.repetitions).toBe(options.repetitions);
+		expect(delay.options.time).toBe(options.time);
+		expect(delay.options.mix).toBe(options.mix);
+
+		done();
+	}, 5000);
+
 });

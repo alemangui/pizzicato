@@ -2,9 +2,13 @@ Pizzicato.Sound = function(options, callback) {
 	var self = this;
 
 	this.context = new AudioContext();
-	this.loop = Pz.Util.isObject(options) && options.loop;
 	this.lastTimePlayed = 0;
 	this.effects = [];
+
+	this.playing = false;
+	this.paused = false;
+
+	this.loop = Pz.Util.isObject(options) && options.loop;
 
 	if (Pz.Util.isString(options))
 		initializeWithUrl(options, callback);
@@ -75,11 +79,13 @@ Pizzicato.Sound.prototype = {
 
 	stop: function() {
 		this.paused = false;
+		this.playing = false;
 		this.sourceNode.stop();
 	},
 
 	pause: function() {
 		this.paused = true;
+		this.playing = false;
 		this.sourceNode.stop();
 	},
 
