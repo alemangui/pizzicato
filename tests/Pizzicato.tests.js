@@ -1,5 +1,9 @@
 describe('Pizzicato', function() {
 
+	it('Should have a context object', function() {
+		expect(typeof Pizzicato.context).toBe('object');
+	});
+
 	it('Should contain Sound', function() {
 		expect(typeof Pizzicato.Sound).toBe('function');
 	});
@@ -59,11 +63,6 @@ describe('Util', function() {
 
 
 describe('Sound', function() {
-
-	it('should create an AudioContext', function() {
-		var sound = new Pizzicato.Sound();
-		expect(toString.call(sound.context)).toBe('[object AudioContext]');
-	});
 
 	it('should create an oscillator mode when initialized with a wave option', function() {
 		var sound = new Pizzicato.Sound({

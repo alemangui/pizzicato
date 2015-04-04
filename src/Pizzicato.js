@@ -3,6 +3,8 @@
 
 	var Pizzicato = root.Pz = root.Pizzicato = {};
 
+	Pizzicato.context = new AudioContext();
+
 	//= include ./Util.js
 	//= include ./Sound.js
 	//= include ./Effects.js

@@ -16,12 +16,11 @@ Pizzicato.Effects.Delay.prototype = {
 
 	applyToNode: function(node) {
 
-		var context = node.context;
 		var currentNode = node;
 
-		var dryGainNode = context.createGain();
-		var wetGainNode = context.createGain();
-		var masterGainNode = context.createGain();
+		var dryGainNode = Pizzicato.context.createGain();
+		var wetGainNode = Pizzicato.context.createGain();
+		var masterGainNode = Pizzicato.context.createGain();
 
 		// TODO: do the mix
 
@@ -29,10 +28,10 @@ Pizzicato.Effects.Delay.prototype = {
 
 		for (var i = 0; i < this.options.repetitions; i++) {
 
-			var delayNode = context.createDelay();
+			var delayNode = Pizzicato.context.createDelay();
 			delayNode.delayTime.value = this.options.time;
 
-			var feedback = context.createGain();
+			var feedback = Pizzicato.context.createGain();
 			feedback.gain.value = 1 - (i * (1 / (this.options.repetitions)));
 
 			currentNode.connect(delayNode);

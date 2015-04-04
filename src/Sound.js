@@ -1,7 +1,6 @@
 Pizzicato.Sound = function(options, callback) {
 	var self = this;
 
-	this.context = new AudioContext();
 	this.lastTimePlayed = 0;
 	this.effects = [];
 
@@ -23,7 +22,7 @@ Pizzicato.Sound = function(options, callback) {
 	
 	function initializeWithWave(waveOptions, callback) {
 		self.getSourceNode = function() {
-			var node = self.context.createOscillator();
+			var node = Pizzicato.context.createOscillator();
 			node.type = waveOptions.type || 'sine';
 			node.frequency.value = waveOptions.frequency || 440;
 
@@ -41,9 +40,9 @@ Pizzicato.Sound = function(options, callback) {
 		request.responseType = 'arraybuffer';
 		request.onload = function(progressEvent) {
 			var response = progressEvent.target.response;
-			self.context.decodeAudioData(response, (function(buffer) {
+			Pizzicato.context.decodeAudioData(response, (function(buffer) {
 				self.getSourceNode = function() {
-					var node = this.context.createBufferSource();
+					var node = Pizzicato.context.createBufferSource();
 					node.loop = this.loop;
 					node.buffer = buffer;
 					return node;
@@ -74,9 +73,9 @@ Pizzicato.Sound.prototype = {
 
 		this.masterVolume = this.getMasterVolumeNode();
 		lastNode.connect(this.masterVolume);
-		lastNode.connect(this.context.destination);
+		lastNode.connect(Pizzicato.context.destination);
 
-		this.lastTimePlayed = this.context.currentTime;
+		this.lastTimePlayed = Pizzicato.context.currentTime;
 		this.sourceNode.start(0, this.startTime || 0);
 	},
 
@@ -94,7 +93,7 @@ Pizzicato.Sound.prototype = {
 
 	onEnded: function() {
 		this.playing = false;
-		this.startTime = this.paused ? this.context.currentTime - this.lastTimePlayed : 0;
+		this.startTime = this.paused ? Pizzicato.context.currentTime - this.lastTimePlayed : 0;
 	},
 
 	addEffect: function(effect) {
@@ -127,7 +126,7 @@ Pizzicato.Sound.prototype = {
 	},
 
 	getMasterVolumeNode: function() {
-		var masterVolume = this.context.createGain();
+		var masterVolume = Pizzicato.context.createGain();
 		masterVolume.gain.value = this.volume;
 		return masterVolume;
 	}

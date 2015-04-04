@@ -2,6 +2,8 @@
 	'use strict';
 
 	var Pizzicato = root.Pz = root.Pizzicato = {};
+
+	Pizzicato.context = new AudioContext();
 	Pizzicato.Util = {
 	
 		isString: function(arg) {
@@ -21,7 +23,6 @@
 	Pizzicato.Sound = function(options, callback) {
 		var self = this;
 	
-		this.context = new AudioContext();
 		this.lastTimePlayed = 0;
 		this.effects = [];
 	
@@ -43,7 +44,7 @@
 		
 		function initializeWithWave(waveOptions, callback) {
 			self.getSourceNode = function() {
-				var node = self.context.createOscillator();
+				var node = Pizzicato.context.createOscillator();
 				node.type = waveOptions.type || 'sine';
 				node.frequency.value = waveOptions.frequency || 440;
 	
@@ -61,9 +62,9 @@
 			request.responseType = 'arraybuffer';
 			request.onload = function(progressEvent) {
 				var response = progressEvent.target.response;
-				self.context.decodeAudioData(response, (function(buffer) {
+				Pizzicato.context.decodeAudioData(response, (function(buffer) {
 					self.getSourceNode = function() {
-						var node = this.context.createBufferSource();
+						var node = Pizzicato.context.createBufferSource();
 						node.loop = this.loop;
 						node.buffer = buffer;
 						return node;
@@ -94,9 +95,9 @@
 	
 			this.masterVolume = this.getMasterVolumeNode();
 			lastNode.connect(this.masterVolume);
-			lastNode.connect(this.context.destination);
+			lastNode.connect(Pizzicato.context.destination);
 	
-			this.lastTimePlayed = this.context.currentTime;
+			this.lastTimePlayed = Pizzicato.context.currentTime;
 			this.sourceNode.start(0, this.startTime || 0);
 		},
 	
@@ -114,7 +115,7 @@
 	
 		onEnded: function() {
 			this.playing = false;
-			this.startTime = this.paused ? this.context.currentTime - this.lastTimePlayed : 0;
+			this.startTime = this.paused ? Pizzicato.context.currentTime - this.lastTimePlayed : 0;
 		},
 	
 		addEffect: function(effect) {
@@ -147,7 +148,7 @@
 		},
 	
 		getMasterVolumeNode: function() {
-			var masterVolume = this.context.createGain();
+			var masterVolume = Pizzicato.context.createGain();
 			masterVolume.gain.value = this.volume;
 			return masterVolume;
 		}
@@ -173,12 +174,11 @@
 	
 		applyToNode: function(node) {
 	
-			var context = node.context;
 			var currentNode = node;
 	
-			var dryGainNode = context.createGain();
-			var wetGainNode = context.createGain();
-			var masterGainNode = context.createGain();
+			var dryGainNode = Pizzicato.context.createGain();
+			var wetGainNode = Pizzicato.context.createGain();
+			var masterGainNode = Pizzicato.context.createGain();
 	
 			// TODO: do the mix
 	
@@ -186,10 +186,10 @@
 	
 			for (var i = 0; i < this.options.repetitions; i++) {
 	
-				var delayNode = context.createDelay();
+				var delayNode = Pizzicato.context.createDelay();
 				delayNode.delayTime.value = this.options.time;
 	
-				var feedback = context.createGain();
+				var feedback = Pizzicato.context.createGain();
 				feedback.gain.value = 1 - (i * (1 / (this.options.repetitions)));
 	
 				currentNode.connect(delayNode);
