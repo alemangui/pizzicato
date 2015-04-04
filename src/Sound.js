@@ -63,7 +63,11 @@ Pizzicato.Sound.prototype = {
 		this.sourceNode = this.getSourceNode();
 		this.sourceNode.onended = this.onEnded.bind(this);
 
-		this.connectEffects(this.sourceNode).connect(this.context.destination);
+
+		var lastNode = this.connectEffects(this.sourceNode);
+
+		// TODO: add master volume
+		lastNode.connect(this.context.destination);
 
 		this.lastTimePlayed = this.context.currentTime;
 		this.sourceNode.start(0, this.startTime || 0);
@@ -96,9 +100,9 @@ Pizzicato.Sound.prototype = {
 	},
 
 	connectEffects: function(sourceNode) {
-		var currentNodes = sourceNode;
+		var currentNode = sourceNode;
 
-		for (var i = 0; i < this.effects.length; i++)
+		for (var i = 0; i < this.effects.length; i++) 
 			currentNode = this.effects[i].applyToNode(currentNode);
 
 		return currentNode;

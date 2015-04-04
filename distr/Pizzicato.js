@@ -83,7 +83,10 @@
 			this.sourceNode = this.getSourceNode();
 			this.sourceNode.onended = this.onEnded.bind(this);
 	
-			this.connectEffects(this.sourceNode).connect(this.context.destination);
+			// connect sound to relevant tree segments
+			var lastNode = this.connectEffects(this.sourceNode);
+			// place a master volume
+			lastNode.connect(this.context.destination);
 	
 			this.lastTimePlayed = this.context.currentTime;
 			this.sourceNode.start(0, this.startTime || 0);
@@ -116,9 +119,9 @@
 		},
 	
 		connectEffects: function(sourceNode) {
-			var currentNodes = sourceNode;
+			var currentNode = sourceNode;
 	
-			for (var i = 0; i < this.effects.length; i++)
+			for (var i = 0; i < this.effects.length; i++) 
 				currentNode = this.effects[i].applyToNode(currentNode);
 	
 			return currentNode;
@@ -128,27 +131,53 @@
 	Pizzicato.Effects = {};
 
 	Pizzicato.Effects.Delay = function(options) {
-		this.options = options = options || {};
-		options.repeats = options.repeats || 5;
-		options.time = options.time || 0.2;
+		
+		this.options = options || {};
+	
+		var defaults = {
+			repetitions: 5,
+			time: 0.3,
+			mix: 0.5
+		};
+	
+		for (var key in defaults)
+			this.options[key] = this.options[key] || defaults[key];
 	};
 	
 	Pizzicato.Effects.Delay.prototype = {
 	
 		applyToNode: function(node) {
+	
 			var context = node.context;
 			var currentNode = node;
 	
-			for (var i = 0; i < this.options.repeats; i++) {
-				var delayNode = context.createDelay();
+			var dryGainNode = context.createGain();
+			var wetGainNode = context.createGain();
+			var masterGainNode = context.createGain();
 	
+			// do the mix
+	
+			node.connect(dryGainNode);
+	
+			for (var i = 0; i < this.options.repetitions; i++) {
+	
+				var delayNode = context.createDelay();
 				delayNode.delayTime.value = this.options.time;
+	
+				var feedback = context.createGain();
+				feedback.gain.value = 1 - (i * (1 / (this.options.repetitions)));
+	
 				currentNode.connect(delayNode);
-				delayNode.connect(context.destination);
+				delayNode.connect(feedback);
+				feedback.connect(wetGainNode);
+	
 				currentNode = delayNode;
 			}
 			
-			return node;
+			dryGainNode.connect(masterGainNode);
+			wetGainNode.connect(masterGainNode);
+	
+			return masterGainNode;
 		}
 	
 	};
