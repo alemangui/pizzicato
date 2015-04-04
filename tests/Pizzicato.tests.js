@@ -78,6 +78,23 @@ describe('Sound', function() {
 		});
 	}, 5000);
 
+	it('volume should default to 1', function() {
+		var sound = new Pizzicato.Sound({
+			wave: { type: 'sine' }
+		});
+		expect(sound.volume).toBeCloseTo(1.0);
+		expect(sound.getMasterVolumeNode().gain.value).toBeCloseTo(1.0);
+	});
+
+	it('volume should be overridable from the initialization', function() {
+		var sound = new Pizzicato.Sound({
+			wave: { type: 'sine' },
+			volume: 0.8
+		});
+		expect(sound.volume).toBeCloseTo(0.8);
+		expect(sound.getMasterVolumeNode().gain.value).toBeCloseTo(0.8);
+	});
+
 	it('Pausing, playing and stopping should update the corresponding properties', function(done) {
 		var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
 			expect(sound.playing).toBe(false);

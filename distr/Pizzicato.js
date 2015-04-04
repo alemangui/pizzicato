@@ -29,6 +29,7 @@
 		this.paused = false;
 	
 		this.loop = Pz.Util.isObject(options) && options.loop;
+		this.volume = Pz.Util.isObject(options) && options.volume ? options.volume : 1;
 	
 		if (Pz.Util.isString(options))
 			initializeWithUrl(options, callback);
@@ -81,16 +82,18 @@
 		play: function() {
 			if (this.playing) return;
 	
+			var lastNode;
+	
 			this.playing = true;
 			this.paused = false;
 	
 			this.sourceNode = this.getSourceNode();
 			this.sourceNode.onended = this.onEnded.bind(this);
 	
+			lastNode = this.connectEffects(this.sourceNode);
 	
-			var lastNode = this.connectEffects(this.sourceNode);
-	
-			// TODO: add master volume
+			this.masterVolume = this.getMasterVolumeNode();
+			lastNode.connect(this.masterVolume);
 			lastNode.connect(this.context.destination);
 	
 			this.lastTimePlayed = this.context.currentTime;
@@ -132,6 +135,21 @@
 				currentNode = this.effects[i].applyToNode(currentNode);
 	
 			return currentNode;
+		},
+	
+		setVolume: function(volume) {
+			if(volume < 0 || volume > 1) return;
+	
+			this.volume = volume;
+			
+			if (this.playing) 
+				this.masterVolume.gain.value = this.volume;
+		},
+	
+		getMasterVolumeNode: function() {
+			var masterVolume = this.context.createGain();
+			masterVolume.gain.value = this.volume;
+			return masterVolume;
 		}
 	};
 
