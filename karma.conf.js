@@ -6,7 +6,7 @@ module.exports = function(config) {
 		frameworks: ['jasmine'],
 		files: [
 			'distr/Pizzicato.js',
-			'tests/Pizzicato.Tests.js',
+			'tests/**/*.js',
       { 
       	pattern:  'tests/*.wav',
         watched:  false,
