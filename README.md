@@ -1,4 +1,4 @@
-<img align="center" src="http://www.alemangui.com/index/img/work/Pizzicato.png" alt="Pizzicato.js">
+<img align="center" src="http://www.alemangui.com/index/img/work/pizzicato_horizontal.gif" alt="Pizzicato.js">
 
 ##A Web Audio API wrapper soon to come!
 
