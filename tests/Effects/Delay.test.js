@@ -4,7 +4,7 @@ describe('Effects.Delay', function() {
 		var options = {
 			repetitions: 10,
 			time: 0.6,
-			mix: 0.7
+			mix: 0
 		};
 		var delay = new Pizzicato.Effects.Delay(options);
 

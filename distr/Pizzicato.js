@@ -16,12 +16,37 @@
 	
 		isFunction: function(arg) {
 			return toString.call(arg) === '[object Function]';
+		},
+	
+		isNumber: function(arg) {
+			return toString.call(arg) === '[object Number]' && arg === +arg;
+		},
+	
+		getDryLevel: function(mix) {
+			if (!Pz.Util.isNumber(mix) || mix > 1 || mix < 0)
+				return 0;
+	
+			if (mix <= 0.5)
+				return 1;
+	
+			return 1 - ((mix - 0.5) * 2);
+		},
+	
+		getWetLevel: function(mix) {
+			if (!Pz.Util.isNumber(mix) || mix > 1 || mix < 0)
+				return 0;
+	
+			if (mix >= 0.5)
+				return 1;
+	
+			return 1 - ((0.5 - mix) * 2);
 		}
 	
 	};
 
 	Pizzicato.Sound = function(options, callback) {
 		var self = this;
+		var util = Pizzicato.Util;
 	
 		this.lastTimePlayed = 0;
 		this.effects = [];
@@ -29,19 +54,19 @@
 		this.playing = false;
 		this.paused = false;
 	
-		this.loop = Pz.Util.isObject(options) && options.loop;
-		this.volume = Pz.Util.isObject(options) && options.volume ? options.volume : 1;
+		this.loop = util.isObject(options) && options.loop;
+		this.volume = util.isObject(options) && options.volume ? options.volume : 1;
 	
-		if (Pz.Util.isString(options))
+		if (util.isString(options))
 			initializeWithUrl(options, callback);
 	
-		else if (Pz.Util.isObject(options) && Pz.Util.isString(options.source))
+		else if (util.isObject(options) && util.isString(options.source))
 			initializeWithUrl(options.source, callback);
 	
-		else if (Pz.Util.isObject(options) && Pz.Util.isObject(options.wave))
+		else if (util.isObject(options) && util.isObject(options.wave))
 			initializeWithWave(options.wave, callback);
 	
-		
+	
 		function initializeWithWave(waveOptions, callback) {
 			self.getSourceNode = function() {
 				var node = Pizzicato.context.createOscillator();
@@ -167,7 +192,7 @@
 		};
 	
 		for (var key in defaults)
-			this.options[key] = this.options[key] || defaults[key];
+			this.options[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
 	};
 	
 	Pizzicato.Effects.Delay.prototype = {
@@ -180,7 +205,8 @@
 			var wetGainNode = Pizzicato.context.createGain();
 			var masterGainNode = Pizzicato.context.createGain();
 	
-			// TODO: do the mix
+			dryGainNode.gain.value = Pizzicato.Util.getDryLevel(this.options.mix);
+			wetGainNode.gain.value = Pizzicato.Util.getWetLevel(this.options.mix);
 	
 			node.connect(dryGainNode);
 	

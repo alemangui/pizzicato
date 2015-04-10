@@ -9,7 +9,7 @@ Pizzicato.Effects.Delay = function(options) {
 	};
 
 	for (var key in defaults)
-		this.options[key] = this.options[key] || defaults[key];
+		this.options[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
 };
 
 Pizzicato.Effects.Delay.prototype = {
@@ -22,7 +22,8 @@ Pizzicato.Effects.Delay.prototype = {
 		var wetGainNode = Pizzicato.context.createGain();
 		var masterGainNode = Pizzicato.context.createGain();
 
-		// TODO: do the mix
+		dryGainNode.gain.value = Pizzicato.Util.getDryLevel(this.options.mix);
+		wetGainNode.gain.value = Pizzicato.Util.getWetLevel(this.options.mix);
 
 		node.connect(dryGainNode);
 
