@@ -1,5 +1,6 @@
 Pizzicato.Sound = function(options, callback) {
 	var self = this;
+	var util = Pizzicato.Util;
 
 	this.lastTimePlayed = 0;
 	this.effects = [];
@@ -7,19 +8,19 @@ Pizzicato.Sound = function(options, callback) {
 	this.playing = false;
 	this.paused = false;
 
-	this.loop = Pz.Util.isObject(options) && options.loop;
-	this.volume = Pz.Util.isObject(options) && options.volume ? options.volume : 1;
+	this.loop = util.isObject(options) && options.loop;
+	this.volume = util.isObject(options) && options.volume ? options.volume : 1;
 
-	if (Pz.Util.isString(options))
+	if (util.isString(options))
 		initializeWithUrl(options, callback);
 
-	else if (Pz.Util.isObject(options) && Pz.Util.isString(options.source))
+	else if (util.isObject(options) && util.isString(options.source))
 		initializeWithUrl(options.source, callback);
 
-	else if (Pz.Util.isObject(options) && Pz.Util.isObject(options.wave))
+	else if (util.isObject(options) && util.isObject(options.wave))
 		initializeWithWave(options.wave, callback);
 
-	
+
 	function initializeWithWave(waveOptions, callback) {
 		self.getSourceNode = function() {
 			var node = Pizzicato.context.createOscillator();
