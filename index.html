@@ -1,17 +1,74 @@
-<html>
-<head>
-	<title>Pizzicato.js: A simple navascript audio library</title>
-	<link rel="stylesheet" type="text/css" href="./styles.css">
-</head>
-<body>
-	<div class="logo">
-		<img src="./img/logo.jpg">
-		<p>A simple javascript audio library coming soon!</p>
-	</div>
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Pizzicato.js: A Javascript library for web audio</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <link rel="stylesheet" href="css/prism.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    </head>
+
+    <body>
+
+        <a href="https://github.com/alemangui/pizzicato"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+
+        <div class="container">
+            <div class="logo">
+                <img src="./img/logo.jpg">
+            </div>
+            
+            <h2>A web audio Javascript library coming soon!</h2>
+
+            <p>Please note this is still a work in progress and it's far from being ready. Take a look at the <a href="https://github.com/alemangui/pizzicato"> github repository </a> for more information.</p>
+            
+            <h3>Create sounds from wave forms</h3>
+            <pre><code class="language-javascript">
+var sawtoothWave = new Pizzicato.Sound({ 
+    wave: { type: 'sawtooth' }
+});
+
+sawtoothWave.play();
+            </code></pre>
+
+            <button id="playWave" class="green">Play</button>
+
+            
+            <h3>Load external audio files</h3>
+
+            <pre><code class="language-javascript">
+var click = new Pizzicato.Sound('./audio/click.wav', function() {
+    console.log('click loaded!');
+    click.play();
+});
+            </code></pre>
+
+            <button id="playClick" class="green">Play</button>
 
 
-	<script src="https://cdn.rawgit.com/alemangui/pizzicato/master/distr/Pizzicato.js"></script>
-	<script src="./scripts.js"></script>
+            <h3>Add effects</h3>
 
-</body>
+            <pre><code class="language-javascript">
+var delay = new Pizzicato.Effects.Delay({
+    repetitions: 6,
+    time: 0.4,
+    mix: 0.5
+});
+
+birds.addEffect(delay);
+birds.play();
+            </code></pre>
+
+            <button id="playBirds" class="green">Play</button>
+        </div>
+        <script src="https://cdn.rawgit.com/alemangui/pizzicato/master/distr/Pizzicato.js"></script>
+        <script src="js/vendor/prism.js"></script>
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+        <script src="js/main.js"></script>
+    </body>
 </html>
