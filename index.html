@@ -39,7 +39,12 @@ var sawtoothWave = new Pizzicato.Sound({
 sawtoothWave.play();
             </code></pre>
 
-            <button id="playWave" class="green">Play</button>
+            <div class="controls">
+                <button id="stopWave" class="stop action"></button>
+                <button id="playWave" class="play action"></button>
+                <button id="pauseWave" class="pause action"></button>
+            </div>
+
 
             
             <h3>Load external audio files</h3>
@@ -51,8 +56,11 @@ var click = new Pizzicato.Sound('./audio/click.wav', function() {
 });
             </code></pre>
 
-            <button id="playClick" class="green">Play</button>
-
+            <div class="controls">
+                <button id="stopClick" class="stop action"></button>
+                <button id="playClick" class="play action"></button>
+                <button id="pauseClick" class="pause action"></button>
+            </div>
 
             <h3>Add effects</h3>
 
@@ -67,7 +75,11 @@ birds.addEffect(delay);
 birds.play();
             </code></pre>
 
-            <button id="playBirds" class="green">Play</button>
+            <div class="controls">
+                <button id="stopBirds" class="stop action"></button>
+                <button id="playBirds" class="play action"></button>
+                <button id="pauseBirds" class="pause action"></button>
+            </div>
         </div>
         <script src="https://cdn.rawgit.com/alemangui/pizzicato/master/distr/Pizzicato.js"></script>
         <script src="js/vendor/prism.js"></script>
