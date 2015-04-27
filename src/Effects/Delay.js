@@ -55,7 +55,7 @@ Pizzicato.Effects.Delay.prototype = Object.create(null, {
 		},
 
 		set: function(mix) {
-			if (!Pz.Util.isNumber(mix) || mix < 0 || mix > 1)
+			if (!Pz.Util.isInRange(mix, 0, 1))
 				return;
 
 			this.options.mix = mix;
@@ -72,7 +72,7 @@ Pizzicato.Effects.Delay.prototype = Object.create(null, {
 		},
 
 		set: function(time) {
-			if (!Pz.Util.isNumber(time))
+			if (!Pz.Util.isInRange(time, 0, 180))
 				return;
 
 			this.options.time = time;
@@ -89,7 +89,7 @@ Pizzicato.Effects.Delay.prototype = Object.create(null, {
 		},
 
 		set: function(repetitions) {
-			if (!Pz.Util.isNumber(repetitions))
+			if (!Pz.Util.isInRange(repetitions, 0, 50))
 				return;
 
 			this.options.repetitions = parseInt(repetitions, 10);

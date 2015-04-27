@@ -50,7 +50,7 @@ Pizzicato.Effects.Compressor.prototype = Object.create(null, {
 			return this.compressorNode.threshold.value;
 		},
 		set: function(value) {
-			if (Pizzicato.Util.isNumber(value))
+			if (Pizzicato.Util.isInRange(value, -100, 0))
 				this.compressorNode.threshold.value = value;
 		}
 	},
@@ -67,7 +67,7 @@ Pizzicato.Effects.Compressor.prototype = Object.create(null, {
 			return this.compressorNode.knee.value;
 		},
 		set: function(value) {
-			if (Pizzicato.Util.isNumber(value))
+			if (Pizzicato.Util.isInRange(value, 0, 40))
 				this.compressorNode.knee.value = value;
 		}
 	},
@@ -86,7 +86,7 @@ Pizzicato.Effects.Compressor.prototype = Object.create(null, {
 			return this.compressorNode.attack.value;
 		},
 		set: function(value) {
-			if (Pizzicato.Util.isNumber(value))
+			if (Pizzicato.Util.isInRange(value, 0, 1))
 				this.compressorNode.attack.value = value;
 		}
 	},
@@ -105,7 +105,7 @@ Pizzicato.Effects.Compressor.prototype = Object.create(null, {
 			return this.compressorNode.release.value;
 		},
 		set: function(value) {
-			if (Pizzicato.Util.isNumber(value))
+			if (Pizzicato.Util.isInRange(value, 0, 1))
 				this.compressorNode.release.value = value;
 		}
 	},
@@ -122,7 +122,7 @@ Pizzicato.Effects.Compressor.prototype = Object.create(null, {
 			return this.compressorNode.ratio.value;
 		},
 		set: function(value) {
-			if (Pizzicato.Util.isNumber(value))
+			if (Pizzicato.Util.isInRange(value, 1, 20))
 				this.compressorNode.ratio.value = value;
 		}
 	},

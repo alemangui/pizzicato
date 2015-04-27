@@ -53,6 +53,20 @@ describe('Util', function() {
 	});
 
 
+	it('contains a working isInRange function', function() {
+		var isInRange = Pizzicato.Util.isInRange;
+
+		expect(typeof isInRange).toBe('function');
+		expect(isInRange('', 0, 1)).toBe(false);
+		expect(isInRange(NaN, 0, 1)).toBe(false);
+		expect(isInRange({ text: 'hello' })).toBe(false);
+		expect(isInRange(0, 0, 1)).toBe(true);
+		expect(isInRange(0.43, 0, 1)).toBe(true);
+		expect(isInRange(42, 10, 20)).toBe(false);
+		expect(isInRange(-42, -43, 0)).toBe(true);
+	});
+
+
 	it('Returns correct dry level from a mix', function() {
 		var getDryLevel = Pizzicato.Util.getDryLevel;
 

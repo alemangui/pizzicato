@@ -16,6 +16,13 @@ Pizzicato.Util = {
 		return toString.call(arg) === '[object Number]' && arg === +arg;
 	},
 
+	isInRange: function(arg, min, max) {
+		if (!Pz.Util.isNumber(arg) || !Pz.Util.isNumber(min) || !Pz.Util.isNumber(max))
+			return false;
+
+		return arg >= min && arg <= max;
+	},
+
 	getDryLevel: function(mix) {
 		if (!Pz.Util.isNumber(mix) || mix > 1 || mix < 0)
 			return 0;

@@ -22,6 +22,13 @@
 			return toString.call(arg) === '[object Number]' && arg === +arg;
 		},
 	
+		isInRange: function(arg, min, max) {
+			if (!Pz.Util.isNumber(arg) || !Pz.Util.isNumber(min) || !Pz.Util.isNumber(max))
+				return false;
+	
+			return arg >= min && arg <= max;
+		},
+	
 		getDryLevel: function(mix) {
 			if (!Pz.Util.isNumber(mix) || mix > 1 || mix < 0)
 				return 0;
@@ -238,7 +245,7 @@
 			},
 	
 			set: function(mix) {
-				if (!Pz.Util.isNumber(mix) || mix < 0 || mix > 1)
+				if (!Pz.Util.isInRange(mix, 0, 1))
 					return;
 	
 				this.options.mix = mix;
@@ -255,7 +262,7 @@
 			},
 	
 			set: function(time) {
-				if (!Pz.Util.isNumber(time))
+				if (!Pz.Util.isInRange(time, 0, 180))
 					return;
 	
 				this.options.time = time;
@@ -272,7 +279,7 @@
 			},
 	
 			set: function(repetitions) {
-				if (!Pz.Util.isNumber(repetitions))
+				if (!Pz.Util.isInRange(repetitions, 0, 50))
 					return;
 	
 				this.options.repetitions = parseInt(repetitions, 10);
@@ -400,7 +407,7 @@
 				return this.compressorNode.threshold.value;
 			},
 			set: function(value) {
-				if (Pizzicato.Util.isNumber(value))
+				if (Pizzicato.Util.isInRange(value, -100, 0))
 					this.compressorNode.threshold.value = value;
 			}
 		},
@@ -417,7 +424,7 @@
 				return this.compressorNode.knee.value;
 			},
 			set: function(value) {
-				if (Pizzicato.Util.isNumber(value))
+				if (Pizzicato.Util.isInRange(value, 0, 40))
 					this.compressorNode.knee.value = value;
 			}
 		},
@@ -436,7 +443,7 @@
 				return this.compressorNode.attack.value;
 			},
 			set: function(value) {
-				if (Pizzicato.Util.isNumber(value))
+				if (Pizzicato.Util.isInRange(value, 0, 1))
 					this.compressorNode.attack.value = value;
 			}
 		},
@@ -455,7 +462,7 @@
 				return this.compressorNode.release.value;
 			},
 			set: function(value) {
-				if (Pizzicato.Util.isNumber(value))
+				if (Pizzicato.Util.isInRange(value, 0, 1))
 					this.compressorNode.release.value = value;
 			}
 		},
@@ -472,7 +479,7 @@
 				return this.compressorNode.ratio.value;
 			},
 			set: function(value) {
-				if (Pizzicato.Util.isNumber(value))
+				if (Pizzicato.Util.isInRange(value, 1, 20))
 					this.compressorNode.ratio.value = value;
 			}
 		},
