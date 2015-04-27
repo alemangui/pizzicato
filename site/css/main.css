@@ -81,30 +81,93 @@ p {
     text-align: center;
 }
 
-button.green {
+.controls {
+    text-align: center;
+}
+
+button{
     border: none;
-    background-color: rgb(103, 178, 78);
     color: white;
     font-weight: bold;
     padding: 10px;
-    min-width: 150px;
+    min-width: 50px;
+    min-height: 50px;
     border-radius: 5px;
+    position: relative;
 }
 
-button.green:hover {
+button.play {
+    background-color: rgb(103, 178, 78);
+    min-width: 100px;
+    border-radius: 0;
+}
+
+button.play:before {
+    content: "";
+    position: absolute;
+    left: 38px;
+    border: 8px solid transparent;
+    border-width: 12px 30px;
+    border-left-color: #FFFFFF;
+    margin-top: -12px;
+    background: transparent;
+}
+
+button.play:hover {
     background-color: rgb(126, 200, 101);
 }
 
-button.green:active {
+button.play:active {
     background-color: rgb(74, 145, 50);
 }
 
+button.stop {
+    background-color: rgb(178, 78, 78);
+    border-radius: 5px 0px 0px 5px;
+}
 
+button.stop:before {
+    content: "";
+    position: absolute;
+    left: 15px;
+    width: 21px;
+    height: 21px;
+    margin-top: -10px;
+    background: white;
+}
 
+button.stop:hover {
+    background-color: rgb(200, 106, 106);
+}
 
+button.stop:active {
+    background-color: rgb(155, 58, 58);
+}
 
+button.pause {
+    background-color: rgb(78, 144, 178);
+    border-radius: 0px 5px 5px 0px;
+}
 
+button.pause:before {
+    content: "";
+    position: absolute;
+    left: 16px;
+    width: 6px;
+    height: 21px;
+    border: 4px solid #FFFFFF;
+    border-width: 0px 5px;
+    margin-top: -10px;
+    background: transparent;
+}
 
+button.pause:hover {
+    background-color: rgb(117, 171, 199);
+}
+
+button.pause:active {
+    background-color: rgb(54, 127, 165);
+}
 
 
 /* ==========================================================================
