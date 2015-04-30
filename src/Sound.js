@@ -53,7 +53,6 @@ Pizzicato.Sound = function(options, callback) {
 			}).bind(self));
 		};
 		request.send();
-		console.log('request sent');
 	}
 };
 
