@@ -4,6 +4,65 @@
 	var Pizzicato = root.Pz = root.Pizzicato = {};
 
 	Pizzicato.context = new AudioContext();
+	Pizzicato.Events = {
+	
+		/**
+		 * Adds an event handler that will be treated upon
+		 * the triggering of that event.
+		 */
+		on: function(name, callback, context) {
+			if (!name || !callback)
+				return;
+	
+			this._events = this._events || {};
+			var _event = this._events[name] || (this._events[name] = []);
+	
+			_event.push({
+				callback: callback,
+				context: context || this,
+				handler: this
+			});
+		},
+	
+		/**
+		 * Triggers a particular event. If a handler
+		 * is linked to that event, the handler will be
+		 * executed.
+		 */
+		trigger: function(name) {
+			if (!name)
+				return;
+	
+			var _event, length, args, i;
+	
+			this._events = this._events || {};
+			_event = this._events[name] || (this._events[name] = []);
+	
+			if (!_event)
+				return;
+	
+			length = Math.max(0, arguments.length - 1);
+	    args = [];
+	    for (i = 0; i < length; i++) args[i] = arguments[i + 1];
+	
+	    for (i = 0; i < _event.length; i++)
+				_event[i].callback.apply(_event[i].context, args);	
+		},
+	
+		/**
+		 * Removes an event handler. If no name is provided,
+		 * all handlers for this object will be removed.
+		 */
+		off: function(name) {
+			if (name)
+				this._events[name] = undefined;
+	
+			else
+				this._events = {};
+		}
+	
+	};
+
 	Pizzicato.Util = {
 	
 		isString: function(arg) {
@@ -106,6 +165,7 @@
 				}).bind(self));
 			};
 			request.send();
+			console.log('request sent');
 		}
 	};
 	
@@ -131,23 +191,29 @@
 	
 			this.lastTimePlayed = Pizzicato.context.currentTime;
 			this.sourceNode.start(0, this.startTime || 0);
+	
+			this.trigger('play');
 		},
 	
 		stop: function() {
 			this.paused = false;
 			this.playing = false;
 			this.sourceNode.stop();
+			this.trigger('stop');
 		},
 	
 		pause: function() {
 			this.paused = true;
 			this.playing = false;
 			this.sourceNode.stop();
+			this.trigger('pause');
 		},
 	
 		onEnded: function() {
 			this.playing = false;
 			this.startTime = this.paused ? Pizzicato.context.currentTime - this.lastTimePlayed : 0;
+			this.trigger('stop');
+			this.trigger('end');
 		},
 	
 		addEffect: function(effect) {
@@ -183,7 +249,11 @@
 			var masterVolume = Pizzicato.context.createGain();
 			masterVolume.gain.value = this.volume;
 			return masterVolume;
-		}
+		},
+	
+		on: Pizzicato.Events.on,
+		off: Pizzicato.Events.off,
+		trigger: Pizzicato.Events.trigger
 	};
 
 	Pizzicato.Effects = {};

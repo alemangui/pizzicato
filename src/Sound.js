@@ -53,6 +53,7 @@ Pizzicato.Sound = function(options, callback) {
 			}).bind(self));
 		};
 		request.send();
+		console.log('request sent');
 	}
 };
 
@@ -78,23 +79,29 @@ Pizzicato.Sound.prototype = {
 
 		this.lastTimePlayed = Pizzicato.context.currentTime;
 		this.sourceNode.start(0, this.startTime || 0);
+
+		this.trigger('play');
 	},
 
 	stop: function() {
 		this.paused = false;
 		this.playing = false;
 		this.sourceNode.stop();
+		this.trigger('stop');
 	},
 
 	pause: function() {
 		this.paused = true;
 		this.playing = false;
 		this.sourceNode.stop();
+		this.trigger('pause');
 	},
 
 	onEnded: function() {
 		this.playing = false;
 		this.startTime = this.paused ? Pizzicato.context.currentTime - this.lastTimePlayed : 0;
+		this.trigger('stop');
+		this.trigger('end');
 	},
 
 	addEffect: function(effect) {
@@ -130,5 +137,9 @@ Pizzicato.Sound.prototype = {
 		var masterVolume = Pizzicato.context.createGain();
 		masterVolume.gain.value = this.volume;
 		return masterVolume;
-	}
+	},
+
+	on: Pizzicato.Events.on,
+	off: Pizzicato.Events.off,
+	trigger: Pizzicato.Events.trigger
 };

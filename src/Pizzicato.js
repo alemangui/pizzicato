@@ -5,6 +5,7 @@
 
 	Pizzicato.context = new AudioContext();
 
+	//= include ./Events.js
 	//= include ./Util.js
 	//= include ./Sound.js
 	//= include ./Effects.js
