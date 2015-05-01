@@ -66,6 +66,10 @@ p {
     color: rgb(94, 94, 94);
 }
 
+body {
+    padding-bottom: 40px;
+}
+
 .container {
     width: 800px;
     margin-left: auto;
@@ -99,7 +103,7 @@ button{
 button.play {
     background-color: rgb(103, 178, 78);
     min-width: 100px;
-    border-radius: 0;
+    border-radius: 0px 5px 5px 0px;
 }
 
 button.play:before {
@@ -144,29 +148,47 @@ button.stop:active {
     background-color: rgb(155, 58, 58);
 }
 
-button.pause {
-    background-color: rgb(78, 144, 178);
-    border-radius: 0px 5px 5px 0px;
-}
-
 button.pause:before {
     content: "";
     position: absolute;
-    left: 16px;
+    left: 40px;
     width: 6px;
     height: 21px;
     border: 4px solid #FFFFFF;
-    border-width: 0px 5px;
+    border-width: 0px 7px;
     margin-top: -10px;
     background: transparent;
 }
 
-button.pause:hover {
-    background-color: rgb(117, 171, 199);
+.slider {
+    height: 30px;
+    width: 390px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5px;
+    padding: 0 10px;
+    border-radius: 5px;
+    border: solid 2px #D8D6D6;
 }
 
-button.pause:active {
-    background-color: rgb(54, 127, 165);
+
+.slider>label {
+    width: 130px;
+    display: block;
+    float: left;
+    margin-right: 10px;
+    height: 30px;
+    text-align: right;
+    font-weight: bold;
+    line-height: 24px;
+    vertical-align: middle;
+    color: #6B6969;
+}
+
+input[type="range"] {
+    line-height: 30px;
+    vertical-align: middle;
+    width: 250px;
 }
 
 

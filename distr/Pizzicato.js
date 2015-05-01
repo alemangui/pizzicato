@@ -165,7 +165,6 @@
 				}).bind(self));
 			};
 			request.send();
-			console.log('request sent');
 		}
 	};
 	
