@@ -23,7 +23,7 @@
 
         <div class="container">
             <div class="logo">
-                <img src="./img/logo.jpg">
+                <img src="./img/logo.png">
             </div>
             
             <h2>A web audio Javascript library coming soon!</h2>
@@ -42,7 +42,6 @@ sawtoothWave.play();
             <div class="controls">
                 <button id="stopWave" class="stop action"></button>
                 <button id="playWave" class="play action"></button>
-                <button id="pauseWave" class="pause action"></button>
             </div>
 
 
@@ -51,7 +50,7 @@ sawtoothWave.play();
 
             <pre><code class="language-javascript">
 var click = new Pizzicato.Sound('./audio/click.wav', function() {
-    console.log('click loaded!');
+    // Click loaded!
     click.play();
 });
             </code></pre>
@@ -59,10 +58,10 @@ var click = new Pizzicato.Sound('./audio/click.wav', function() {
             <div class="controls">
                 <button id="stopClick" class="stop action"></button>
                 <button id="playClick" class="play action"></button>
-                <button id="pauseClick" class="pause action"></button>
             </div>
 
             <h3>Add effects</h3>
+            <h4>Delay</h4>
 
             <pre><code class="language-javascript">
 var delay = new Pizzicato.Effects.Delay({
@@ -75,10 +74,64 @@ birds.addEffect(delay);
 birds.play();
             </code></pre>
 
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="delay-repetitions">Repetitions</label>
+                    <input type="range" min="0" max="50" step="1" value="5" id="delay-repetitions" />
+                </div>
+                <div class="slider">
+                    <label for="delay-time">Time</label>
+                    <input type="range" min="0" max="5" step="0.001" value="0.3" id="delay-time" />
+                </div>
+                <div class="slider">
+                    <label for="delay-mix">Mix</label>
+                    <input type="range" min="0" max="1" step="0.001" value="0.5" id="delay-mix" />
+                </div>
+            </div>
+
             <div class="controls">
                 <button id="stopBirds" class="stop action"></button>
                 <button id="playBirds" class="play action"></button>
-                <button id="pauseBirds" class="pause action"></button>
+            </div>
+
+            <h4>Compressor</h4>
+
+            <pre><code class="language-javascript">
+var compressor = new Pizzicato.Effects.Compressor({
+    threshold: -24,
+    ratio: 12
+});
+
+beats.addEffect(compressor);
+beats.play();
+            </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="compressor-threshold">Threshold</label>
+                    <input type="range" min="-100" max="0" step="1" value="-24" id="compressor-threshold" />
+                </div>
+                <div class="slider">
+                    <label for="compressor-knee">Knee</label>
+                    <input type="range" min="0" max="40" step="1" value="30" id="compressor-knee" />
+                </div>
+                <div class="slider">
+                    <label for="compressor-attack">Attack</label>
+                    <input type="range" min="0" max="1" step="0.001" value="0.003" id="compressor-attack" />
+                </div>
+                <div class="slider">
+                    <label for="compressor-release">Release</label>
+                    <input type="range" min="0" max="1" step="0.001" value="0.250" id="compressor-release" />
+                </div>
+                <div class="slider">
+                    <label for="compressor-ratio">Ratio</label>
+                    <input type="range" min="1" max="20" step="1" value="12" id="compressor-ratio" />
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="stopBeats" class="stop action"></button>
+                <button id="playBeats" class="play action"></button>
             </div>
         </div>
         <script src="https://cdn.rawgit.com/alemangui/pizzicato/master/distr/Pizzicato.js"></script>
