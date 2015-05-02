@@ -1,25 +1,19 @@
-var sawtoothWave = new Pizzicato.Sound({ 
-    wave: { type: 'sawtooth' }
+var delay = new Pizzicato.Effects.Delay({
+  repetitions: 6,
+  time: 0.4,
+  mix: 0.5
 });
+var compressor = new Pizzicato.Effects.Compressor({
+  threshold: -24,
+  ratio: 12
+});
+
+
+var sawtoothWave = new Pizzicato.Sound({ wave: { type: 'sawtooth' }});
 var click = new Pizzicato.Sound('./audio/click.wav');
-var birds = new Pizzicato.Sound('./audio/bird.wav', function() {
-	var delay = new Pizzicato.Effects.Delay({
-    repetitions: 6,
-    time: 0.4,
-    mix: 0.5
-	});
-
-	birds.addEffect(delay);
-});
+var birds = new Pizzicato.Sound('./audio/bird.wav', function() { birds.addEffect(delay); });
 var dreamSound = new Pizzicato.Sound('./audio/dream.wav');
-var beats = new Pizzicato.Sound('./audio/bird.wav', function() {
-	var compressor = new Pizzicato.Effects.Compressor({
-    threshold: -24,
-    ratio: 12
-	});
-
-	beats.addEffect(compressor);
-});
+var beats = new Pizzicato.Sound('./audio/bird.wav', function() { beats.addEffect(compressor); });
 
 var segments = [
 	{
@@ -35,12 +29,34 @@ var segments = [
 	{
 		audio: birds,
 		playButton: document.getElementById('playBirds'),
-		stopButton: document.getElementById('stopBirds')
+		stopButton: document.getElementById('stopBirds'),
+		effects: [
+			{
+				instance: delay,
+				parameters: {
+					repetitions: document.getElementById('delay-repetitions'),
+					time: document.getElementById('delay-time'),
+					mix: document.getElementById('delay-mix')
+				}
+			}
+		]
 	},
 	{
 		audio: beats,
 		playButton: document.getElementById('playBeats'),
-		stopButton: document.getElementById('stopBeats')
+		stopButton: document.getElementById('stopBeats'),
+		effects: [
+			{
+				instance: compressor,
+				parameters: {
+					threshold: document.getElementById('compressor-threshold'),
+					knee: document.getElementById('compressor-knee'),
+					attack: document.getElementById('compressor-attack'),
+					release: document.getElementById('compressor-release'),
+					ratio: document.getElementById('compressor-ratio')
+				}
+			}
+		]
 	}
 ]
 
@@ -49,10 +65,12 @@ for (var i = 0; i < segments.length; i++) {
 
 		segment.audio.on('play', function() {
 			segment.playButton.classList.add('pause');
-		})
+		});
+
 		segment.audio.on('stop', function() {
 			segment.playButton.classList.remove('pause');
 		});
+
 		segment.audio.on('pause', function() {
 			segment.playButton.classList.add('pause');
 		});
@@ -67,6 +85,25 @@ for (var i = 0; i < segments.length; i++) {
 		segment.stopButton.addEventListener('click', function(e) {
 			segment.audio.stop();
 		});
+
+		if (!segment.effects || !segment.effects.length)
+			return;
+
+		for (var i = 0; i < segment.effects.length; i++) {
+			var effect = segment.effects[i];
+
+			for (var key in effect.parameters) {
+				(function(key, slider, instance){
+
+					var display = slider.parentNode.getElementsByClassName('slider-value')[0];
+
+					slider.addEventListener('input', function(e) {
+						display.innerHTML = instance[key] = e.target.valueAsNumber;
+					});
+
+				})(key, effect.parameters[key], effect.instance);	
+			}
+		}
 
 	})(segments[i]);
 }
