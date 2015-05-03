@@ -4,10 +4,10 @@ Pizzicato.Sound = function(options, callback) {
 
 	this.lastTimePlayed = 0;
 	this.effects = [];
-
 	this.playing = false;
 	this.paused = false;
 
+	this.masterVolume = Pizzicato.context.createGain();
 	this.loop = util.isObject(options) && options.loop;
 	this.volume = util.isObject(options) && options.volume ? options.volume : 1;
 
@@ -57,88 +57,91 @@ Pizzicato.Sound = function(options, callback) {
 };
 
 
-Pizzicato.Sound.prototype = {
+Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
-	play: function() {
-		if (this.playing) return;
+	play: {
+		value: function() {
+			if (this.playing) return;
 
-		var lastNode;
+			this.playing = true;
+			this.paused = false;
+			this.sourceNode = this.getSourceNode();
+			this.sourceNode.onended = this.onEnded.bind(this);
 
-		this.playing = true;
-		this.paused = false;
+			var lastNode = this.connectEffects(this.sourceNode);
 
-		this.sourceNode = this.getSourceNode();
-		this.sourceNode.onended = this.onEnded.bind(this);
+			lastNode.connect(this.masterVolume);
+			lastNode.connect(Pizzicato.context.destination);
 
-		lastNode = this.connectEffects(this.sourceNode);
+			this.lastTimePlayed = Pizzicato.context.currentTime;
+			this.sourceNode.start(0, this.startTime || 0);
 
-		this.masterVolume = this.getMasterVolumeNode();
-		lastNode.connect(this.masterVolume);
-		lastNode.connect(Pizzicato.context.destination);
-
-		this.lastTimePlayed = Pizzicato.context.currentTime;
-		this.sourceNode.start(0, this.startTime || 0);
-
-		this.trigger('play');
+			this.trigger('play');
+		}
 	},
 
-	stop: function() {
-		this.paused = false;
-		this.playing = false;
-		this.sourceNode.stop();
-		this.trigger('stop');
+	stop: {
+		value: function() {
+			this.paused = false;
+			this.playing = false;
+			this.sourceNode.stop();
+			this.trigger('stop');
+		}
 	},
 
-	pause: function() {
-		this.paused = true;
-		this.playing = false;
-		this.sourceNode.stop();
-		this.trigger('pause');
+	pause: {
+		value: function() {
+			this.paused = true;
+			this.playing = false;
+			this.sourceNode.stop();
+			this.trigger('pause');
+		}
 	},
 
-	onEnded: function() {
-		this.playing = false;
-		this.startTime = this.paused ? Pizzicato.context.currentTime - this.lastTimePlayed : 0;
-		this.trigger('stop');
-		this.trigger('end');
+	onEnded: {
+		value: function() {
+			this.playing = false;
+			this.startTime = this.paused ? Pizzicato.context.currentTime - this.lastTimePlayed : 0;
+			this.trigger('stop');
+			this.trigger('end');
+		}
 	},
 
-	addEffect: function(effect) {
-		this.effects.push(effect);
+	addEffect: {
+		value: function(effect) {
+			this.effects.push(effect);
+		}
 	},
 
-	removeEffect: function(effect) {
-		var index = this.effects.indexOf(effect);
+	removeEffect: {
+		value: function(effect) {
+			var index = this.effects.indexOf(effect);
 
-		if (index !== -1)
-			this.effects.splice(index, 1);
+			if (index !== -1)
+				this.effects.splice(index, 1);
+		}
 	},
 
-	connectEffects: function(sourceNode) {
-		var currentNode = sourceNode;
+	connectEffects: {
+		value: function(sourceNode) {
+			var currentNode = sourceNode;
 
-		for (var i = 0; i < this.effects.length; i++) 
-			currentNode = this.effects[i].applyToNode(currentNode);
+			for (var i = 0; i < this.effects.length; i++) 
+				currentNode = this.effects[i].applyToNode(currentNode);
 
-		return currentNode;
+			return currentNode;
+		}	
 	},
 
-	setVolume: function(volume) {
-		if(volume < 0 || volume > 1) return;
+	volume: {
+		get: function() {
+			if (this.masterVolume)
+				return this.masterVolume.gain.value;
+		},
 
-		this.volume = volume;
-		
-		if (this.playing) 
-			this.masterVolume.gain.value = this.volume;
-	},
-
-	getMasterVolumeNode: function() {
-		var masterVolume = Pizzicato.context.createGain();
-		masterVolume.gain.value = this.volume;
-		return masterVolume;
-	},
-
-	on: Pizzicato.Events.on,
-	off: Pizzicato.Events.off,
-	trigger: Pizzicato.Events.trigger
-};
+		set: function(volume) {
+			if (Pz.Util.isInRange(volume, 0, 1) && this.masterVolume)
+				this.masterVolume.gain.value = volume;
+		}
+	}
+});

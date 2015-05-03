@@ -17,8 +17,7 @@ describe('Sound', function() {
 		var sound = new Pizzicato.Sound({
 			wave: { type: 'sine' }
 		});
-		expect(sound.volume).toBeCloseTo(1.0);
-		expect(sound.getMasterVolumeNode().gain.value).toBeCloseTo(1.0);
+		expect(sound.masterVolume.gain.value).toBeCloseTo(1.0);
 	});
 
 	it('volume should be overridable from the initialization', function() {
@@ -26,8 +25,16 @@ describe('Sound', function() {
 			wave: { type: 'sine' },
 			volume: 0.8
 		});
-		expect(sound.volume).toBeCloseTo(0.8);
-		expect(sound.getMasterVolumeNode().gain.value).toBeCloseTo(0.8);
+		expect(sound.masterVolume.gain.value).toBeCloseTo(0.8);
+	});
+
+	it('volume should be set only if it is a valid value', function() {
+		var sound = new Pizzicato.Sound({
+			wave: { type: 'sine' }
+		});
+		expect(sound.masterVolume.gain.value).toBeCloseTo(1.0);
+		sound.volume = 50;
+		expect(sound.masterVolume.gain.value).toBeCloseTo(1.0);
 	});
 
 	it('pausing, playing and stopping should update the corresponding properties', function(done) {
