@@ -114,58 +114,22 @@
 		var self = this;
 		var util = Pizzicato.Util;
 	
+		this.masterVolume = this.getMasterVolume();
+	
 		this.lastTimePlayed = 0;
 		this.effects = [];
-		this.playing = false;
-		this.paused = false;
-	
-		this.masterVolume = Pizzicato.context.createGain();
+		this.playing = this.paused = false;
 		this.loop = util.isObject(options) && options.loop;
 		this.volume = util.isObject(options) && options.volume ? options.volume : 1;
 	
 		if (util.isString(options))
-			initializeWithUrl(options, callback);
+			(this.initializeWithUrl.bind(this))(options, callback);
 	
 		else if (util.isObject(options) && util.isString(options.source))
-			initializeWithUrl(options.source, callback);
+			(this.initializeWithUrl.bind(this))(options.source, callback);
 	
 		else if (util.isObject(options) && util.isObject(options.wave))
-			initializeWithWave(options.wave, callback);
-	
-	
-		function initializeWithWave(waveOptions, callback) {
-			self.getSourceNode = function() {
-				var node = Pizzicato.context.createOscillator();
-				node.type = waveOptions.type || 'sine';
-				node.frequency.value = waveOptions.frequency || 440;
-	
-				return node;
-			};
-			if (Pz.Util.isFunction(callback)) 
-				callback();
-		}
-	
-	
-		function initializeWithUrl(url, callback) {
-			var request = new XMLHttpRequest();
-	
-			request.open('GET', url, true);
-			request.responseType = 'arraybuffer';
-			request.onload = function(progressEvent) {
-				var response = progressEvent.target.response;
-				Pizzicato.context.decodeAudioData(response, (function(buffer) {
-					self.getSourceNode = function() {
-						var node = Pizzicato.context.createBufferSource();
-						node.loop = this.loop;
-						node.buffer = buffer;
-						return node;
-					};
-					if (Pz.Util.isFunction(callback)) 
-						callback();
-				}).bind(self));
-			};
-			request.send();
-		}
+			(this.initializeWithWave.bind(this))(options.wave, callback);
 	};
 	
 	
@@ -174,23 +138,19 @@
 		play: {
 			value: function() {
 				if (this.playing) return;
+				
+				this.sourceNode = this.getSourceNode();
 	
 				this.playing = true;
 				this.paused = false;
-				this.sourceNode = this.getSourceNode();
-				this.sourceNode.onended = this.onEnded.bind(this);
-	
-				var lastNode = this.connectEffects(this.sourceNode);
-	
-				lastNode.connect(this.masterVolume);
-				lastNode.connect(Pizzicato.context.destination);
-	
+				
 				this.lastTimePlayed = Pizzicato.context.currentTime;
+				
 				this.sourceNode.start(0, this.startTime || 0);
-	
 				this.trigger('play');
 			}
 		},
+	
 	
 		stop: {
 			value: function() {
@@ -201,6 +161,7 @@
 			}
 		},
 	
+	
 		pause: {
 			value: function() {
 				this.paused = true;
@@ -209,6 +170,7 @@
 				this.trigger('pause');
 			}
 		},
+	
 	
 		onEnded: {
 			value: function() {
@@ -219,31 +181,41 @@
 			}
 		},
 	
+	
 		addEffect: {
 			value: function(effect) {
 				this.effects.push(effect);
+				this.connectEffects();
 			}
 		},
+	
 	
 		removeEffect: {
 			value: function(effect) {
 				var index = this.effects.indexOf(effect);
 	
-				if (index !== -1)
-					this.effects.splice(index, 1);
+				if (index === -1) return;
+	
+				this.effects.splice(index, 1);
+				this.connectEffects();
 			}
 		},
 	
+	
 		connectEffects: {
-			value: function(sourceNode) {
-				var currentNode = sourceNode;
+			value: function() {
+				for (var i = 0; i < this.effects.length; i++) {
+					
+					var destinationNode = i < this.effects.length - 1 
+						? this.effects[i + 1].inputNode 
+						: this.masterVolume;
 	
-				for (var i = 0; i < this.effects.length; i++) 
-					currentNode = this.effects[i].applyToNode(currentNode);
-	
-				return currentNode;
+					this.effects[i].outputNode.disconnect();
+					this.effects[i].outputNode.connect(destinationNode);
+				}
 			}	
 		},
+	
 	
 		volume: {
 			get: function() {
@@ -255,11 +227,93 @@
 				if (Pz.Util.isInRange(volume, 0, 1) && this.masterVolume)
 					this.masterVolume.gain.value = volume;
 			}
-		}
+		},
 	
-		// on: { value: Pizzicato.Events.on },
-		// off: { value: Pizzicato.Events.off },
-		// trigger: { value: Pizzicato.Events.trigger }
+	
+		// Non enumberable properties
+	
+	
+		initializeWithWave: {
+			enumberable: false,
+	
+			value: function (waveOptions, callback) {
+				this.getRawSourceNode = function() {
+					var node = Pizzicato.context.createOscillator();
+					node.type = waveOptions.type || 'sine';
+					node.frequency.value = waveOptions.frequency || 440;
+	
+					return node;
+				};
+				if (Pz.Util.isFunction(callback)) 
+					callback();
+			}
+		},
+		
+	
+		initializeWithUrl: {
+			enumberable: false,
+			value: function (url, callback) {
+				var self = this;
+				var request = new XMLHttpRequest();
+	
+				request.open('GET', url, true);
+				request.responseType = 'arraybuffer';
+				request.onload = function(progressEvent) {
+					var response = progressEvent.target.response;
+					Pizzicato.context.decodeAudioData(response, (function(buffer) {
+						self.getRawSourceNode = function() {
+							var node = Pizzicato.context.createBufferSource();
+							node.loop = this.loop;
+							node.buffer = buffer;
+							return node;
+						};
+						if (Pz.Util.isFunction(callback)) 
+							callback();
+					}).bind(self));
+				};
+				request.send();
+			}
+		},
+	
+	
+		getSourceNode: {
+			enumberable: false,
+	
+			value: function() {
+				var node = this.getRawSourceNode();
+	
+				node.onended = this.onEnded.bind(this);
+				node.connect(this.getInputNode());
+	
+				return node;
+			}
+		},
+	
+	
+		getMasterVolume: {
+			enumberable: false,
+	
+			value: function() {
+				if (this.masterVolume)
+					return this.masterVolume;
+	
+				var masterVolume = Pizzicato.context.createGain();
+				masterVolume.connect(Pizzicato.context.destination);
+				return masterVolume;
+			}
+		},
+	
+	
+		getInputNode: {
+			enumberable: false,
+	
+			value: function() {
+				if (this.effects.length > 0) 
+					return this.effects[0].inputNode;
+	
+				return this.masterVolume;
+			}
+		}
 	});
 
 	Pizzicato.Effects = {};
@@ -277,40 +331,21 @@
 		for (var key in defaults)
 			this.options[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
 	
-		this.inputGainNode = Pizzicato.context.createGain();
+		this.inputNode = Pizzicato.context.createGain();
 		this.dryGainNode = Pizzicato.context.createGain();
 		this.wetGainNode = Pizzicato.context.createGain();
-		this.outputGainNode = Pizzicato.context.createGain();
+		this.outputNode = Pizzicato.context.createGain();
 	
 		this.adjustMix();
 	
-		this.inputGainNode.connect(this.dryGainNode);
-		this.dryGainNode.connect(this.outputGainNode);
-		this.wetGainNode.connect(this.outputGainNode);
+		this.inputNode.connect(this.dryGainNode);
+		this.dryGainNode.connect(this.outputNode);
+		this.wetGainNode.connect(this.outputNode);
 	
 		this.createDelayLoop();	
 	};
 	
 	Pizzicato.Effects.Delay.prototype = Object.create(null, {
-	
-		/**
-		 * Applies the delay effect to a node and 
-		 * returns the master gain node;
-		 * @type {Function}
-		 */
-		applyToNode: {
-	
-			writable: false,
-	
-			configurable: false,
-	
-			enumerable: true,
-	
-			value: function(node) {
-				node.connect(this.inputGainNode);
-				return this.outputGainNode;
-			}
-		},
 	
 		/**
 		 * Gets and sets the dry/wet mix.
@@ -387,7 +422,7 @@
 					
 					var delay = Pizzicato.context.createDelay();
 					var feedback = Pizzicato.context.createGain();
-					var parentNode = (i === 0) ? this.inputGainNode : this.delayLoop[i - 1].delay;
+					var parentNode = (i === 0) ? this.inputNode : this.delayLoop[i - 1].delay;
 					
 					delay.delayTime.value = this.time;
 					feedback.gain.value = 1 - (i * (1 / (this.repetitions)));
@@ -443,35 +478,16 @@
 			ratio: 12
 		};
 	
-		this.compressorNode = Pizzicato.context.createDynamicsCompressor();
-		this.outputGainNode = Pizzicato.context.createGain();
+		this.inputNode = this.compressorNode = Pizzicato.context.createDynamicsCompressor();
+		this.outputNode = Pizzicato.context.createGain();
 		
-		this.compressorNode.connect(this.outputGainNode);
+		this.compressorNode.connect(this.outputNode);
 	
 		for (var key in defaults)
 			this[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
 	};
 	
 	Pizzicato.Effects.Compressor.prototype = Object.create(null, {
-	
-		/**
-		 * Applies the compression effect to a node and 
-		 * returns the master gain node.
-		 * @type {Function}
-		 */
-		applyToNode: {
-	
-			writable: false,
-	
-			configurable: false,
-	
-			enumerable: true,
-	
-			value: function(node) {
-				node.connect(this.compressorNode);
-				return this.outputGainNode;
-			}
-		},
 	
 		/**
 		 * The level above which compression is applied to the audio.

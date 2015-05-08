@@ -10,35 +10,16 @@ Pizzicato.Effects.Compressor = function(options) {
 		ratio: 12
 	};
 
-	this.compressorNode = Pizzicato.context.createDynamicsCompressor();
-	this.outputGainNode = Pizzicato.context.createGain();
+	this.inputNode = this.compressorNode = Pizzicato.context.createDynamicsCompressor();
+	this.outputNode = Pizzicato.context.createGain();
 	
-	this.compressorNode.connect(this.outputGainNode);
+	this.compressorNode.connect(this.outputNode);
 
 	for (var key in defaults)
 		this[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
 };
 
 Pizzicato.Effects.Compressor.prototype = Object.create(null, {
-
-	/**
-	 * Applies the compression effect to a node and 
-	 * returns the master gain node.
-	 * @type {Function}
-	 */
-	applyToNode: {
-
-		writable: false,
-
-		configurable: false,
-
-		enumerable: true,
-
-		value: function(node) {
-			node.connect(this.compressorNode);
-			return this.outputGainNode;
-		}
-	},
 
 	/**
 	 * The level above which compression is applied to the audio.

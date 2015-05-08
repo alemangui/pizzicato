@@ -11,40 +11,21 @@ Pizzicato.Effects.Delay = function(options) {
 	for (var key in defaults)
 		this.options[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
 
-	this.inputGainNode = Pizzicato.context.createGain();
+	this.inputNode = Pizzicato.context.createGain();
 	this.dryGainNode = Pizzicato.context.createGain();
 	this.wetGainNode = Pizzicato.context.createGain();
-	this.outputGainNode = Pizzicato.context.createGain();
+	this.outputNode = Pizzicato.context.createGain();
 
 	this.adjustMix();
 
-	this.inputGainNode.connect(this.dryGainNode);
-	this.dryGainNode.connect(this.outputGainNode);
-	this.wetGainNode.connect(this.outputGainNode);
+	this.inputNode.connect(this.dryGainNode);
+	this.dryGainNode.connect(this.outputNode);
+	this.wetGainNode.connect(this.outputNode);
 
 	this.createDelayLoop();	
 };
 
 Pizzicato.Effects.Delay.prototype = Object.create(null, {
-
-	/**
-	 * Applies the delay effect to a node and 
-	 * returns the master gain node;
-	 * @type {Function}
-	 */
-	applyToNode: {
-
-		writable: false,
-
-		configurable: false,
-
-		enumerable: true,
-
-		value: function(node) {
-			node.connect(this.inputGainNode);
-			return this.outputGainNode;
-		}
-	},
 
 	/**
 	 * Gets and sets the dry/wet mix.
@@ -121,7 +102,7 @@ Pizzicato.Effects.Delay.prototype = Object.create(null, {
 				
 				var delay = Pizzicato.context.createDelay();
 				var feedback = Pizzicato.context.createGain();
-				var parentNode = (i === 0) ? this.inputGainNode : this.delayLoop[i - 1].delay;
+				var parentNode = (i === 0) ? this.inputNode : this.delayLoop[i - 1].delay;
 				
 				delay.delayTime.value = this.time;
 				feedback.gain.value = 1 - (i * (1 / (this.repetitions)));
