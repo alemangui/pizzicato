@@ -236,7 +236,6 @@ input[type=range]::-ms-track {
 }
 
 /**** Style input range ****/
-/* Special styling for WebKit/Blink */
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   height: 23px;
@@ -245,22 +244,20 @@ input[type=range]::-webkit-slider-thumb {
   background: rgb(237, 45, 58);
   border: 7px solid #ccc;
   cursor: pointer;
-  margin-top: -8px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
-  box-shadow: 1px 1px 1px #333, 0px 0px 1px #333; /* Add cool effects to your sliders! */
+  margin-top: -8px;
+  box-shadow: 1px 1px 1px #333, 0px 0px 1px #333; 
 }
 
-/* All the same stuff for Firefox */
 input[type=range]::-moz-range-thumb {
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  height: 23px;
-  width: 23px;
+  height: 13px;
+  width: 13px;
   border-radius: 50%;
   background: rgb(237, 45, 58);
   border: 7px solid #ccc;
   cursor: pointer;
 }
 
-/* All the same stuff for IE */
 input[type=range]::-ms-thumb {
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
   height: 23px;
@@ -275,10 +272,8 @@ input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
   height: 8.4px;
   cursor: pointer;
-  /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
   background: #444;
   border-radius: 3px;
-  /*border: 0.2px solid #010101;*/
 }
 
 input[type=range]:focus::-webkit-slider-runnable-track {
@@ -289,10 +284,8 @@ input[type=range]::-moz-range-track {
   width: 100%;
   height: 8.4px;
   cursor: pointer;
-  /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
   background: #444;
   border-radius: 3px;
-  /*border: 0.2px solid #010101;*/
 }
 
 input[type=range]::-ms-track {
@@ -308,7 +301,6 @@ input[type=range]::-ms-fill-lower {
   background: #2a6495;
   border: 0.2px solid #010101;
   border-radius: 2.6px;
-  /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
 }
 input[type=range]:focus::-ms-fill-lower {
   background: #3071a9;
@@ -317,7 +309,6 @@ input[type=range]::-ms-fill-upper {
   background: #3071a9;
   border: 0.2px solid #010101;
   border-radius: 2.6px;
-  /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
 }
 input[type=range]:focus::-ms-fill-upper {
   background: #367ebd;
