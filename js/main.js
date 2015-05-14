@@ -19,17 +19,20 @@ var segments = [
 	{
 		audio: sawtoothWave,
 		playButton: document.getElementById('playWave'),
-		stopButton: document.getElementById('stopWave')
+		stopButton: document.getElementById('stopWave'),
+		volumeSlider: document.getElementById('volume-wave')
 	},
 	{
 		audio: click,
 		playButton: document.getElementById('playClick'),
-		stopButton: document.getElementById('stopClick')
+		stopButton: document.getElementById('stopClick'),
+		volumeSlider: document.getElementById('volume-click')
 	},
 	{
 		audio: birds,
 		playButton: document.getElementById('playBirds'),
 		stopButton: document.getElementById('stopBirds'),
+		volumeSlider: document.getElementById('volume-birds'),
 		effects: [
 			{
 				instance: delay,
@@ -45,6 +48,7 @@ var segments = [
 		audio: beats,
 		playButton: document.getElementById('playBeats'),
 		stopButton: document.getElementById('stopBeats'),
+		volumeSlider: document.getElementById('volume-beats'),
 		effects: [
 			{
 				instance: compressor,
@@ -84,6 +88,11 @@ for (var i = 0; i < segments.length; i++) {
 
 		segment.stopButton.addEventListener('click', function(e) {
 			segment.audio.stop();
+		});
+
+		segment.volumeSlider.addEventListener('input', function(e) {
+			var volumeDisplay = segment.volumeSlider.parentNode.getElementsByClassName('slider-value')[0];
+			volumeDisplay.innerHTML = segment.audio.volume = e.target.valueAsNumber;
 		});
 
 		if (!segment.effects || !segment.effects.length)
