@@ -37,6 +37,14 @@ describe('Sound', function() {
 		expect(sound.masterVolume.gain.value).toBeCloseTo(1.0);
 	});
 
+	it('should change the master volume when editing the volume property', function() {
+		var sound = new Pizzicato.Sound({
+			wave: { type: 'sine' }
+		});
+		sound.volume = 0.3;
+		expect(sound.masterVolume.gain.value).toBeCloseTo(0.3);
+	});
+
 	it('pausing, playing and stopping should update the corresponding properties', function(done) {
 		var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
 			expect(sound.playing).toBe(false);

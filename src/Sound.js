@@ -94,9 +94,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 		value: function() {
 			for (var i = 0; i < this.effects.length; i++) {
 				
-				var destinationNode = i < this.effects.length - 1 
-					? this.effects[i + 1].inputNode 
-					: this.masterVolume;
+				var destinationNode = i < this.effects.length - 1 ? this.effects[i + 1].inputNode : this.masterVolume;
 
 				this.effects[i].outputNode.disconnect();
 				this.effects[i].outputNode.connect(destinationNode);

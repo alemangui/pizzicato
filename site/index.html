@@ -39,6 +39,14 @@ var sawtoothWave = new Pizzicato.Sound({
 sawtoothWave.play();
             </code></pre>
 
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-wave">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-wave" />
+                    <div class="slider-value">1</div>
+                </div>
+            </div>
+
             <div class="controls">
                 <button id="stopWave" class="stop action"></button>
                 <button id="playWave" class="play action"></button>
@@ -54,6 +62,14 @@ var click = new Pizzicato.Sound('./audio/click.wav', function() {
     click.play();
 });
             </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-click">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-click" />
+                    <div class="slider-value">1</div>
+                </div>
+            </div>
 
             <div class="controls">
                 <button id="stopClick" class="stop action"></button>
@@ -75,6 +91,11 @@ birds.play();
             </code></pre>
 
             <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-birds">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-birds" />
+                    <div class="slider-value">1</div>
+                </div>
                 <div class="slider">
                     <label for="delay-repetitions">Repetitions</label>
                     <input type="range" min="0" max="50" step="1" value="5" id="delay-repetitions" />
@@ -110,6 +131,11 @@ beats.play();
             </code></pre>
 
             <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-beats">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-beats" />
+                    <div class="slider-value">1</div>
+                </div>
                 <div class="slider">
                     <label for="compressor-threshold">Threshold</label>
                     <input type="range" min="-100" max="0" step="1" value="-24" id="compressor-threshold" />

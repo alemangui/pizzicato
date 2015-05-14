@@ -184,6 +184,10 @@ button.pause:before {
     border-radius: 0px 0px 8px 8px; 
 }
 
+.slider:only-child {
+    border-radius: 8px 8px 8px 8px; 
+}
+
 .slider>label {
     width: 120px;
     display: block;
