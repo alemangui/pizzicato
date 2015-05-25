@@ -76,6 +76,26 @@ var click = new Pizzicato.Sound('./audio/click.wav', function() {
                 <button id="playClick" class="play action"></button>
             </div>
 
+
+            <h3>Use your microphone (make sure you have headphones!)</h3>
+
+            <pre><code class="language-javascript">
+var voice = new Pizzicato.Sound({ microphone: true });
+            </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-voice">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-voice" />
+                    <div class="slider-value">1</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="stopVoice" class="stop action"></button>
+                <button id="playVoice" class="play action"></button>
+            </div>
+
             <h3>Add effects</h3>
             <h4>Delay</h4>
 
@@ -168,7 +188,7 @@ beats.play();
                 <button id="playBeats" class="play action"></button>
             </div>
         </div>
-        <script src="https://cdn.rawgit.com/alemangui/pizzicato/master/distr/Pizzicato.js"></script>
+        <script src="./Pizzicato.js"></script>
         <script src="js/vendor/prism.js"></script>
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
         <script src="js/main.js"></script>
