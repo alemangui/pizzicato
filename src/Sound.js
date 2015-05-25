@@ -18,6 +18,9 @@ Pizzicato.Sound = function(options, callback) {
 
 	else if (util.isObject(options) && util.isObject(options.wave))
 		(this.initializeWithWave.bind(this))(options.wave, callback);
+
+	else if (util.isObject(options) && !!options.microphone)
+		(this.initializeWithMicrophone.bind(this))(options, callback);
 };
 
 
@@ -32,9 +35,11 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			this.playing = true;
 			this.paused = false;
 			
-			this.lastTimePlayed = Pizzicato.context.currentTime;
-			
-			this.sourceNode.start(0, this.startTime || 0);
+			if (!this.isMediaStream()) {
+				this.lastTimePlayed = Pizzicato.context.currentTime;
+				this.sourceNode.start(0, this.startTime || 0);
+			}
+
 			this.trigger('play');
 		}
 	},
@@ -42,9 +47,16 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 	stop: {
 		value: function() {
+			if (!this.paused && !this.playing) return;
+
 			this.paused = false;
 			this.playing = false;
-			this.sourceNode.stop();
+
+			if (!this.isMediaStream())
+				this.sourceNode.stop();
+			else 
+				this.sourceNode.disconnect();
+
 			this.trigger('stop');
 		}
 	},
@@ -52,9 +64,16 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 	pause: {
 		value: function() {
+			if (this.paused) return;
+
 			this.paused = true;
 			this.playing = false;
-			this.sourceNode.stop();
+			
+			if (!this.isMediaStream())
+				this.sourceNode.stop();
+			else
+				this.sourceNode.disconnect();
+
 			this.trigger('pause');
 		}
 	},
@@ -74,6 +93,10 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 		value: function(effect) {
 			this.effects.push(effect);
 			this.connectEffects();
+			if (!!this.sourceNode) {
+				this.sourceNode.disconnect()
+				this.sourceNode.connect(this.getInputNode())	
+			}
 		}
 	},
 
@@ -138,6 +161,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 	initializeWithUrl: {
 		enumberable: false,
+
 		value: function (url, callback) {
 			var self = this;
 			var request = new XMLHttpRequest();
@@ -158,6 +182,33 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 				}).bind(self));
 			};
 			request.send();
+		}
+	},
+
+
+	initializeWithMicrophone: {
+		enumberable: false,
+
+		value: function(options, callback) {
+			navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+			var self = this;
+
+			if (!navigator.getUserMedia) return;
+
+			navigator.getUserMedia({ audio: true }, (function(stream) {
+
+				self.getRawSourceNode = function() {
+					return Pizzicato.context.createMediaStreamSource(stream);
+				};
+
+				if (Pz.Util.isFunction(callback))
+					callback();
+
+			}).bind(self), function() {
+
+				console.log('Error while getting user media');
+
+			});
 		}
 	},
 
@@ -198,6 +249,15 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 				return this.effects[0].inputNode;
 
 			return this.masterVolume;
+		}
+	},
+
+
+	isMediaStream: {
+		enumberable: false,
+
+		value: function() {
+			return !!this.sourceNode && this.sourceNode.mediaStream;
 		}
 	}
 });

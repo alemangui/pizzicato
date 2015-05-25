@@ -11,6 +11,7 @@ var compressor = new Pizzicato.Effects.Compressor({
 
 var sawtoothWave = new Pizzicato.Sound({ wave: { type: 'sawtooth' }});
 var click = new Pizzicato.Sound('./audio/click.wav');
+var voice = new Pizzicato.Sound({ microphone: true });
 var birds = new Pizzicato.Sound('./audio/bird.wav', function() { birds.addEffect(delay); });
 var dreamSound = new Pizzicato.Sound('./audio/dream.wav');
 var beats = new Pizzicato.Sound('./audio/bird.wav', function() { beats.addEffect(compressor); });
@@ -27,6 +28,12 @@ var segments = [
 		playButton: document.getElementById('playClick'),
 		stopButton: document.getElementById('stopClick'),
 		volumeSlider: document.getElementById('volume-click')
+	},
+	{
+		audio: voice,
+		playButton: document.getElementById('playVoice'),
+		stopButton: document.getElementById('stopVoice'),
+		volumeSlider: document.getElementById('volume-voice')
 	},
 	{
 		audio: birds,
@@ -76,7 +83,7 @@ for (var i = 0; i < segments.length; i++) {
 		});
 
 		segment.audio.on('pause', function() {
-			segment.playButton.classList.add('pause');
+			segment.playButton.classList.remove('pause');
 		});
 
 		segment.playButton.addEventListener('click', function(e) {
