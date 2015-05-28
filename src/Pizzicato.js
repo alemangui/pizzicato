@@ -3,7 +3,7 @@
 
 	var Pizzicato = root.Pz = root.Pizzicato = {};
 
-	Pizzicato.context = new AudioContext();
+	Pizzicato.context = new (window.AudioContext || window.webkitAudioContext)();
 
 	//= include ./Events.js
 	//= include ./Util.js

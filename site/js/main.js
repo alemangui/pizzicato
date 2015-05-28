@@ -9,12 +9,18 @@ var compressor = new Pizzicato.Effects.Compressor({
 });
 
 
-var sawtoothWave = new Pizzicato.Sound({ wave: { type: 'sawtooth' }});
-var click = new Pizzicato.Sound('./audio/click.wav');
-var voice = new Pizzicato.Sound({ microphone: true });
-var birds = new Pizzicato.Sound('./audio/bird.wav', function() { birds.addEffect(delay); });
-var dreamSound = new Pizzicato.Sound('./audio/dream.wav');
-var beats = new Pizzicato.Sound('./audio/bird.wav', function() { beats.addEffect(compressor); });
+var sawtoothWave 	= new Pizzicato.Sound({ wave: { type: 'sawtooth' }});
+var click 				= new Pizzicato.Sound('./audio/click.wav');
+var birds 				= new Pizzicato.Sound('./audio/bird.wav', function() { birds.addEffect(delay); });
+var dreamSound 		= new Pizzicato.Sound('./audio/dream.wav');
+var beats 				= new Pizzicato.Sound('./audio/bird.wav', function() { beats.addEffect(compressor); });
+var voice 				= new Pizzicato.Sound({ microphone: true }, function(err) {
+	if (!err) return;
+	document.getElementById('playVoice').setAttribute('disabled', 'disabled');
+	document.getElementById('stopVoice').setAttribute('disabled', 'disabled');
+	document.getElementById('volume-voice').setAttribute('disabled', 'disabled');
+	document.getElementById('microphone-error').style.display = 'block';
+});
 
 var segments = [
 	{

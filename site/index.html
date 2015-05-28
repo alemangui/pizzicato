@@ -78,7 +78,7 @@ var click = new Pizzicato.Sound('./audio/click.wav', function() {
 
 
             <h3>Use your microphone (make sure you have headphones!)</h3>
-
+            <div class="error" id="microphone-error">Oops! We didn't get your permission to access the microphone.</div>
             <pre><code class="language-javascript">
 var voice = new Pizzicato.Sound({ microphone: true });
             </code></pre>

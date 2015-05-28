@@ -62,12 +62,16 @@ html {
     color: #333;
 }
 
+body {
+    padding-bottom: 40px;
+}
+
 p {
     color: rgb(94, 94, 94);
 }
 
-body {
-    padding-bottom: 40px;
+h3, h4 {
+  margin-bottom: 5px;
 }
 
 .container {
@@ -159,6 +163,14 @@ button.pause:before {
     border-width: 0px 7px;
     margin-top: -10px;
     background: transparent;
+}
+
+button:disabled {
+    background-color: #777;
+}
+
+button[disabled], button[disabled]:hover, button[disabled]:active {
+    background-color: #777;
 }
 
 .slider-group {
@@ -272,6 +284,12 @@ input[type=range]::-ms-thumb {
   cursor: pointer;
 }
 
+input[type=range]:disabled::-webkit-slider-thumb,
+input[type=range]:disabled::-moz-range-thumb,
+input[type=range]:disabled::-ms-thumb {
+  background: #777;
+}
+
 input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
   height: 8.4px;
@@ -318,6 +336,15 @@ input[type=range]:focus::-ms-fill-upper {
   background: #367ebd;
 }
 
+
+div.error {
+  display: none;
+  background: rgb(240, 195, 195);
+  border-radius: 5px;
+  padding: 3px 10px;
+  color: rgb(151, 90, 90);
+
+}
 
 /* ==========================================================================
    Media Queries

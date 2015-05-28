@@ -35,7 +35,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			this.playing = true;
 			this.paused = false;
 			
-			if (!this.isMediaStream()) {
+			if (!this.isMicrophoneInput()) {
 				this.lastTimePlayed = Pizzicato.context.currentTime;
 				this.sourceNode.start(0, this.startTime || 0);
 			}
@@ -52,10 +52,11 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			this.paused = false;
 			this.playing = false;
 
-			if (!this.isMediaStream())
-				this.sourceNode.stop();
-			else 
+			if (this.isMicrophoneInput())
 				this.sourceNode.disconnect();
+			else 
+				this.sourceNode.stop(0);
+				
 
 			this.trigger('stop');
 		}
@@ -69,10 +70,10 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			this.paused = true;
 			this.playing = false;
 			
-			if (!this.isMediaStream())
-				this.sourceNode.stop();
-			else
+			if (this.isMicrophoneInput())
 				this.sourceNode.disconnect();
+			else 
+				this.sourceNode.stop(0);
 
 			this.trigger('pause');
 		}
@@ -94,8 +95,8 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			this.effects.push(effect);
 			this.connectEffects();
 			if (!!this.sourceNode) {
-				this.sourceNode.disconnect()
-				this.sourceNode.connect(this.getInputNode())	
+				this.sourceNode.disconnect();
+				this.sourceNode.connect(this.getInputNode());
 			}
 		}
 	},
@@ -204,9 +205,10 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 				if (Pz.Util.isFunction(callback))
 					callback();
 
-			}).bind(self), function() {
+			}).bind(self), function(error) {
 
-				console.log('Error while getting user media');
+				if (Pz.Util.isFunction(callback))
+					callback(error);
 
 			});
 		}
@@ -253,7 +255,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 	},
 
 
-	isMediaStream: {
+	isMicrophoneInput: {
 		enumberable: false,
 
 		value: function() {
