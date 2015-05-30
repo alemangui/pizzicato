@@ -21,6 +21,9 @@ Pizzicato.Sound = function(options, callback) {
 
 	else if (util.isObject(options) && !!options.microphone)
 		(this.initializeWithMicrophone.bind(this))(options, callback);
+
+	else if (util.isFunction(options))
+		(this.initializeWithFunction.bind(this))(options, callback);
 };
 
 
@@ -35,7 +38,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			this.playing = true;
 			this.paused = false;
 			
-			if (!this.isMicrophoneInput()) {
+			if (Pz.Util.isFunction(this.sourceNode.start)) {
 				this.lastTimePlayed = Pizzicato.context.currentTime;
 				this.sourceNode.start(0, this.startTime || 0);
 			}
@@ -52,11 +55,10 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			this.paused = false;
 			this.playing = false;
 
-			if (this.isMicrophoneInput())
-				this.sourceNode.disconnect();
-			else 
+			if (Pz.Util.isFunction(this.sourceNode.stop))
 				this.sourceNode.stop(0);
-				
+			else
+				this.sourceNode.disconnect();
 
 			this.trigger('stop');
 		}
@@ -70,10 +72,10 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			this.paused = true;
 			this.playing = false;
 			
-			if (this.isMicrophoneInput())
-				this.sourceNode.disconnect();
-			else 
+			if (Pz.Util.isFunction(this.sourceNode.stop))
 				this.sourceNode.stop(0);
+			else 
+				this.sourceNode.disconnect();				
 
 			this.trigger('pause');
 		}
@@ -215,6 +217,20 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 	},
 
 
+	initializeWithFunction: {
+		enumberable: false,
+
+		value: function(fn, callback) {
+			this.getRawSourceNode = function() {
+				var node = Pizzicato.context.createScriptProcessor(undefined, 1, 1);
+				node.onaudioprocess = fn;
+
+				return node;
+			};
+		}
+	},
+
+
 	getSourceNode: {
 		enumberable: false,
 
@@ -251,15 +267,6 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 				return this.effects[0].inputNode;
 
 			return this.masterVolume;
-		}
-	},
-
-
-	isMicrophoneInput: {
-		enumberable: false,
-
-		value: function() {
-			return !!this.sourceNode && this.sourceNode.mediaStream;
 		}
 	}
 });

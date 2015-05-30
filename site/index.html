@@ -96,6 +96,30 @@ var voice = new Pizzicato.Sound({ microphone: true });
                 <button id="playVoice" class="play action"></button>
             </div>
 
+
+            <h3>Create your own audio function</h3>
+            <pre><code class="language-javascript">
+var whiteNoise = new Pizzicato.Sound(function(e) {
+
+    var output = e.outputBuffer.getChannelData(0);
+    for (var i = 0; i < e.outputBuffer.length; i++)
+        output[i] = Math.random();
+});
+            </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-white">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-white" />
+                    <div class="slider-value">1</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="stopWhite" class="stop action"></button>
+                <button id="playWhite" class="play action"></button>
+            </div>
+
             <h3>Add effects</h3>
             <h4>Delay</h4>
 

@@ -14,6 +14,11 @@ var click 				= new Pizzicato.Sound('./audio/click.wav');
 var birds 				= new Pizzicato.Sound('./audio/bird.wav', function() { birds.addEffect(delay); });
 var dreamSound 		= new Pizzicato.Sound('./audio/dream.wav');
 var beats 				= new Pizzicato.Sound('./audio/bird.wav', function() { beats.addEffect(compressor); });
+var whiteNoise    = new Pizzicato.Sound(function(e) {
+  var output = e.outputBuffer.getChannelData(0);
+  for (var i = 0; i < e.outputBuffer.length; i++)
+    output[i] = Math.random();
+});
 var voice 				= new Pizzicato.Sound({ microphone: true }, function(err) {
 	if (!err) return;
 	document.getElementById('playVoice').setAttribute('disabled', 'disabled');
@@ -40,6 +45,12 @@ var segments = [
 		playButton: document.getElementById('playVoice'),
 		stopButton: document.getElementById('stopVoice'),
 		volumeSlider: document.getElementById('volume-voice')
+	},
+	{
+		audio: whiteNoise,
+		playButton: document.getElementById('playWhite'),
+		stopButton: document.getElementById('stopWhite'),
+		volumeSlider: document.getElementById('volume-white')
 	},
 	{
 		audio: birds,
