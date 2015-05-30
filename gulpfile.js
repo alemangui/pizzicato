@@ -7,21 +7,24 @@ var rename = require('gulp-rename');
 var karma = require('karma').server;
 
 gulp.task('hint', function() {
-	gulp.src('./src/**/*.js')
+	var stream = gulp.src('./src/**/*.js')
 		.pipe(jshint())
 		.pipe(jshint.reporter('jshint-stylish'))
+		.pipe(jshint.reporter('fail'));
 });
 
-gulp.task('scripts', function() {
-	gulp.src('./src/Pizzicato.js')
+
+gulp.task('scripts', ['hint'], function() {
+	var stream = gulp.src('./src/Pizzicato.js')
 		.pipe(include())
 		.pipe(gulp.dest('./distr'))
 		.pipe(rename('Pizzicato.min.js'))
 		.pipe(uglify())
-		.pipe(gulp.dest('./distr'))	
+		.pipe(gulp.dest('./distr'));
 });
 
-gulp.task('test', function(done) {
+
+gulp.task('test', ['scripts'], function(done) {
 	karma.start({
 		configFile: __dirname + '/karma.conf.js',
 		singleRun: true
