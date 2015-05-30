@@ -7,6 +7,13 @@ describe('Sound', function() {
 		expect(toString.call(sound.getSourceNode())).toBe('[object OscillatorNode]')
 	});
 
+	it('should create a script processor when initialized with a function', function() {
+		var sound = new Pizzicato.Sound(function(e) {});
+		sound.play();
+		expect(sound.sourceNode.toString()).toContain('ScriptProcessorNode');
+		sound.stop();
+	});
+
 	it('should execute callback function when given one', function(done) {
 		var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
 			done();
