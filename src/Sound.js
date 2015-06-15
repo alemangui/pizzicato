@@ -184,6 +184,10 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 						callback();
 				}).bind(self));
 			};
+			request.onreadystatechange = function(event) {
+				if (request.readyState === 4 && request.status !== 200)
+					console.error('Error while fetching ' + url + '. ' + request.statusText);
+			};
 			request.send();
 		}
 	},
@@ -222,7 +226,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 		value: function(fn, callback) {
 			this.getRawSourceNode = function() {
-				var node = Pizzicato.context.createScriptProcessor(undefined, 1, 1);
+				var node = Pizzicato.context.createScriptProcessor(2048, 1, 1);
 				node.onaudioprocess = fn;
 
 				return node;
