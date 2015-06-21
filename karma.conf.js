@@ -1,8 +1,16 @@
 module.exports = function(config) {
 
-	config.set({
+	var cfg = {
  
 		browsers: ['Chrome'],
+
+		customLaunchers: {
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
+    
 		frameworks: ['jasmine'],
 		files: [
 			'distr/Pizzicato.js',
@@ -14,7 +22,11 @@ module.exports = function(config) {
         included: false 
       }
 		]
+	};
 
-	});
+	if (process.env.TRAVIS)
+    cfg.browsers = ['Chrome_travis_ci'];
+
+	config.set(cfg);
 
 };
