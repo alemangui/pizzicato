@@ -2,21 +2,45 @@
 
 [![Build Status](https://travis-ci.org/alemangui/pizzicato.svg?branch=master)](https://travis-ci.org/alemangui/pizzicato)
 
-##A Web Audio API wrapper soon to come!
+##A Web Audio API wrapper in the making!
 
-In the meantime, feel free to check out the project. 
+In the meantime, feel free to check out the project and take a look at the [website](http://alemangui.github.io/pizzicato/).
 
 First install dependencies with 
 ```
 npm install
 ```
 
-And then build with
+And then run tests and build with
 ```
-gulp
+npm test
 ```
 
-To run only the tests, do 
+Or to skip tests:
 ```
-gulp test
+npm build
+```
+
+## How does it work?
+Include Pizzicato in your site
+```html
+<script src="./Pizzicato.js"></script>
+```
+
+Create a sound
+```javascript
+var sawtoothWave = new Pizzicato.Sound({ 
+    wave: { type: 'sawtooth' }
+});
+```
+
+Add effects
+```javascript
+var delay = new Pizzicato.Effects.Delay();
+sawtoothWave.addEffect(delay);
+```
+
+Use it!
+```javascript
+sawtoothWave.play();
 ```
