@@ -57,23 +57,23 @@ sawtoothWave.play();
             <h3>Load external audio files</h3>
 
             <pre><code class="language-javascript">
-var click = new Pizzicato.Sound('./audio/click.wav', function() {
-    // Click loaded!
-    click.play();
+var acousticGuitar = new Pizzicato.Sound('./audio/acoustic.wav', function() {
+    // Sound loaded!
+    acousticGuitar.play();
 });
             </code></pre>
 
             <div class="slider-group">
                 <div class="slider">
-                    <label for="volume-click">Volume</label>
-                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-click" />
+                    <label for="volume-acoustic">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-acoustic" />
                     <div class="slider-value">1</div>
                 </div>
             </div>
 
             <div class="controls">
-                <button id="stopClick" class="stop action"></button>
-                <button id="playClick" class="play action"></button>
+                <button id="stopAcoustic" class="stop action"></button>
+                <button id="playAcoustic" class="play action"></button>
             </div>
 
 
@@ -130,14 +130,14 @@ var delay = new Pizzicato.Effects.Delay({
     mix: 0.5
 });
 
-birds.addEffect(delay);
-birds.play();
+sound.addEffect(delay);
+sound.play();
             </code></pre>
 
             <div class="slider-group">
                 <div class="slider">
-                    <label for="volume-birds">Volume</label>
-                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-birds" />
+                    <label for="volume-timba">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-timba" />
                     <div class="slider-value">1</div>
                 </div>
                 <div class="slider">
@@ -158,8 +158,8 @@ birds.play();
             </div>
 
             <div class="controls">
-                <button id="stopBirds" class="stop action"></button>
-                <button id="playBirds" class="play action"></button>
+                <button id="stopTimba" class="stop action"></button>
+                <button id="playTimba" class="play action"></button>
             </div>
 
             <h4>Compressor</h4>
@@ -170,14 +170,14 @@ var compressor = new Pizzicato.Effects.Compressor({
     ratio: 12
 });
 
-beats.addEffect(compressor);
-beats.play();
+sound.addEffect(compressor);
+sound.play();
             </code></pre>
 
             <div class="slider-group">
                 <div class="slider">
-                    <label for="volume-beats">Volume</label>
-                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-beats" />
+                    <label for="volume-electro">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-electro" />
                     <div class="slider-value">1</div>
                 </div>
                 <div class="slider">
@@ -208,11 +208,47 @@ beats.play();
             </div>
 
             <div class="controls">
-                <button id="stopBeats" class="stop action"></button>
-                <button id="playBeats" class="play action"></button>
+                <button id="stopElectro" class="stop action"></button>
+                <button id="playElectro" class="play action"></button>
+            </div>
+
+
+        <h4>Low Pass Filter</h4>
+
+            <pre><code class="language-javascript">
+var lowPassFilter = new Pizzicato.Effects.LowPassFilter({
+    frequency: 400,
+    peak: 10
+});
+
+sound.addEffect(lowPassFilter);
+sound.play();
+            </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-synth">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-synth" />
+                    <div class="slider-value">1</div>
+                </div>
+                <div class="slider">
+                    <label for="low-pass-filter-frequency">Frequency</label>
+                    <input type="range" min="10" max="22050" step="1" value="400" id="low-pass-filter-frequency" />
+                    <div class="slider-value">400</div>
+                </div>
+                <div class="slider">
+                    <label for="low-pass-filter-peak">Peak</label>
+                    <input type="range" min="0.0001" max="20" step="0.0001" value="10" id="low-pass-filter-peak" />
+                    <div class="slider-value">10</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="stopSynth" class="stop action"></button>
+                <button id="playSynth" class="play action"></button>
             </div>
         </div>
-        <script src="https://cdn.rawgit.com/alemangui/pizzicato/master/distr/Pizzicato.js"></script>
+        <script src="./Pizzicato.js"></script>
         <script src="js/vendor/prism.js"></script>
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
         <script src="js/main.js"></script>

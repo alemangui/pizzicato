@@ -7,13 +7,17 @@ var compressor = new Pizzicato.Effects.Compressor({
   threshold: -24,
   ratio: 12
 });
+var lowPassFilter = new Pizzicato.Effects.LowPassFilter({
+	frequency: 400,
+	peak: 10
+});
 
 
 var sawtoothWave 	= new Pizzicato.Sound({ wave: { type: 'sawtooth' }});
-var click 				= new Pizzicato.Sound('./audio/click.wav');
-var birds 				= new Pizzicato.Sound('./audio/bird.wav', function() { birds.addEffect(delay); });
-var dreamSound 		= new Pizzicato.Sound('./audio/dream.wav');
-var beats 				= new Pizzicato.Sound('./audio/bird.wav', function() { beats.addEffect(compressor); });
+var acoustic 			= new Pizzicato.Sound('./audio/acoustic.wav');
+var timba 				= new Pizzicato.Sound({ source: './audio/timba.wav', loop: true }, function() { timba.addEffect(delay); });
+var electro 			= new Pizzicato.Sound({ source: './audio/electro.wav', loop: true }, function() { electro.addEffect(compressor); });
+var synth		 			= new Pizzicato.Sound({ source: './audio/synth.wav', loop: true }, function() { synth.addEffect(lowPassFilter); });
 var whiteNoise    = new Pizzicato.Sound(function(e) {
   var output = e.outputBuffer.getChannelData(0);
   for (var i = 0; i < e.outputBuffer.length; i++)
@@ -35,10 +39,10 @@ var segments = [
 		volumeSlider: document.getElementById('volume-wave')
 	},
 	{
-		audio: click,
-		playButton: document.getElementById('playClick'),
-		stopButton: document.getElementById('stopClick'),
-		volumeSlider: document.getElementById('volume-click')
+		audio: acoustic,
+		playButton: document.getElementById('playAcoustic'),
+		stopButton: document.getElementById('stopAcoustic'),
+		volumeSlider: document.getElementById('volume-acoustic')
 	},
 	{
 		audio: voice,
@@ -53,10 +57,10 @@ var segments = [
 		volumeSlider: document.getElementById('volume-white')
 	},
 	{
-		audio: birds,
-		playButton: document.getElementById('playBirds'),
-		stopButton: document.getElementById('stopBirds'),
-		volumeSlider: document.getElementById('volume-birds'),
+		audio: timba,
+		playButton: document.getElementById('playTimba'),
+		stopButton: document.getElementById('stopTimba'),
+		volumeSlider: document.getElementById('volume-timba'),
 		effects: [
 			{
 				instance: delay,
@@ -69,10 +73,10 @@ var segments = [
 		]
 	},
 	{
-		audio: beats,
-		playButton: document.getElementById('playBeats'),
-		stopButton: document.getElementById('stopBeats'),
-		volumeSlider: document.getElementById('volume-beats'),
+		audio: electro,
+		playButton: document.getElementById('playElectro'),
+		stopButton: document.getElementById('stopElectro'),
+		volumeSlider: document.getElementById('volume-electro'),
 		effects: [
 			{
 				instance: compressor,
@@ -82,6 +86,21 @@ var segments = [
 					attack: document.getElementById('compressor-attack'),
 					release: document.getElementById('compressor-release'),
 					ratio: document.getElementById('compressor-ratio')
+				}
+			}
+		]
+	},
+	{
+		audio: synth,
+		playButton: document.getElementById('playSynth'),
+		stopButton: document.getElementById('stopSynth'),
+		volumeSlider: document.getElementById('volume-synth'),
+		effects: [
+			{
+				instance: lowPassFilter,
+				parameters: {
+					frequency: document.getElementById('low-pass-filter-frequency'),
+					peak: document.getElementById('low-pass-filter-peak')
 				}
 			}
 		]
