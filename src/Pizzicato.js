@@ -13,7 +13,7 @@
 	//= include ./Effects.js
 	//= include ./Effects/Delay.js
 	//= include ./Effects/Compressor.js
-	//= include ./Instruments/Synth.js
+	//= include ./Effects/LowPassFilter.js
 	
 	return Pizzicato;
 })(this);

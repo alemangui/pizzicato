@@ -21,7 +21,7 @@ Or to skip tests:
 npm build
 ```
 
-## How does it work?
+## TL;DR: How does it work?
 Include Pizzicato in your site
 ```html
 <script src="./Pizzicato.js"></script>

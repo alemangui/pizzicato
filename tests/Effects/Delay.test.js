@@ -21,12 +21,12 @@ describe('Effects.Delay', function() {
 		var delay = new Pizzicato.Effects.Delay({ mix: initialMix });
 
 		expect(delay.dryGainNode.gain.value).toBeCloseTo(Pz.Util.getDryLevel(0));
-		expect(delay.dryGainNode.gain.value).toBeCloseTo(Pz.Util.getDryLevel(0));
+		expect(delay.wetGainNode.gain.value).toBeCloseTo(Pz.Util.getWetLevel(0));
 
 		delay.mix = newMix;
 
 		expect(delay.dryGainNode.gain.value).toBeCloseTo(Pz.Util.getDryLevel(newMix));
-		expect(delay.dryGainNode.gain.value).toBeCloseTo(Pz.Util.getDryLevel(newMix));
+		expect(delay.wetGainNode.gain.value).toBeCloseTo(Pz.Util.getWetLevel(newMix));
 	});
 
 
