@@ -129,4 +129,13 @@ var compressor = new Pizzicato.Effects.Delay({
 sound.addEffect(compressor);
 sound.play();
 ```
+### Support
+#### Browsers
+Pizzicato can only work in [browsers with Web Audio support](http://caniuse.com/#feat=audio-api), no shims have been added yet. This means:
+* Firefox 31+
+* Chrome 31+
+* Safari 7+ (microphone audio input not available in Safari)
+* Opera 30+
 
+#### Audio formats
+Pizzicato supports [supported by Web Audio](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility). These may vary depending on your system version and browser.
