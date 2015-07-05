@@ -162,6 +162,37 @@ sound.play();
                 <button id="playTimba" class="play action"></button>
             </div>
 
+
+            <h4>Distortion</h4>
+
+            <pre><code class="language-javascript">
+var distortion = new Pizzicato.Effects.Distortion({
+    gain: 0.4
+});
+
+sound.addEffect(distortion);
+sound.play();
+            </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-guitar">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-guitar" />
+                    <div class="slider-value">1</div>
+                </div>
+                <div class="slider">
+                    <label for="distortion-gain">Gain</label>
+                    <input type="range" min="0" max="1" step="0.01" value="0.4" id="distortion-gain" />
+                    <div class="slider-value">0.4</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="stopGuitar" class="stop action"></button>
+                <button id="playGuitar" class="play action"></button>
+            </div>
+
+
             <h4>Compressor</h4>
 
             <pre><code class="language-javascript">
@@ -248,36 +279,6 @@ sound.play();
                 <button id="playSynth" class="play action"></button>
             </div>
 
-
-
-            <h4>Distortion</h4>
-
-            <pre><code class="language-javascript">
-var distortion = new Pizzicato.Effects.Distortion({
-    gain: 0.4
-});
-
-sound.addEffect(distortion);
-sound.play();
-            </code></pre>
-
-            <div class="slider-group">
-                <div class="slider">
-                    <label for="volume-guitar">Volume</label>
-                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-guitar" />
-                    <div class="slider-value">1</div>
-                </div>
-                <div class="slider">
-                    <label for="distortion-gain">Gain</label>
-                    <input type="range" min="0" max="1" step="0.01" value="0.4" id="distortion-gain" />
-                    <div class="slider-value">0.4</div>
-                </div>
-            </div>
-
-            <div class="controls">
-                <button id="stopGuitar" class="stop action"></button>
-                <button id="playGuitar" class="play action"></button>
-            </div>
         </div>
 
 
