@@ -11,6 +11,9 @@ var lowPassFilter = new Pizzicato.Effects.LowPassFilter({
 	frequency: 400,
 	peak: 10
 });
+var distortion = new Pizzicato.Effects.Distortion({
+	gain: 0.4
+});
 
 
 var sawtoothWave 	= new Pizzicato.Sound({ wave: { type: 'sawtooth' }});
@@ -18,6 +21,7 @@ var acoustic 			= new Pizzicato.Sound('./audio/acoustic.m4a');
 var timba 				= new Pizzicato.Sound({ source: './audio/timba.m4a', loop: true }, function() { timba.addEffect(delay); });
 var electro 			= new Pizzicato.Sound({ source: './audio/electro.m4a', loop: true }, function() { electro.addEffect(compressor); });
 var synth		 			= new Pizzicato.Sound({ source: './audio/synth.m4a', loop: true }, function() { synth.addEffect(lowPassFilter); });
+var guitar 				= new Pizzicato.Sound({ source: './audio/guitar.m4a', loop: true }, function() { guitar.addEffect(distortion); });
 var whiteNoise    = new Pizzicato.Sound(function(e) {
   var output = e.outputBuffer.getChannelData(0);
   for (var i = 0; i < e.outputBuffer.length; i++)
@@ -101,6 +105,20 @@ var segments = [
 				parameters: {
 					frequency: document.getElementById('low-pass-filter-frequency'),
 					peak: document.getElementById('low-pass-filter-peak')
+				}
+			}
+		]
+	},
+	{
+		audio: guitar,
+		playButton: document.getElementById('playGuitar'),
+		stopButton: document.getElementById('stopGuitar'),
+		volumeSlider: document.getElementById('volume-guitar'),
+		effects: [
+			{
+				instance: distortion,
+				parameters: {
+					gain: document.getElementById('distortion-gain')
 				}
 			}
 		]
