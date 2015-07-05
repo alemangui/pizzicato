@@ -107,6 +107,19 @@ sound.addEffect(delay);
 sound.play();
 ```
 
+### Distortion
+The distortion effect adds an "override" to the sound, similar to the ones found in guitar amps. The distortion effect only takes one parameter:
+* ```gain``` _(min: 0, max: 1, defaults to 0.5)_: Amount of distortion applied.
+
+Example:
+```javascript
+var distortion = new Pizzicato.Effects.Delay({
+    gain: 0.4
+});
+sound.addEffect(delay);
+sound.play();
+```
+
 ### Compressor
 A compressor allows reducing the range between the loudest and the quietest parts of a sound. This is done by boosting the quiet segments and attenuating the loud ones.
 
@@ -129,6 +142,24 @@ var compressor = new Pizzicato.Effects.Delay({
 sound.addEffect(compressor);
 sound.play();
 ```
+
+### Low pass filter
+A low-pass filter passes signals with a frequency lower than a pre-determined cutoff frequency and attenuates signals with frequencies higher than the cutoff frequency. 
+
+* ```frequency``` _(min: 10, max: 22050, defaults to 350)_: The cutoff frequency of the lowpass filter.
+* ```peak``` _(min: 0.0001, max: 1000, defaults to 1)_: Indicates how peaked the frequency is around the cutoff frequency. The greater the value is, the greater is the peak.
+
+Example:
+```javascript
+var lowPassFilter = new Pizzicato.Effects.LowPassFilter({
+    frequency: 400,
+    peak: 10
+});
+
+sound.addEffect(lowPassFilter);
+sound.play();
+```
+
 ### Support
 #### Browsers
 Pizzicato can only work in [browsers with Web Audio support](http://caniuse.com/#feat=audio-api), no shims have been added yet. This means:
