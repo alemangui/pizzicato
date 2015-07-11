@@ -2,13 +2,13 @@ describe('Effects.Delay', function() {
 
 	it('Should override default options', function() {
 		var options = {
-			repetitions: 10,
+			feedback: 0.9,
 			time: 0.6,
 			mix: 0
 		};
 		var delay = new Pizzicato.Effects.Delay(options);
 
-		expect(delay.repetitions).toBe(options.repetitions);
+		expect(delay.feedback).toBe(options.feedback);
 		expect(delay.time).toBe(options.time);
 		expect(delay.mix).toBe(options.mix);
 	});
@@ -17,11 +17,11 @@ describe('Effects.Delay', function() {
 	it('Should change the gain node values when changing the mix', function() {
 		var initialMix = 0;
 		var newMix = 0.5;
-
+		console.log('will init delay');
 		var delay = new Pizzicato.Effects.Delay({ mix: initialMix });
 
-		expect(delay.dryGainNode.gain.value).toBeCloseTo(Pz.Util.getDryLevel(0));
-		expect(delay.wetGainNode.gain.value).toBeCloseTo(Pz.Util.getWetLevel(0));
+		expect(delay.dryGainNode.gain.value).toBeCloseTo(Pz.Util.getDryLevel(initialMix));
+		expect(delay.wetGainNode.gain.value).toBeCloseTo(Pz.Util.getWetLevel(initialMix));
 
 		delay.mix = newMix;
 
@@ -33,29 +33,29 @@ describe('Effects.Delay', function() {
 	it('Should change the delay node time values when changing the time', function() {
 		var initialTime = 0.3;
 		var newTime = 0.5;
-		var i;
 
+console.log('will init delay');
 		var delay = new Pizzicato.Effects.Delay({ time: initialTime });
 
-		for (i = 0; i < delay.delayLoop.length; i++)
-			expect(delay.delayLoop[i].delay.delayTime.value).toBeCloseTo(initialTime);
+		expect(delay.delayNode.delayTime.value).toBeCloseTo(initialTime);
 
 		delay.time = newTime;
 
-		for (i = 0; i < delay.delayLoop.length; i++)
-			expect(delay.delayLoop[i].delay.delayTime.value).toBeCloseTo(newTime);
+		expect(delay.delayNode.delayTime.value).toBeCloseTo(newTime);
 	});
 
 
-	it('Should change the times the delay is looped when changing the repetitions', function() {
-		var initialRepetitions = 10;
-		var newRepetitions = 5;
+	it('Should change the feedback strength when changing the feedback', function() {
+		var initialFeedback = 0.4;
+		var newFeedback = 0.5;
+console.log('will init delay');
+		var delay = new Pizzicato.Effects.Delay({ feedback: initialFeedback });
 
-		var delay = new Pizzicato.Effects.Delay({ repetitions: initialRepetitions });
-		expect(delay.delayLoop.length).toBe(10);
+		expect(delay.feedbackGainNode.gain.value).toBeCloseTo(initialFeedback);
 
-		delay.repetitions = newRepetitions;
-		expect(delay.delayLoop.length).toBe(newRepetitions);
+		delay.feedback = newFeedback;
+
+		expect(delay.feedbackGainNode.gain.value).toBeCloseTo(newFeedback);
 	});
 
 });

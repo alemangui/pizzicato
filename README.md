@@ -92,14 +92,14 @@ sound.removeEffect(delay);
 ```
 ### Delay
 The delay effect plays back the sound a certain number of times in defined intervals, giving the impression of an echo. The following options are available when creating a delay effect:
-* ```repetitions``` _(min: 0, max: 50, defaults to 5)_: How many times will the sound be played back? 
+* ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
 * ```time``` _(min: 0, max: 180, defaults to 0.3)_: Interval time in seconds.
 * ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output (the delayed sound).
 
 Example:
 ```javascript
 var delay = new Pizzicato.Effects.Delay({
-    repetitions: 8,
+    feedback: 0.8,
     time: 0.22,
     mix: 0.75
 });

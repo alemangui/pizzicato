@@ -69,7 +69,7 @@ var segments = [
 			{
 				instance: delay,
 				parameters: {
-					repetitions: document.getElementById('delay-repetitions'),
+					feedback: document.getElementById('delay-feedback'),
 					time: document.getElementById('delay-time'),
 					mix: document.getElementById('delay-mix')
 				}

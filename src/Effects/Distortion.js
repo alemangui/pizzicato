@@ -6,13 +6,11 @@ Pizzicato.Effects.Distortion = function(options) {
 		gain: 0.5
 	};
 
-	for (var key in defaults)
-		this.options[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
-
 	this.waveShaperNode = Pizzicato.context.createWaveShaper();
 	this.inputNode = this.outputNode = this.waveShaperNode;
 
-	this.adjustGain();
+	for (var key in defaults)
+		this[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
 };
 
 Pizzicato.Effects.Distortion.prototype = Object.create(null, {
