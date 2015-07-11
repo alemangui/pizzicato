@@ -125,7 +125,7 @@ var whiteNoise = new Pizzicato.Sound(function(e) {
 
             <pre><code class="language-javascript">
 var delay = new Pizzicato.Effects.Delay({
-    repetitions: 6,
+    feedback: 0.6,
     time: 0.4,
     mix: 0.5
 });
@@ -141,9 +141,9 @@ sound.play();
                     <div class="slider-value">1</div>
                 </div>
                 <div class="slider">
-                    <label for="delay-repetitions">Repetitions</label>
-                    <input type="range" min="0" max="50" step="1" value="5" id="delay-repetitions" />
-                    <div class="slider-value">5</div>
+                    <label for="delay-feedback">Feedback</label>
+                    <input type="range" min="0" max="1" step="0.01" value="0.6" id="delay-feedback" />
+                    <div class="slider-value">0.6</div>
                 </div>
                 <div class="slider">
                     <label for="delay-time">Time</label>
@@ -282,7 +282,7 @@ sound.play();
         </div>
 
 
-        <script src="https://cdn.rawgit.com/alemangui/pizzicato/master/distr/Pizzicato.js"></script>
+        <script src="./Pizzicato.js"></script>
         <script src="js/vendor/prism.js"></script>
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
         <script src="js/main.js"></script>
