@@ -17,7 +17,6 @@ describe('Effects.Delay', function() {
 	it('Should change the gain node values when changing the mix', function() {
 		var initialMix = 0;
 		var newMix = 0.5;
-		console.log('will init delay');
 		var delay = new Pizzicato.Effects.Delay({ mix: initialMix });
 
 		expect(delay.dryGainNode.gain.value).toBeCloseTo(Pz.Util.getDryLevel(initialMix));
@@ -33,8 +32,6 @@ describe('Effects.Delay', function() {
 	it('Should change the delay node time values when changing the time', function() {
 		var initialTime = 0.3;
 		var newTime = 0.5;
-
-console.log('will init delay');
 		var delay = new Pizzicato.Effects.Delay({ time: initialTime });
 
 		expect(delay.delayNode.delayTime.value).toBeCloseTo(initialTime);
@@ -48,7 +45,6 @@ console.log('will init delay');
 	it('Should change the feedback strength when changing the feedback', function() {
 		var initialFeedback = 0.4;
 		var newFeedback = 0.5;
-console.log('will init delay');
 		var delay = new Pizzicato.Effects.Delay({ feedback: initialFeedback });
 
 		expect(delay.feedbackGainNode.gain.value).toBeCloseTo(initialFeedback);

@@ -15,6 +15,7 @@
 	//= include ./Effects/Compressor.js
 	//= include ./Effects/LowPassFilter.js
 	//= include ./Effects/Distortion.js
+	//= include ./Effects/Flanger.js
 	
 	return Pizzicato;
 })(this);
