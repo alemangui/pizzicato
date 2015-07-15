@@ -28,7 +28,7 @@
 		"jasmine-core": "2.2.0"
 	},
 	"scripts": {
-		"build": "gulp",
+		"build": "gulp scripts",
 		"test": "gulp test"
 	},
 	"keywords": [

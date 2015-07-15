@@ -13,12 +13,12 @@ npm install
 
 And then run tests and build with
 ```
-npm test
+npm run test
 ```
 
 Or to skip tests:
 ```
-npm build
+npm run build
 ```
 
 ## TL;DR: How does it work?
