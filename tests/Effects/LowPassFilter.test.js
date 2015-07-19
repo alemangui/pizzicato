@@ -12,6 +12,19 @@ describe('Effects.LowPassFilter', function() {
 	});
 
 
+	it('should choose default options if invalid parameters are passed', function() {
+		var options = {
+			frequency: 1000000,
+			peak: 'invalid'
+		};
+
+		var lowPassFilter = new Pizzicato.Effects.LowPassFilter(options);
+
+		expect(lowPassFilter.frequency).toBe(350);
+		expect(lowPassFilter.peak).toBe(1);		
+	});
+
+
 	it('Should change the filter node frequency value when changing the frequency', function() {
 		var initialFrequency = 400;
 		var newFrequency = 600;

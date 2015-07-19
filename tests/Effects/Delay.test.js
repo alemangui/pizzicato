@@ -14,6 +14,21 @@ describe('Effects.Delay', function() {
 	});
 
 
+	it('should choose default options if invalid parameters are passed', function() {
+		var options = {
+			feedback: '0.9',
+			time: null,
+			mix: -100000
+		};
+
+		var delay = new Pizzicato.Effects.Delay(options);
+
+		expect(delay.feedback).toBe(0.5);
+		expect(delay.time).toBe(0.3);
+		expect(delay.mix).toBe(0.5);
+	});
+
+
 	it('Should change the gain node values when changing the mix', function() {
 		var initialMix = 0;
 		var newMix = 0.5;

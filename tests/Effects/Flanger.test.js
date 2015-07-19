@@ -18,6 +18,25 @@ describe('Effects.Flanger', function() {
 	});
 
 
+	it('should choose default options if invalid parameters are passed', function() {
+		var options = {
+			time: null,
+			speed: 'invalid',
+			depth: 1000000,
+			feedback: 1000000,
+			mix: -1000000
+		};
+
+		var flanger = new Pizzicato.Effects.Flanger(options);
+
+		expect(flanger.time).toBe(0.01);
+		expect(flanger.speed).toBe(0.7);
+		expect(flanger.depth).toBe(0.0008);
+		expect(flanger.feedback).toBe(0.6);
+		expect(flanger.mix).toBe(0.5);		
+	});
+
+
 	it('Should modify the delay node time when changing the time', function() {
 		var initialTime = 0.002;
 		var newTime = 0.003;

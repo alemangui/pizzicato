@@ -393,7 +393,8 @@
 
 	Pizzicato.Effects.Delay = function(options) {
 	
-		this.options = options || {};
+		this.options = {};
+		options = options || this.options;
 	
 		var defaults = {
 			feedback: 0.5,
@@ -416,8 +417,10 @@
 		this.dryGainNode.connect(this.outputNode);
 		this.wetGainNode.connect(this.outputNode);
 	
-		for (var key in defaults)
-			this[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
+		for (var key in defaults) {
+			this[key] = options[key];
+			this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
+		}
 	};
 	
 	Pizzicato.Effects.Delay.prototype = Object.create(null, {
@@ -426,6 +429,8 @@
 		 * Gets and sets the dry/wet mix.
 		 */
 		mix: {
+			enumerable: true,
+	
 			get: function() {
 				return this.options.mix	;	
 			},
@@ -444,6 +449,8 @@
 		 * Time between each delayed sound
 		 */
 		time: {
+			enumerable: true,
+	
 			get: function() {
 				return this.options.time;	
 			},
@@ -461,6 +468,8 @@
 		 * Strength of each of the echoed delayed sounds.
 		 */
 		feedback: {
+			enumerable: true,
+	
 			get: function() {
 				return this.options.feedback;	
 			},
@@ -478,7 +487,8 @@
 
 	Pizzicato.Effects.Compressor = function(options) {
 	
-		this.options = options || {};
+		this.options = {};
+		options = options || this.options;
 	
 		var defaults = {
 			threshold: -24,
@@ -493,8 +503,10 @@
 		
 		this.compressorNode.connect(this.outputNode);
 	
-		for (var key in defaults)
-			this[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
+		for (var key in defaults) {
+			this[key] = options[key];
+			this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
+		}
 	};
 	
 	Pizzicato.Effects.Compressor.prototype = Object.create(null, {
@@ -593,8 +605,9 @@
 	});
 
 	Pizzicato.Effects.LowPassFilter = function(options) {
-		
-		this.options = options || {};
+	
+		this.options = {};
+		options = options || this.options;
 	
 		var defaults = {
 			frequency: 350,
@@ -608,8 +621,10 @@
 	
 		this.filterNode.connect(this.outputNode);
 	
-		for (var key in defaults)
-			this[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
+		for (var key in defaults) {
+			this[key] = options[key];
+			this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
+		}
 	};
 	
 	Pizzicato.Effects.LowPassFilter.prototype = Object.create(null, {
@@ -648,8 +663,9 @@
 	});
 
 	Pizzicato.Effects.Distortion = function(options) {
-		
-		this.options = options || {};
+	
+		this.options = {};
+		options = options || this.options;
 	
 		var defaults = {
 			gain: 0.5
@@ -658,8 +674,10 @@
 		this.waveShaperNode = Pizzicato.context.createWaveShaper();
 		this.inputNode = this.outputNode = this.waveShaperNode;
 	
-		for (var key in defaults)
-			this[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
+		for (var key in defaults) {
+			this[key] = options[key];
+			this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
+		}
 	};
 	
 	Pizzicato.Effects.Distortion.prototype = Object.create(null, {
@@ -708,8 +726,9 @@
 	});
 
 	Pizzicato.Effects.Flanger = function(options) {
-		
-		this.options = options || {};
+	
+		this.options = {};
+		options = options || this.options;
 	
 		var defaults = {
 			time: 0.01,
@@ -749,8 +768,10 @@
 	
 		this.oscillatorNode.start(0);
 	
-		for (var key in defaults)
-			this[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
+		for (var key in defaults) {
+			this[key] = options[key];
+			this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
+		}
 	};
 	
 	Pizzicato.Effects.Flanger.prototype = Object.create(null, {

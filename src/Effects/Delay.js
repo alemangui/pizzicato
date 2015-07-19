@@ -1,6 +1,7 @@
 Pizzicato.Effects.Delay = function(options) {
 
-	this.options = options || {};
+	this.options = {};
+	options = options || this.options;
 
 	var defaults = {
 		feedback: 0.5,
@@ -23,8 +24,10 @@ Pizzicato.Effects.Delay = function(options) {
 	this.dryGainNode.connect(this.outputNode);
 	this.wetGainNode.connect(this.outputNode);
 
-	for (var key in defaults)
-		this[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
+	for (var key in defaults) {
+		this[key] = options[key];
+		this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
+	}
 };
 
 Pizzicato.Effects.Delay.prototype = Object.create(null, {

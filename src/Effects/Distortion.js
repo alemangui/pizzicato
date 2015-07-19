@@ -1,6 +1,7 @@
 Pizzicato.Effects.Distortion = function(options) {
-	
-	this.options = options || {};
+
+	this.options = {};
+	options = options || this.options;
 
 	var defaults = {
 		gain: 0.5
@@ -9,8 +10,10 @@ Pizzicato.Effects.Distortion = function(options) {
 	this.waveShaperNode = Pizzicato.context.createWaveShaper();
 	this.inputNode = this.outputNode = this.waveShaperNode;
 
-	for (var key in defaults)
-		this[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
+	for (var key in defaults) {
+		this[key] = options[key];
+		this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
+	}
 };
 
 Pizzicato.Effects.Distortion.prototype = Object.create(null, {

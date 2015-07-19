@@ -1,6 +1,7 @@
 Pizzicato.Effects.LowPassFilter = function(options) {
-	
-	this.options = options || {};
+
+	this.options = {};
+	options = options || this.options;
 
 	var defaults = {
 		frequency: 350,
@@ -14,8 +15,10 @@ Pizzicato.Effects.LowPassFilter = function(options) {
 
 	this.filterNode.connect(this.outputNode);
 
-	for (var key in defaults)
-		this[key] = typeof this.options[key] === 'undefined' ? defaults[key] : this.options[key];
+	for (var key in defaults) {
+		this[key] = options[key];
+		this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
+	}
 };
 
 Pizzicato.Effects.LowPassFilter.prototype = Object.create(null, {

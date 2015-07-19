@@ -1,12 +1,12 @@
 describe('Effects.Compressor', function() {
 
-
 	it('Should override default options', function() {
 		var options = {
 			threshold: -25,
 			knee: 33,
 			attack: 0.005,
-			release: 0.299
+			release: 0.299,
+			ratio: 13
 		};
 
 		var compressor = new Pizzicato.Effects.Compressor(options);
@@ -15,6 +15,26 @@ describe('Effects.Compressor', function() {
 		expect(compressor.knee).toBe(options.knee);
 		expect(compressor.attack).toBeCloseTo(options.attack);
 		expect(compressor.release).toBeCloseTo(options.release);
+		expect(compressor.ratio).toBeCloseTo(options.ratio);
+	});
+
+
+	it('should choose default options if invalid parameters are passed', function() {
+		var options = {
+			threshold: null,
+			knee: undefined,
+			attack: {},
+			release: 'invalid',
+			ratio: -1000000
+		};
+
+		var compressor = new Pizzicato.Effects.Compressor(options);
+
+		expect(compressor.threshold).toBe(-24);
+		expect(compressor.knee).toBe(30);
+		expect(compressor.attack).toBeCloseTo(0.003);
+		expect(compressor.release).toBeCloseTo(0.250);
+		expect(compressor.ratio).toBeCloseTo(12);
 	});
 
 
@@ -29,6 +49,7 @@ describe('Effects.Compressor', function() {
 
 		expect(compressor.compressorNode.threshold.value).toBe(newThreshold);
 	});
+
 
 	it('Should not allow setting an invalid value as threshold', function() {
 		var initialThreshold = -30;
