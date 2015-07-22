@@ -31,8 +31,8 @@ var whiteNoise    	= new Pizzicato.Sound(function(e) {
 });
 var voice 				= new Pizzicato.Sound({ microphone: true }, function(err) {
 	if (!err) return;
-	document.getElementById('playVoice').setAttribute('disabled', 'disabled');
-	document.getElementById('stopVoice').setAttribute('disabled', 'disabled');
+	document.getElementById('play-voice').setAttribute('disabled', 'disabled');
+	document.getElementById('stop-voice').setAttribute('disabled', 'disabled');
 	document.getElementById('volume-voice').setAttribute('disabled', 'disabled');
 	document.getElementById('microphone-error').style.display = 'block';
 });
@@ -40,32 +40,32 @@ var voice 				= new Pizzicato.Sound({ microphone: true }, function(err) {
 var segments = [
 	{
 		audio: sawtoothWave,
-		playButton: document.getElementById('playWave'),
-		stopButton: document.getElementById('stopWave'),
+		playButton: document.getElementById('play-wave'),
+		stopButton: document.getElementById('stop-wave'),
 		volumeSlider: document.getElementById('volume-wave')
 	},
 	{
 		audio: acoustic,
-		playButton: document.getElementById('playAcoustic'),
-		stopButton: document.getElementById('stopAcoustic'),
+		playButton: document.getElementById('play-acoustic'),
+		stopButton: document.getElementById('stop-acoustic'),
 		volumeSlider: document.getElementById('volume-acoustic')
 	},
 	{
 		audio: voice,
-		playButton: document.getElementById('playVoice'),
-		stopButton: document.getElementById('stopVoice'),
+		playButton: document.getElementById('play-voice'),
+		stopButton: document.getElementById('stop-voice'),
 		volumeSlider: document.getElementById('volume-voice')
 	},
 	{
 		audio: whiteNoise,
-		playButton: document.getElementById('playWhite'),
-		stopButton: document.getElementById('stopWhite'),
+		playButton: document.getElementById('play-white'),
+		stopButton: document.getElementById('stop-white'),
 		volumeSlider: document.getElementById('volume-white')
 	},
 	{
 		audio: timba,
-		playButton: document.getElementById('playTimba'),
-		stopButton: document.getElementById('stopTimba'),
+		playButton: document.getElementById('play-timba'),
+		stopButton: document.getElementById('stop-timba'),
 		volumeSlider: document.getElementById('volume-timba'),
 		effects: [
 			{
@@ -80,8 +80,8 @@ var segments = [
 	},
 	{
 		audio: electro,
-		playButton: document.getElementById('playElectro'),
-		stopButton: document.getElementById('stopElectro'),
+		playButton: document.getElementById('play-electro'),
+		stopButton: document.getElementById('stop-electro'),
 		volumeSlider: document.getElementById('volume-electro'),
 		effects: [
 			{
@@ -98,8 +98,8 @@ var segments = [
 	},
 	{
 		audio: synth,
-		playButton: document.getElementById('playSynth'),
-		stopButton: document.getElementById('stopSynth'),
+		playButton: document.getElementById('play-synth'),
+		stopButton: document.getElementById('stop-synth'),
 		volumeSlider: document.getElementById('volume-synth'),
 		effects: [
 			{
@@ -113,8 +113,8 @@ var segments = [
 	},
 	{
 		audio: guitar,
-		playButton: document.getElementById('playGuitar'),
-		stopButton: document.getElementById('stopGuitar'),
+		playButton: document.getElementById('play-guitar'),
+		stopButton: document.getElementById('stop-guitar'),
 		volumeSlider: document.getElementById('volume-guitar'),
 		effects: [
 			{
@@ -127,8 +127,8 @@ var segments = [
 	},
 	{
 		audio: electricGuitar,
-		playButton: document.getElementById('playElectricGuitar'),
-		stopButton: document.getElementById('stopElectricGuitar'),
+		playButton: document.getElementById('play-electric-guitar'),
+		stopButton: document.getElementById('stop-electric-guitar'),
 		volumeSlider: document.getElementById('volume-electric-guitar'),
 		effects: [
 			{
