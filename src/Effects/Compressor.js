@@ -30,6 +30,8 @@ Pizzicato.Effects.Compressor.prototype = Object.create(null, {
 	 * MAX: 0
 	 */
 	threshold: {
+		enumerable: true,
+		
 		get: function() {
 			return this.compressorNode.threshold.value;
 		},
@@ -47,6 +49,8 @@ Pizzicato.Effects.Compressor.prototype = Object.create(null, {
 	 * MAX 40
 	 */
 	knee: {
+		enumerable: true,
+		
 		get: function() {
 			return this.compressorNode.knee.value;
 		},
@@ -66,6 +70,8 @@ Pizzicato.Effects.Compressor.prototype = Object.create(null, {
 	 * MAX 1
 	 */
 	attack: {
+		enumerable: true,
+		
 		get: function() {
 			return this.compressorNode.attack.value;
 		},
@@ -85,6 +91,8 @@ Pizzicato.Effects.Compressor.prototype = Object.create(null, {
 	 * MAX 1
 	 */
 	release: {
+		enumerable: true,
+		
 		get: function() {
 			return this.compressorNode.release.value;
 		},
@@ -102,6 +110,8 @@ Pizzicato.Effects.Compressor.prototype = Object.create(null, {
 	 * MAX 20
 	 */
 	ratio: {
+		enumerable: true,
+		
 		get: function() {
 			return this.compressorNode.ratio.value;
 		},

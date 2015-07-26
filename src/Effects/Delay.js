@@ -36,6 +36,8 @@ Pizzicato.Effects.Delay.prototype = Object.create(null, {
 	 * Gets and sets the dry/wet mix.
 	 */
 	mix: {
+		enumerable: true,
+
 		get: function() {
 			return this.options.mix	;	
 		},
@@ -54,6 +56,8 @@ Pizzicato.Effects.Delay.prototype = Object.create(null, {
 	 * Time between each delayed sound
 	 */
 	time: {
+		enumerable: true,
+
 		get: function() {
 			return this.options.time;	
 		},
@@ -71,6 +75,8 @@ Pizzicato.Effects.Delay.prototype = Object.create(null, {
 	 * Strength of each of the echoed delayed sounds.
 	 */
 	feedback: {
+		enumerable: true,
+
 		get: function() {
 			return this.options.feedback;	
 		},

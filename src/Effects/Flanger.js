@@ -50,6 +50,8 @@ Pizzicato.Effects.Flanger = function(options) {
 Pizzicato.Effects.Flanger.prototype = Object.create(null, {
 	
 	time: {
+		enumberable: true,
+		
 		get: function() {
 			return this.options.time;
 		},
@@ -65,6 +67,8 @@ Pizzicato.Effects.Flanger.prototype = Object.create(null, {
 
 
 	speed: {
+		enumberable: true,
+		
 		get: function() {
 			return this.options.speed;
 		},
@@ -80,6 +84,8 @@ Pizzicato.Effects.Flanger.prototype = Object.create(null, {
 
 
 	depth: {
+		enumberable: true,
+		
 		get: function() {
 			return this.options.depth;
 		},
@@ -95,6 +101,8 @@ Pizzicato.Effects.Flanger.prototype = Object.create(null, {
 
 
 	feedback: {
+		enumberable: true,
+		
 		get: function() {
 			return this.options.feedback;
 		},
@@ -110,6 +118,8 @@ Pizzicato.Effects.Flanger.prototype = Object.create(null, {
 
 
 	mix: {
+		enumberable: true,
+		
 		get: function() {
 			return this.options.mix;
 		},

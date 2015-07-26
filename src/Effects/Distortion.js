@@ -22,6 +22,8 @@ Pizzicato.Effects.Distortion.prototype = Object.create(null, {
 	 * Gets and sets the gain (amount of distortion).
 	 */
 	gain: {
+		enumerable: true,
+		
 		get: function() {
 			return this.options.gain;
 		},

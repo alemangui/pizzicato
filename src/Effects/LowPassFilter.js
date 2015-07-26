@@ -29,6 +29,8 @@ Pizzicato.Effects.LowPassFilter.prototype = Object.create(null, {
 	 * MAX: 22050 (half the sampling rate of the current context)
 	 */
 	frequency: {
+		enumerable: true,
+		
 		get: function() {
 			return this.filterNode.frequency.value;
 		},
@@ -46,6 +48,8 @@ Pizzicato.Effects.LowPassFilter.prototype = Object.create(null, {
 	 * MAX: 1000
 	 */
 	peak: {
+		enumerable: true,
+		
 		get: function() {
 			return this.filterNode.Q.value;
 		},

@@ -30,6 +30,8 @@ Pizzicato.Sound = function(options, callback) {
 Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 	play: {
+		enumerable: true,
+		
 		value: function() {
 			if (this.playing) return;
 			
@@ -49,6 +51,8 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 
 	stop: {
+		enumerable: true,
+		
 		value: function() {
 			if (!this.paused && !this.playing) return;
 
@@ -66,6 +70,8 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 
 	pause: {
+		enumerable: true,
+		
 		value: function() {
 			if (this.paused) return;
 
@@ -83,6 +89,8 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 
 	onEnded: {
+		enumerable: true,
+		
 		value: function() {
 			this.playing = false;
 			this.startTime = this.paused ? Pizzicato.context.currentTime - this.lastTimePlayed : 0;
@@ -93,6 +101,8 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 
 	addEffect: {
+		enumerable: true,
+		
 		value: function(effect) {
 			this.effects.push(effect);
 			this.connectEffects();
@@ -105,6 +115,8 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 
 	removeEffect: {
+		enumerable: true,
+		
 		value: function(effect) {
 			var index = this.effects.indexOf(effect);
 
@@ -117,6 +129,8 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 
 	connectEffects: {
+		enumerable: true,
+		
 		value: function() {
 			for (var i = 0; i < this.effects.length; i++) {
 				
@@ -130,6 +144,8 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 
 	volume: {
+		enumerable: true,
+		
 		get: function() {
 			if (this.masterVolume)
 				return this.masterVolume.gain.value;
@@ -142,11 +158,11 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 	},
 
 
-	// Non enumberable properties
+	// Non enumerable properties
 
 
 	initializeWithWave: {
-		enumberable: false,
+		enumerable: false,
 
 		value: function (waveOptions, callback) {
 			this.getRawSourceNode = function() {
@@ -163,7 +179,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 	
 
 	initializeWithUrl: {
-		enumberable: false,
+		enumerable: false,
 
 		value: function (url, callback) {
 			var self = this;
@@ -194,7 +210,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 
 	initializeWithMicrophone: {
-		enumberable: false,
+		enumerable: false,
 
 		value: function(options, callback) {
 			navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
@@ -222,7 +238,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 
 	initializeWithFunction: {
-		enumberable: false,
+		enumerable: false,
 
 		value: function(fn, callback) {
 			this.getRawSourceNode = function() {
@@ -236,7 +252,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 
 	getSourceNode: {
-		enumberable: false,
+		enumerable: false,
 
 		value: function() {
 			var node = this.getRawSourceNode();
@@ -250,7 +266,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 
 	getMasterVolume: {
-		enumberable: false,
+		enumerable: false,
 
 		value: function() {
 			if (this.masterVolume)
@@ -264,7 +280,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 
 	getInputNode: {
-		enumberable: false,
+		enumerable: false,
 
 		value: function() {
 			if (this.effects.length > 0) 
