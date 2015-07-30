@@ -120,6 +120,28 @@ sound.addEffect(delay);
 sound.play();
 ```
 
+### Flanger
+The flanger produces a swirling effect by delaying a "copy" of the sound by a small, gradually changing period. The flanger effect takes the folloeing parameters:
+* ```time``` _(min: 0.001, max: 0.02, defaults to 0.01)_: Changes the small delay time applied to the copied signal.
+* ```speed``` _(min: 0.5, max: 5, defaults to 0.7)_: Changes the speed at which the flanging occurs.
+* ```depth``` _(min: 0.0005, max: 0.005, defaults to 0.0008)_: Changes the depth/intensity of the swirling effect.
+* ```feedback``` _(min: 0, max: 0.8, defaults to 0.6)_: Changes the volume of the delayed sound.
+* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output.
+
+Example:
+```javascript
+var flanger = new Pizzicato.Effects.Flanger({
+    time: 0.01,
+    speed: 0.7,
+    depth: 0.0008,
+    feedback: 0.6,
+    mix: 0.5
+});
+
+sound.addEffect(flanger);
+sound.play();
+```
+
 ### Compressor
 A compressor allows reducing the range between the loudest and the quietest parts of a sound. This is done by boosting the quiet segments and attenuating the loud ones.
 
