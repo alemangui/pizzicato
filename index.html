@@ -197,10 +197,10 @@ sound.play();
 
             <pre><code class="language-javascript">
 var flanger = new Pizzicato.Effects.Flanger({
-    time: 0.01,
-    speed: 0.7,
-    depth: 0.0008,
-    feedback: 0.6,
+    time: 0.45,
+    speed: 0.2,
+    depth: 0.1,
+    feedback: 0.1,
     mix: 0.5
 });
 
@@ -216,27 +216,27 @@ sound.play();
                 </div>
                 <div class="slider">
                     <label for="flanger-time">Time</label>
-                    <input type="range" min="0.001" max="0.02" step="0.001" value="0.01" id="flanger-time" />
-                    <div class="slider-value">0.01</div>
+                    <input type="range" min="0" max="1" step="0.01" value="0.01" id="flanger-time" />
+                    <div class="slider-value">0.45</div>
                 </div>
                 <div class="slider">
                     <label for="flanger-speed">Speed</label>
-                    <input type="range" min="0.05" max="5" step="0.001" value="0.25" id="flanger-speed" />
-                    <div class="slider-value">0.25</div>
+                    <input type="range" min="0" max="1" step="0.01" value="0.25" id="flanger-speed" />
+                    <div class="slider-value">0.2</div>
                 </div>
                 <div class="slider">
                     <label for="flanger-depth">Depth</label>
-                    <input type="range" min="0.0005" max="0.005" step="0.0001" value="0.002" id="flanger-depth" />
-                    <div class="slider-value">0.002</div>
+                    <input type="range" min="0" max="1" step="0.01" value="0.002" id="flanger-depth" />
+                    <div class="slider-value">0.1</div>
                 </div>
                 <div class="slider">
                     <label for="flanger-feedback">Feedback</label>
-                    <input type="range" min="0" max="0.8" step="0.001" value="0.6" id="flanger-feedback" />
-                    <div class="slider-value">0.6</div>
+                    <input type="range" min="0" max="1" step="0.01" value="0.6" id="flanger-feedback" />
+                    <div class="slider-value">0.1</div>
                 </div>
                 <div class="slider">
                     <label for="flanger-mix">Mix</label>
-                    <input type="range" min="0" max="1" step="0.001" value="0.5" id="flanger-mix" />
+                    <input type="range" min="0" max="1" step="0.01" value="0.5" id="flanger-mix" />
                     <div class="slider-value">0.5</div>
                 </div>
             </div>
