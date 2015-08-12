@@ -67,6 +67,17 @@ describe('Util', function() {
 	});
 
 
+	it('returns a normalized version of a number', function() {
+		var normalize = Pizzicato.Util.normalize;
+
+		expect(typeof normalize).toBe('function');
+		expect(normalize(0.5, 0, 20)).toBe(10);
+		expect(normalize(0.5, 0, 100)).toBe(50);
+		expect(normalize(0.5, 3, 20)).toBeCloseTo(11.5);
+		expect(normalize(0.5, 0, 0)).toBeCloseTo(0);
+	});
+
+
 	it('Returns correct dry level from a mix', function() {
 		var getDryLevel = Pizzicato.Util.getDryLevel;
 

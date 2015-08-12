@@ -122,19 +122,19 @@ sound.play();
 
 ### Flanger
 The flanger produces a swirling effect by delaying a "copy" of the sound by a small, gradually changing period. The flanger effect takes the folloeing parameters:
-* ```time``` _(min: 0.001, max: 0.02, defaults to 0.01)_: Changes the small delay time applied to the copied signal.
-* ```speed``` _(min: 0.5, max: 5, defaults to 0.7)_: Changes the speed at which the flanging occurs.
-* ```depth``` _(min: 0.0005, max: 0.005, defaults to 0.0008)_: Changes the depth/intensity of the swirling effect.
-* ```feedback``` _(min: 0, max: 0.8, defaults to 0.6)_: Changes the volume of the delayed sound.
+* ```time``` _(min: 0, max: 1, defaults to 0.45)_: Changes the small delay time applied to the copied signal.
+* ```speed``` _(min: 0, max: 1, defaults to 0.2)_: Changes the speed at which the flanging occurs.
+* ```depth``` _(min: 0, max: 1, defaults to 0.1)_: Changes the depth/intensity of the swirling effect.
+* ```feedback``` _(min: 0, max: 1, defaults to 0.1)_: Changes the volume of the delayed sound.
 * ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output.
 
 Example:
 ```javascript
 var flanger = new Pizzicato.Effects.Flanger({
-    time: 0.01,
-    speed: 0.7,
-    depth: 0.0008,
-    feedback: 0.6,
+    time: 0.45,
+    speed: 0.2,
+    depth: 0.1,
+    feedback: 0.1,
     mix: 0.5
 });
 

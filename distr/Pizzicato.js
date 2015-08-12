@@ -90,6 +90,15 @@
 			return arg >= min && arg <= max;
 		},
 	
+		// Takes a number from 0 to 1 and normalizes it 
+		// to fit within range floor to ceiling
+		normalize: function(num, floor, ceil) {
+			if (!Pz.Util.isNumber(num) || !Pz.Util.isNumber(floor) || !Pz.Util.isNumber(ceil))
+				return;
+			
+			return ((ceil - floor) * num) / 1 + floor;
+		},
+	
 		getDryLevel: function(mix) {
 			if (!Pz.Util.isNumber(mix) || mix > 1 || mix < 0)
 				return 0;
@@ -109,7 +118,6 @@
 	
 			return 1 - ((0.5 - mix) * 2);
 		}
-	
 	};
 
 	Pizzicato.Sound = function(options, callback) {
@@ -144,6 +152,8 @@
 	Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 	
 		play: {
+			enumerable: true,
+			
 			value: function() {
 				if (this.playing) return;
 				
@@ -163,6 +173,8 @@
 	
 	
 		stop: {
+			enumerable: true,
+			
 			value: function() {
 				if (!this.paused && !this.playing) return;
 	
@@ -180,6 +192,8 @@
 	
 	
 		pause: {
+			enumerable: true,
+			
 			value: function() {
 				if (this.paused) return;
 	
@@ -197,6 +211,8 @@
 	
 	
 		onEnded: {
+			enumerable: true,
+			
 			value: function() {
 				this.playing = false;
 				this.startTime = this.paused ? Pizzicato.context.currentTime - this.lastTimePlayed : 0;
@@ -207,6 +223,8 @@
 	
 	
 		addEffect: {
+			enumerable: true,
+			
 			value: function(effect) {
 				this.effects.push(effect);
 				this.connectEffects();
@@ -219,6 +237,8 @@
 	
 	
 		removeEffect: {
+			enumerable: true,
+			
 			value: function(effect) {
 				var index = this.effects.indexOf(effect);
 	
@@ -231,6 +251,8 @@
 	
 	
 		connectEffects: {
+			enumerable: true,
+			
 			value: function() {
 				for (var i = 0; i < this.effects.length; i++) {
 					
@@ -244,6 +266,8 @@
 	
 	
 		volume: {
+			enumerable: true,
+			
 			get: function() {
 				if (this.masterVolume)
 					return this.masterVolume.gain.value;
@@ -256,11 +280,11 @@
 		},
 	
 	
-		// Non enumberable properties
+		// Non enumerable properties
 	
 	
 		initializeWithWave: {
-			enumberable: false,
+			enumerable: false,
 	
 			value: function (waveOptions, callback) {
 				this.getRawSourceNode = function() {
@@ -277,7 +301,7 @@
 		
 	
 		initializeWithUrl: {
-			enumberable: false,
+			enumerable: false,
 	
 			value: function (url, callback) {
 				var self = this;
@@ -308,7 +332,7 @@
 	
 	
 		initializeWithMicrophone: {
-			enumberable: false,
+			enumerable: false,
 	
 			value: function(options, callback) {
 				navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
@@ -336,7 +360,7 @@
 	
 	
 		initializeWithFunction: {
-			enumberable: false,
+			enumerable: false,
 	
 			value: function(fn, callback) {
 				this.getRawSourceNode = function() {
@@ -350,7 +374,7 @@
 	
 	
 		getSourceNode: {
-			enumberable: false,
+			enumerable: false,
 	
 			value: function() {
 				var node = this.getRawSourceNode();
@@ -364,7 +388,7 @@
 	
 	
 		getMasterVolume: {
-			enumberable: false,
+			enumerable: false,
 	
 			value: function() {
 				if (this.masterVolume)
@@ -378,7 +402,7 @@
 	
 	
 		getInputNode: {
-			enumberable: false,
+			enumerable: false,
 	
 			value: function() {
 				if (this.effects.length > 0) 
@@ -517,6 +541,8 @@
 		 * MAX: 0
 		 */
 		threshold: {
+			enumerable: true,
+			
 			get: function() {
 				return this.compressorNode.threshold.value;
 			},
@@ -534,6 +560,8 @@
 		 * MAX 40
 		 */
 		knee: {
+			enumerable: true,
+			
 			get: function() {
 				return this.compressorNode.knee.value;
 			},
@@ -553,6 +581,8 @@
 		 * MAX 1
 		 */
 		attack: {
+			enumerable: true,
+			
 			get: function() {
 				return this.compressorNode.attack.value;
 			},
@@ -572,6 +602,8 @@
 		 * MAX 1
 		 */
 		release: {
+			enumerable: true,
+			
 			get: function() {
 				return this.compressorNode.release.value;
 			},
@@ -589,6 +621,8 @@
 		 * MAX 20
 		 */
 		ratio: {
+			enumerable: true,
+			
 			get: function() {
 				return this.compressorNode.ratio.value;
 			},
@@ -635,6 +669,8 @@
 		 * MAX: 22050 (half the sampling rate of the current context)
 		 */
 		frequency: {
+			enumerable: true,
+			
 			get: function() {
 				return this.filterNode.frequency.value;
 			},
@@ -652,6 +688,8 @@
 		 * MAX: 1000
 		 */
 		peak: {
+			enumerable: true,
+			
 			get: function() {
 				return this.filterNode.Q.value;
 			},
@@ -686,6 +724,8 @@
 		 * Gets and sets the gain (amount of distortion).
 		 */
 		gain: {
+			enumerable: true,
+			
 			get: function() {
 				return this.options.gain;
 			},
@@ -731,10 +771,10 @@
 		options = options || this.options;
 	
 		var defaults = {
-			time: 0.01,
-			speed: 0.7,
-			depth: 0.0008,
-			feedback: 0.6,
+			time: 0.45,
+			speed: 0.2,
+			depth: 0.1,
+			feedback: 0.1,
 			mix: 0.5
 		};
 	
@@ -777,66 +817,77 @@
 	Pizzicato.Effects.Flanger.prototype = Object.create(null, {
 		
 		time: {
+			enumberable: true,
+			
 			get: function() {
 				return this.options.time;
 			},
 	
 			set: function(time) {
-				if (!Pz.Util.isInRange(time, 0.001, 0.02))
+	
+				if (!Pz.Util.isInRange(time, 0, 1))
 					return;
 	
 				this.options.time = time;
-				this.delayNode.delayTime.value = time;
+				this.delayNode.delayTime.value = Pz.Util.normalize(time, 0.001, 0.02);
 			}
 		},
 	
 	
 		speed: {
+			enumberable: true,
+			
 			get: function() {
 				return this.options.speed;
 			},
 	
 			set: function(speed) {
-				if (!Pz.Util.isInRange(speed, 0.5, 5))
-				return;
+				if (!Pz.Util.isInRange(speed, 0, 1))
+					return;
 	
 				this.options.speed = speed;
-				this.oscillatorNode.frequency.value = speed;
+				this.oscillatorNode.frequency.value = Pz.Util.normalize(speed, 0.5, 5);
 			}
 		},
 	
 	
 		depth: {
+			enumberable: true,
+			
 			get: function() {
 				return this.options.depth;
 			},
 	
 			set: function(depth) {
-				if (!Pz.Util.isInRange(depth, 0.0005, 0.005))
+				if (!Pz.Util.isInRange(depth, 0, 1))
 					return;
 	
 				this.options.depth = depth;
-				this.gainNode.gain.value = depth;
+				this.gainNode.gain.value = Pz.Util.normalize(depth, 0.0005, 0.005);
 			}
 		},
 	
 	
 		feedback: {
+			enumberable: true,
+			
 			get: function() {
 				return this.options.feedback;
 			},
 	
 			set: function(feedback) {
-				if (!Pz.Util.isInRange(feedback, 0, 0.8))
+				if (!Pz.Util.isInRange(feedback, 0, 1))
 					return;
 	
 				this.options.feedback = feedback;
-				this.feedbackNode.gain.value = feedback;
+				this.feedbackNode.gain.value = Pz.Util.normalize(feedback, 0, 0.8);
 			}
 		},
 	
 	
 		mix: {
+			enumberable: true,
+			
 			get: function() {
 				return this.options.mix;
 			},

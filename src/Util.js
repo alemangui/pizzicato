@@ -23,6 +23,15 @@ Pizzicato.Util = {
 		return arg >= min && arg <= max;
 	},
 
+	// Takes a number from 0 to 1 and normalizes it 
+	// to fit within range floor to ceiling
+	normalize: function(num, floor, ceil) {
+		if (!Pz.Util.isNumber(num) || !Pz.Util.isNumber(floor) || !Pz.Util.isNumber(ceil))
+			return;
+		
+		return ((ceil - floor) * num) / 1 + floor;
+	},
+
 	getDryLevel: function(mix) {
 		if (!Pz.Util.isNumber(mix) || mix > 1 || mix < 0)
 			return 0;
@@ -42,5 +51,4 @@ Pizzicato.Util = {
 
 		return 1 - ((0.5 - mix) * 2);
 	}
-
 };
