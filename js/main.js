@@ -17,7 +17,7 @@ var distortion = new Pizzicato.Effects.Distortion({
 var flanger = new Pizzicato.Effects.Flanger();
 
 
-var sawtoothWave 		= new Pizzicato.Sound({ wave: { type: 'sawtooth' }});
+var sineWave 				= new Pizzicato.Sound({ wave: { type: 'sine' }});
 var acoustic 				= new Pizzicato.Sound('./audio/acoustic.m4a');
 var timba 					= new Pizzicato.Sound({ source: './audio/timba.m4a', loop: true }, function() { timba.addEffect(delay); });
 var electro 				= new Pizzicato.Sound({ source: './audio/electro.m4a', loop: true }, function() { electro.addEffect(compressor); });
@@ -39,7 +39,7 @@ var voice 				= new Pizzicato.Sound({ microphone: true }, function(err) {
 
 var segments = [
 	{
-		audio: sawtoothWave,
+		audio: sineWave,
 		playButton: document.getElementById('play-wave'),
 		stopButton: document.getElementById('stop-wave'),
 		volumeSlider: document.getElementById('volume-wave')
