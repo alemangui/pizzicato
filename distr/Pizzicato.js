@@ -131,6 +131,7 @@
 		this.playing = this.paused = false;
 		this.loop = util.isObject(options) && options.loop;
 		this.volume = util.isObject(options) && options.volume ? options.volume : 1;
+		this.sustain = options && options.sustain;
 	
 		if (util.isString(options))
 			(this.initializeWithUrl.bind(this))(options, callback);
@@ -157,17 +158,21 @@
 			value: function() {
 				if (this.playing) return;
 				
-				this.sourceNode = this.getSourceNode();
+				if (this.sustainActive && this.onSustainDone)
+					this.onSustainDone();
 	
 				this.playing = true;
 				this.paused = false;
-				
+	
+				this.sourceNode = this.getSourceNode();
+	
 				if (Pz.Util.isFunction(this.sourceNode.start)) {
 					this.lastTimePlayed = Pizzicato.context.currentTime;
 					this.sourceNode.start(0, this.startTime || 0);
 				}
 	
 				this.trigger('play');
+	
 			}
 		},
 	
@@ -178,15 +183,21 @@
 			value: function() {
 				if (!this.paused && !this.playing) return;
 	
-				this.paused = false;
-				this.playing = false;
+				var self = this;
+				this.paused = this.playing = false;
 	
-				if (Pz.Util.isFunction(this.sourceNode.stop))
-					this.sourceNode.stop(0);
-				else
-					this.sourceNode.disconnect();
+				var stopSound = function() {
+					return Pz.Util.isFunction(self.sourceNode.stop) ? self.sourceNode.stop(0) : self.sourceNode.disconnect();
+				};
 	
-				this.trigger('stop');
+				if (Pz.Util.isNumber(this.sustain))
+					this.prepareSustain(stopSound);
+	
+				else 
+					stopSound();
+					
+				this.startTime = 0;
+				self.trigger('stop');
 			}
 		},
 	
@@ -205,6 +216,7 @@
 				else 
 					this.sourceNode.disconnect();				
 	
+				this.startTime = Pz.context.currentTime - this.lastTimePlayed;
 				this.trigger('pause');
 			}
 		},
@@ -214,10 +226,8 @@
 			enumerable: true,
 			
 			value: function() {
-				this.playing = false;
-				this.startTime = this.paused ? Pizzicato.context.currentTime - this.lastTimePlayed : 0;
-				this.trigger('stop');
-				this.trigger('end');
+				if (!this.paused)
+					this.trigger('end');
 			}
 		},
 	
@@ -387,6 +397,12 @@
 		},
 	
 	
+		/**
+		 * Returns the node used for the master volume. This node is connected
+		 * to a sustainNode that manages the sustain volume changes without 
+		 * modifying the masterVolume. The sustainNode is the one connected
+		 * to the destination.
+		 */
 		getMasterVolume: {
 			enumerable: false,
 	
@@ -395,12 +411,19 @@
 					return this.masterVolume;
 	
 				var masterVolume = Pizzicato.context.createGain();
-				masterVolume.connect(Pizzicato.context.destination);
+				this.sustainNode = Pizzicato.context.createGain();
+	
+				masterVolume.connect(this.sustainNode);
+				this.sustainNode.connect(Pizzicato.context.destination);
+	
 				return masterVolume;
 			}
 		},
 	
-	
+		/**
+		 * Returns the first node in the graph. When there are effects,
+		 * the first node is the input node of the first effect.
+		 */
 		getInputNode: {
 			enumerable: false,
 	
@@ -409,6 +432,37 @@
 					return this.effects[0].inputNode;
 	
 				return this.masterVolume;
+			}
+		},
+	
+		/**
+		 * To achieve the sustain effect, we use web API function linearRampToValueAtTime.
+		 * In order for it to work we must set first the initial value with setValueAtTime.
+		 * Since there is no callback for linearRampToValueAtTime, a setTimeout with the 
+		 * time of the sustain is necessary.
+		 */
+		prepareSustain: {
+			enumerable: false,
+	
+			value: function(stopSound) {
+				var self = this;
+	
+				this.sustainNode.gain.setValueAtTime(1, Pz.context.currentTime);
+				this.sustainNode.gain.linearRampToValueAtTime(0.001, Pz.context.currentTime + this.sustain);
+				this.sustainActive = true;
+	
+				this.onSustainDone = function() {
+					if (self.sustainTimeout) 
+						clearTimeout(self.sustainTimeout);
+	
+					self.sustainNode.gain.cancelScheduledValues(Pz.context.currentTime);
+					self.sustainNode.gain.setValueAtTime(1, Pz.context.currentTime + 0.001);
+				
+					self.sustainActive = false;
+					stopSound();	
+				};
+	
+				this.sustainTimeout = setTimeout(this.onSustainDone, self.sustain * 1000);
 			}
 		}
 	});

@@ -130,22 +130,47 @@ describe('Sound', function() {
 		expect(stopCallback).toHaveBeenCalled();
 	});
 
-	it('should trigger \'stop\' and \'end\' when ended', function(done) {
-		var stopCallback = jasmine.createSpy('stopCallback');
+	it('should trigger \'end\' when ended', function(done) {
 		var endCallback = jasmine.createSpy('endCallback');
 
 		var sound = new Pizzicato.Sound('base/tests/click.wav', function() {
 			
-			sound.on('stop', stopCallback);
 			sound.on('end', endCallback);
 			sound.play();
 
 			setTimeout(function() {
-				expect(stopCallback).toHaveBeenCalled();
 				expect(endCallback).toHaveBeenCalled();
 				done();
 			}, 1000);
 		});
 	}, 5000);
+
+	// This test has been disabled because of https://bugzilla.mozilla.org/show_bug.cgi?id=1195145
+
+	// it('should fade out sound when stopping if sustain is set', function(done) {
+	// 	var volumeAt0;
+	// 	var volumeAt300;
+	// 	var volumeAt600;
+	// 	var sound = new Pizzicato.Sound({ wave: { type: 'sine' },
+	// 		sustain: 1
+	// 	});
+
+	// 	sound.play();
+	// 	sound.stop();
+
+	// 	volumeAt0 = sound.sustainNode.gain.value;
+
+	// 	setTimeout(function() {
+	// 		volumeAt300 = sound.sustainNode.gain.value;
+	// 		expect(volumeAt0).toBeGreaterThan(volumeAt300);
+	// 	}, 300);
+
+	// 	setTimeout(function() {
+	// 		volumeAt600 = sound.sustainNode.gain.value;
+	// 		expect(volumeAt300).toBeGreaterThan(volumeAt600);
+	// 		done();
+	// 	}, 600);
+
+	// }, 2000);
 
 });
