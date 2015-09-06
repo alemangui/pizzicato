@@ -1,12 +1,12 @@
 {
 	"name": "Pizzicato",
-	"description": "",
-	"version": "4.1.0",
-	"homepage": "https://github.com/alemangui/pizzicato",
+	"description": "A web-audio library to simplify using and manipulating sounds.",
+	"version": "0.0.1",
+	"homepage": "http://alemangui.github.io/pizzicato/",
 	"author": {
 		"name": "Alejandro Mantecon Guillen",
 		"email": "alemangui@gmail.com",
-		"url": "http://alemangui.com/"
+		"url": "http://www.alemangui.com/"
 	},
 	"repository": {
 		"type": "git",
