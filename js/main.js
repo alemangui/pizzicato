@@ -17,14 +17,15 @@ var distortion = new Pizzicato.Effects.Distortion({
 var flanger = new Pizzicato.Effects.Flanger();
 
 
-var sineWave 				= new Pizzicato.Sound({ wave: { type: 'sine' }});
-var acoustic 				= new Pizzicato.Sound('./audio/acoustic.m4a');
-var timba 					= new Pizzicato.Sound({ source: './audio/timba.m4a', loop: true }, function() { timba.addEffect(delay); });
-var electro 				= new Pizzicato.Sound({ source: './audio/electro.m4a', loop: true }, function() { electro.addEffect(compressor); });
-var synth		 				= new Pizzicato.Sound({ source: './audio/synth.m4a', loop: true }, function() { synth.addEffect(lowPassFilter); });
-var guitar 					= new Pizzicato.Sound({ source: './audio/guitar.m4a', loop: true }, function() { guitar.addEffect(distortion); });
-var electricGuitar 	= new Pizzicato.Sound({ source: './audio/electric-guitar.m4a', loop: true }, function() { electricGuitar.addEffect(flanger); });
-var whiteNoise    	= new Pizzicato.Sound(function(e) {
+var sineWave         = new Pz.Sound({ wave: { type: 'sine' }});
+var sineWaveSustain  = new Pz.Sound({ wave: { type: 'sine', frequency: 220 }, sustain: 1});
+var acoustic         = new Pz.Sound('./audio/acoustic.m4a');
+var timba            = new Pz.Sound({ source: './audio/timba.m4a', loop: true }, function() { timba.addEffect(delay); });
+var electro          = new Pz.Sound({ source: './audio/electro.m4a', loop: true }, function() { electro.addEffect(compressor); });
+var synth            = new Pz.Sound({ source: './audio/synth.m4a', loop: true }, function() { synth.addEffect(lowPassFilter); });
+var guitar           = new Pz.Sound({ source: './audio/guitar.m4a', loop: true }, function() { guitar.addEffect(distortion); });
+var electricGuitar   = new Pz.Sound({ source: './audio/electric-guitar.m4a', loop: true }, function() { electricGuitar.addEffect(flanger); });
+var whiteNoise       = new Pz.Sound(function(e) {
   var output = e.outputBuffer.getChannelData(0);
   for (var i = 0; i < e.outputBuffer.length; i++)
     output[i] = Math.random();
@@ -61,6 +62,13 @@ var segments = [
 		playButton: document.getElementById('play-white'),
 		stopButton: document.getElementById('stop-white'),
 		volumeSlider: document.getElementById('volume-white')
+	},
+	{
+		audio: sineWaveSustain,
+		playButton: document.getElementById('play-sustain'),
+		stopButton: document.getElementById('stop-sustain'),
+		volumeSlider: document.getElementById('volume-sustain'),
+		sustainSlider: document.getElementById('value-sustain')
 	},
 	{
 		audio: timba,
@@ -175,6 +183,13 @@ for (var i = 0; i < segments.length; i++) {
 			var volumeDisplay = segment.volumeSlider.parentNode.getElementsByClassName('slider-value')[0];
 			volumeDisplay.innerHTML = segment.audio.volume = e.target.valueAsNumber;
 		});
+
+		if (segment.sustainSlider) {
+			segment.sustainSlider.addEventListener('input', function(e) {
+				var sustainDisplay = segment.sustainSlider.parentNode.getElementsByClassName('slider-value')[0];
+				sustainDisplay.innerHTML = segment.audio.sustain = e.target.valueAsNumber;
+			});
+		}
 
 		if (!segment.effects || !segment.effects.length)
 			return;
