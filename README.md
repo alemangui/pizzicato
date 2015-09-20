@@ -83,6 +83,8 @@ It is also possible to use the sound input from the computer. This is usually th
 var voice = new Pizzicato.Sound({ microphone: true });
 ```
 
+
+
 ## Add effects
 Once a sound is created you can add effects to it by using the ```addEffect``` function. To remove an effect, you can use the ```removeEffect``` function.
 ```javascript
@@ -182,13 +184,27 @@ sound.addEffect(lowPassFilter);
 sound.play();
 ```
 
-### Support
-#### Browsers
+### Sustain
+Sustain is only effect included directly in the Pizzicato Sound object. To add sustain, you can either pass a ```sustain``` parameter in the constructor of the object:
+
+```javascript
+var sustainedSound = new Pizzicato.Sound({ sustain: 1 });
+```
+
+Or change the ```sustain``` property directly in the Sound object
+
+```javascript
+mySound = new Pizzicato.Sound();
+mySound.sustain = 0.4;
+```
+
+## Support
+### Browsers
 Pizzicato can only work in [browsers with Web Audio support](http://caniuse.com/#feat=audio-api), no shims have been added yet. This means:
 * Firefox 31+
 * Chrome 31+
 * Safari 7+ (microphone audio input not available in Safari)
 * Opera 30+
 
-#### Audio formats
+### Audio formats
 Pizzicato supports [supported by Web Audio](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility). These may vary depending on your system version and browser.
