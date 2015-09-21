@@ -125,7 +125,6 @@
 		var util = Pizzicato.Util;
 	
 		this.masterVolume = this.getMasterVolume();
-	
 		this.lastTimePlayed = 0;
 		this.effects = [];
 		this.playing = this.paused = false;
@@ -134,19 +133,82 @@
 		this.sustain = options && options.sustain;
 	
 		if (util.isString(options))
-			(this.initializeWithUrl.bind(this))(options, callback);
+			(initializeWithUrl.bind(this))(options, callback);
 	
 		else if (util.isObject(options) && util.isString(options.source))
-			(this.initializeWithUrl.bind(this))(options.source, callback);
+			(initializeWithUrl.bind(this))(options.source, callback);
 	
 		else if (util.isObject(options) && util.isObject(options.wave))
-			(this.initializeWithWave.bind(this))(options.wave, callback);
+			(initializeWithWave.bind(this))(options.wave, callback);
 	
 		else if (util.isObject(options) && !!options.microphone)
-			(this.initializeWithMicrophone.bind(this))(options, callback);
+			(initializeWithMicrophone.bind(this))(options, callback);
 	
 		else if (util.isFunction(options))
-			(this.initializeWithFunction.bind(this))(options, callback);
+			(initializeWithFunction.bind(this))(options, callback);
+	
+		function initializeWithWave (waveOptions, callback) {
+			this.getRawSourceNode = function() {
+				var node = Pizzicato.context.createOscillator();
+				node.type = waveOptions.type || 'sine';
+				node.frequency.value = waveOptions.frequency || 440;
+	
+				return node;
+			};
+			if (util.isFunction(callback)) 
+				callback();
+		}
+	
+		function initializeWithUrl (url, callback) {
+			var request = new XMLHttpRequest();
+	
+			request.open('GET', url, true);
+			request.responseType = 'arraybuffer';
+			request.onload = function(progressEvent) {
+				var response = progressEvent.target.response;
+				Pizzicato.context.decodeAudioData(response, (function(buffer) {
+					self.getRawSourceNode = function() {
+						var node = Pizzicato.context.createBufferSource();
+						node.loop = this.loop;
+						node.buffer = buffer;
+						return node;
+					};
+					if (util.isFunction(callback)) 
+						callback();
+				}).bind(self));
+			};
+			request.onreadystatechange = function(event) {
+				if (request.readyState === 4 && request.status !== 200)
+					console.error('Error while fetching ' + url + '. ' + request.statusText);
+			};
+			request.send();
+		}
+	
+		function initializeWithMicrophone(options, callback) {
+			navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+	
+			if (!navigator.getUserMedia) return;
+	
+			navigator.getUserMedia({ audio: true }, (function(stream) {
+				self.getRawSourceNode = function() {
+					return Pizzicato.context.createMediaStreamSource(stream);
+				};
+				if (util.isFunction(callback))
+					callback();
+	
+			}).bind(self), function(error) {
+				if (util.isFunction(callback))
+					callback(error);
+			});
+		}
+	
+		function initializeWithFunction(fn, callback) {
+			this.getRawSourceNode = function() {
+				var node = Pizzicato.context.createScriptProcessor(2048, 1, 1);
+				node.onaudioprocess = fn;
+				return node;
+			};
+		}
 	};
 	
 	
@@ -156,7 +218,8 @@
 			enumerable: true,
 			
 			value: function() {
-				if (this.playing) return;
+				if (this.playing) 
+					return;
 				
 				if (this.sustainActive && this.onSustainDone)
 					this.onSustainDone();
@@ -192,7 +255,6 @@
 	
 				if (Pz.Util.isNumber(this.sustain))
 					this.prepareSustain(stopSound);
-	
 				else 
 					stopSound();
 					
@@ -290,101 +352,12 @@
 		},
 	
 	
-		// Non enumerable properties
-	
-	
-		initializeWithWave: {
-			enumerable: false,
-	
-			value: function (waveOptions, callback) {
-				this.getRawSourceNode = function() {
-					var node = Pizzicato.context.createOscillator();
-					node.type = waveOptions.type || 'sine';
-					node.frequency.value = waveOptions.frequency || 440;
-	
-					return node;
-				};
-				if (Pz.Util.isFunction(callback)) 
-					callback();
-			}
-		},
-		
-	
-		initializeWithUrl: {
-			enumerable: false,
-	
-			value: function (url, callback) {
-				var self = this;
-				var request = new XMLHttpRequest();
-	
-				request.open('GET', url, true);
-				request.responseType = 'arraybuffer';
-				request.onload = function(progressEvent) {
-					var response = progressEvent.target.response;
-					Pizzicato.context.decodeAudioData(response, (function(buffer) {
-						self.getRawSourceNode = function() {
-							var node = Pizzicato.context.createBufferSource();
-							node.loop = this.loop;
-							node.buffer = buffer;
-							return node;
-						};
-						if (Pz.Util.isFunction(callback)) 
-							callback();
-					}).bind(self));
-				};
-				request.onreadystatechange = function(event) {
-					if (request.readyState === 4 && request.status !== 200)
-						console.error('Error while fetching ' + url + '. ' + request.statusText);
-				};
-				request.send();
-			}
-		},
-	
-	
-		initializeWithMicrophone: {
-			enumerable: false,
-	
-			value: function(options, callback) {
-				navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
-				var self = this;
-	
-				if (!navigator.getUserMedia) return;
-	
-				navigator.getUserMedia({ audio: true }, (function(stream) {
-	
-					self.getRawSourceNode = function() {
-						return Pizzicato.context.createMediaStreamSource(stream);
-					};
-	
-					if (Pz.Util.isFunction(callback))
-						callback();
-	
-				}).bind(self), function(error) {
-	
-					if (Pz.Util.isFunction(callback))
-						callback(error);
-	
-				});
-			}
-		},
-	
-	
-		initializeWithFunction: {
-			enumerable: false,
-	
-			value: function(fn, callback) {
-				this.getRawSourceNode = function() {
-					var node = Pizzicato.context.createScriptProcessor(2048, 1, 1);
-					node.onaudioprocess = fn;
-	
-					return node;
-				};
-			}
-		},
-	
-	
+		/**
+		 * Returns the node that produces the sound. For example, an oscillator
+		 * if the Sound object was initialized with a wave option.
+		 */
 		getSourceNode: {
-			enumerable: false,
+			enumerable: true,
 	
 			value: function() {
 				var node = this.getRawSourceNode();
@@ -398,13 +371,29 @@
 	
 	
 		/**
+		 * Returns the first node in the graph. When there are effects,
+		 * the first node is the input node of the first effect.
+		 */
+		getInputNode: {
+			enumerable: true,
+	
+			value: function() {
+				if (this.effects.length > 0) 
+					return this.effects[0].inputNode;
+	
+				return this.masterVolume;
+			}
+		},
+	
+	
+		/**
 		 * Returns the node used for the master volume. This node is connected
 		 * to a sustainNode that manages the sustain volume changes without 
 		 * modifying the masterVolume. The sustainNode is the one connected
 		 * to the destination.
 		 */
 		getMasterVolume: {
-			enumerable: false,
+			enumerable: true,
 	
 			value: function() {
 				if (this.masterVolume)
@@ -420,20 +409,6 @@
 			}
 		},
 	
-		/**
-		 * Returns the first node in the graph. When there are effects,
-		 * the first node is the input node of the first effect.
-		 */
-		getInputNode: {
-			enumerable: false,
-	
-			value: function() {
-				if (this.effects.length > 0) 
-					return this.effects[0].inputNode;
-	
-				return this.masterVolume;
-			}
-		},
 	
 		/**
 		 * To achieve the sustain effect, we use web API function linearRampToValueAtTime.
@@ -442,7 +417,7 @@
 		 * time of the sustain is necessary.
 		 */
 		prepareSustain: {
-			enumerable: false,
+			enumerable: true,
 	
 			value: function(stopSound) {
 				var self = this;

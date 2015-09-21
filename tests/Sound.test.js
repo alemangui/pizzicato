@@ -145,32 +145,42 @@ describe('Sound', function() {
 		});
 	}, 5000);
 
-	// This test has been disabled because of https://bugzilla.mozilla.org/show_bug.cgi?id=1195145
+	it('should not have accessible initializers', function() {
+		var sound = new Pizzicato.Sound();
 
-	// it('should fade out sound when stopping if sustain is set', function(done) {
-	// 	var volumeAt0;
-	// 	var volumeAt300;
-	// 	var volumeAt600;
-	// 	var sound = new Pizzicato.Sound({ wave: { type: 'sine' },
-	// 		sustain: 1
-	// 	});
+		expect(sound.initializeWithUrl).toBe(undefined);
+		expect(sound.initializeWithWave).toBe(undefined);
+		expect(sound.initializeWithMicrophone).toBe(undefined);
+		expect(sound.initializeWithFunction).toBe(undefined);
+	});
 
-	// 	sound.play();
-	// 	sound.stop();
+	// The following test has been commented out because of 
+	// https://bugzilla.mozilla.org/show_bug.cgi?id=1195145
 
-	// 	volumeAt0 = sound.sustainNode.gain.value;
+	/* it('should fade out sound when stopping if sustain is set', function(done) {
+		var volumeAt0;
+		var volumeAt300;
+		var volumeAt600;
+		var sound = new Pizzicato.Sound({ wave: { type: 'sine' },
+			sustain: 1
+		});
 
-	// 	setTimeout(function() {
-	// 		volumeAt300 = sound.sustainNode.gain.value;
-	// 		expect(volumeAt0).toBeGreaterThan(volumeAt300);
-	// 	}, 300);
+		sound.play();
+		sound.stop();
 
-	// 	setTimeout(function() {
-	// 		volumeAt600 = sound.sustainNode.gain.value;
-	// 		expect(volumeAt300).toBeGreaterThan(volumeAt600);
-	// 		done();
-	// 	}, 600);
+		volumeAt0 = sound.sustainNode.gain.value;
 
-	// }, 2000);
+		setTimeout(function() {
+			volumeAt300 = sound.sustainNode.gain.value;
+			expect(volumeAt0).toBeGreaterThan(volumeAt300);
+		}, 300);
+
+		setTimeout(function() {
+			volumeAt600 = sound.sustainNode.gain.value;
+			expect(volumeAt300).toBeGreaterThan(volumeAt600);
+			done();
+		}, 600);
+
+	}, 2000); */
 
 });
