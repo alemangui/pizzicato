@@ -145,6 +145,19 @@ describe('Sound', function() {
 		});
 	}, 5000);
 
+	it('Pausing or stopping should have no effect when no source node is available', function() {
+		var callback = jasmine.createSpy('endCallback');		
+		var sound = new Pizzicato.Sound({ wave: { type: 'sine' } });
+		
+		sound.on('pause', callback);
+		sound.on('stop', callback);
+
+		sound.pause();
+		sound.stop();
+
+		expect(callback).not.toHaveBeenCalled();
+	});
+
 	it('should not have accessible initializers', function() {
 		var sound = new Pizzicato.Sound();
 

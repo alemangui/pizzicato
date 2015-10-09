@@ -268,7 +268,7 @@
 			enumerable: true,
 			
 			value: function() {
-				if (this.paused) return;
+				if (this.paused || !this.playing) return;
 	
 				this.paused = true;
 				this.playing = false;
