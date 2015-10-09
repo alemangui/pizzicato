@@ -27,12 +27,15 @@ Pizzicato.Sound = function(options, callback) {
 
 	function initializeWithWave (waveOptions, callback) {
 		this.getRawSourceNode = function() {
+			var frequency = this.sourceNode ? this.sourceNode.frequency.value : waveOptions.frequency;
 			var node = Pizzicato.context.createOscillator();
 			node.type = waveOptions.type || 'sine';
-			node.frequency.value = waveOptions.frequency || 440;
+			node.frequency.value = (frequency || 440);
 
 			return node;
 		};
+		this.sourceNode = this.getRawSourceNode();
+
 		if (util.isFunction(callback)) 
 			callback();
 	}
@@ -226,6 +229,25 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 		set: function(volume) {
 			if (Pz.Util.isInRange(volume, 0, 1) && this.masterVolume)
 				this.masterVolume.gain.value = volume;
+		}
+	},
+
+
+	frequency: {
+		enumerable: true,
+
+		get: function() {
+			if (this.sourceNode && Pz.Util.isOscillator(this.sourceNode)) {
+				return this.sourceNode.frequency.value;
+			}
+
+			return null;
+		},
+
+		set: function(frequency) {
+			if (this.sourceNode && Pz.Util.isOscillator(this.sourceNode)) {
+				this.sourceNode.frequency.value = frequency;
+			}
 		}
 	},
 

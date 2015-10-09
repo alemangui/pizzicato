@@ -23,6 +23,10 @@ Pizzicato.Util = {
 		return arg >= min && arg <= max;
 	},
 
+	isOscillator: function(audioNode) {
+		return (audioNode && audioNode.toString() === "[object OscillatorNode]");
+	},
+
 	// Takes a number from 0 to 1 and normalizes it 
 	// to fit within range floor to ceiling
 	normalize: function(num, floor, ceil) {

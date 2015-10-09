@@ -67,6 +67,17 @@ describe('Util', function() {
 	});
 
 
+	it('contains a working isOscillator function', function() {
+		var context = new window.AudioContext();
+		var oscillatorNode = context.createOscillator();
+		var pannerNode = context.createPanner();
+		var isOscillator = Pizzicato.Util.isOscillator;
+
+		expect(isOscillator(oscillatorNode)).toBe(true);
+		expect(isOscillator(pannerNode)).toBe(false);
+	});
+
+
 	it('returns a normalized version of a number', function() {
 		var normalize = Pizzicato.Util.normalize;
 

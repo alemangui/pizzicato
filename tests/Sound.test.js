@@ -52,6 +52,14 @@ describe('Sound', function() {
 		expect(sound.masterVolume.gain.value).toBeCloseTo(0.3);
 	});
 
+	it('should change the oscillator frequency when modifying the frequency in a wave based sound', function() {
+		var sound = new Pizzicato.Sound({ wave: { type: 'sine', frequency: 440 } });
+		expect(sound.frequency).toBe(440);
+
+		sound.frequency = 300
+		expect(sound.frequency).toBe(300);
+	});
+
 	it('pausing, playing and stopping should update the corresponding properties', function(done) {
 		var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
 			expect(sound.playing).toBe(false);

@@ -90,6 +90,10 @@
 			return arg >= min && arg <= max;
 		},
 	
+		isOscillator: function(audioNode) {
+			return (audioNode && audioNode.toString() === "[object OscillatorNode]");
+		},
+	
 		// Takes a number from 0 to 1 and normalizes it 
 		// to fit within range floor to ceiling
 		normalize: function(num, floor, ceil) {
@@ -149,12 +153,15 @@
 	
 		function initializeWithWave (waveOptions, callback) {
 			this.getRawSourceNode = function() {
+				var frequency = this.sourceNode ? this.sourceNode.frequency.value : waveOptions;
 				var node = Pizzicato.context.createOscillator();
 				node.type = waveOptions.type || 'sine';
-				node.frequency.value = waveOptions.frequency || 440;
+				node.frequency.value = frequency || 440;
 	
 				return node;
 			};
+			this.sourceNode = this.getRawSourceNode();
+	
 			if (util.isFunction(callback)) 
 				callback();
 		}
@@ -348,6 +355,25 @@
 			set: function(volume) {
 				if (Pz.Util.isInRange(volume, 0, 1) && this.masterVolume)
 					this.masterVolume.gain.value = volume;
+			}
+		},
+	
+	
+		frequency: {
+			enumerable: true,
+	
+			get: function() {
+				if (this.sourceNode && Pz.Util.isOscillator(this.sourceNode)) {
+					return this.sourceNode.frequency.value;
+				}
+	
+				return null;
+			},
+	
+			set: function(frequency) {
+				if (this.sourceNode && Pz.Util.isOscillator(this.sourceNode)) {
+					this.sourceNode.frequency.value = frequency;
+				}
 			}
 		},
 	
