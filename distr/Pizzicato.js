@@ -153,10 +153,10 @@
 	
 		function initializeWithWave (waveOptions, callback) {
 			this.getRawSourceNode = function() {
-				var frequency = this.sourceNode ? this.sourceNode.frequency.value : waveOptions;
+				var frequency = this.sourceNode ? this.sourceNode.frequency.value : waveOptions.frequency;
 				var node = Pizzicato.context.createOscillator();
 				node.type = waveOptions.type || 'sine';
-				node.frequency.value = frequency || 440;
+				node.frequency.value = (frequency || 440);
 	
 				return node;
 			};
