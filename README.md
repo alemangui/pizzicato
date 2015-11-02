@@ -4,7 +4,7 @@
 
 ##A Web Audio API wrapper in the making!
 
-Pizzicato is still in its early stages. In the meantime, feel free to check out the project and take a look at the [website](http://alemangui.github.io/pizzicato/).
+Pizzicato is still in its early stages. In the meantime, feel free to check out the project and also take a look at the [website](http://alemangui.github.io/pizzicato/). All contributions are welcome!
 
 First install dependencies with 
 ```
@@ -13,12 +13,12 @@ npm install
 
 And then run tests and build with
 ```
-npm run test
+gulp test
 ```
 
 Or to skip tests:
 ```
-npm run build
+gulp scripts
 ```
 
 ## TL;DR: How does it work?
