@@ -124,34 +124,69 @@
 		}
 	};
 
-	Pizzicato.Sound = function(options, callback) {
+	Pizzicato.Sound = function(description, callback) {
 		var self = this;
 		var util = Pizzicato.Util;
+		var descriptionError = getDescriptionError(description);
+		var hasOptions = util.isObject(description) && util.isObject(description.options);
+	
+		if (descriptionError) {
+			console.error(descriptionError);
+			throw new Error('Error initializing Pizzicato Sound: ' + descriptionError);
+		}
 	
 		this.masterVolume = this.getMasterVolume();
 		this.lastTimePlayed = 0;
 		this.effects = [];
 		this.playing = this.paused = false;
-		this.loop = util.isObject(options) && options.loop;
-		this.volume = util.isObject(options) && options.volume ? options.volume : 1;
-		this.sustain = options && options.sustain;
+		this.loop = hasOptions && description.options.loop;
+		this.sustain = hasOptions && description.options.sustain;
+		this.volume = hasOptions && util.isNumber(description.options.volume) ? description.options.volume : 1;
 	
-		if (util.isString(options))
-			(initializeWithUrl.bind(this))(options, callback);
+		if (!description)
+			(initializeWithWave.bind(this))({}, callback);
 	
-		else if (util.isObject(options) && util.isString(options.source))
-			(initializeWithUrl.bind(this))(options.source, callback);
+		else if (util.isString(description))
+			(initializeWithUrl.bind(this))(description, callback);
 	
-		else if (util.isObject(options) && util.isObject(options.wave))
-			(initializeWithWave.bind(this))(options.wave, callback);
+		else if (util.isFunction(description))
+			(initializeWithFunction.bind(this))(description, callback);
 	
-		else if (util.isObject(options) && !!options.microphone)
-			(initializeWithMicrophone.bind(this))(options, callback);
+		else if (description.source === 'file')
+			(initializeWithUrl.bind(this))(description.options.path, callback);
 	
-		else if (util.isFunction(options))
-			(initializeWithFunction.bind(this))(options, callback);
+		else if (description.source === 'wave')
+			(initializeWithWave.bind(this))(description.options, callback);
+	
+		else if (description.source === 'input')
+			(initializeWithInput.bind(this))(description, callback);
+	
+		else if (description.source === 'script')
+			(initializeWithFunction.bind(this))(description.options, callback);
+	
+		
+		function getDescriptionError (description) {
+			var supportedSources = ['wave', 'file', 'input', 'script'];
+	
+			if (description && (!util.isFunction(description) && !util.isString(description) && !util.isObject(description)))
+				return 'Description type not supported. Initialize a sound using an object, a function or a string.';
+	
+			if (util.isObject(description)) {
+				
+				if (!util.isString(description.source) || supportedSources.indexOf(description.source) === -1)
+					return 'Specified source not supported. Sources can be wave, file, input or script';
+	
+				if (description.source === 'file' && (!description.options || !description.options.path))
+					return 'A path is needed for sounds with a file source';
+	
+				if (description.source === 'script' && (!description.options || !description.options.audioFunction))
+					return 'An audio function is needed for sounds with a script source';
+			}
+		}
+	
 	
 		function initializeWithWave (waveOptions, callback) {
+			waveOptions = waveOptions || {};
 			this.getRawSourceNode = function() {
 				var frequency = this.sourceNode ? this.sourceNode.frequency.value : waveOptions.frequency;
 				var node = Pizzicato.context.createOscillator();
@@ -165,6 +200,7 @@
 			if (util.isFunction(callback)) 
 				callback();
 		}
+	
 	
 		function initializeWithUrl (url, callback) {
 			var request = new XMLHttpRequest();
@@ -191,10 +227,11 @@
 			request.send();
 		}
 	
-		function initializeWithMicrophone(options, callback) {
+	
+		function initializeWithInput(options, callback) {
 			navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 	
-			if (!navigator.getUserMedia) return;
+			if (!navigator.getUserMedia) return; 
 	
 			navigator.getUserMedia({ audio: true }, (function(stream) {
 				self.getRawSourceNode = function() {
@@ -209,10 +246,22 @@
 			});
 		}
 	
-		function initializeWithFunction(fn, callback) {
+	
+		function initializeWithFunction(options, callback) {
+			var audioFunction = util.isFunction(options) ? options : options.audioFunction;
+			var bufferSize = util.isObject(options) && options.bufferSize ? options.bufferSize : null;
+	
+			if (!bufferSize) {
+				try { // Webkit does not automatically chose the buffer size
+					var test = Pizzicato.context.createScriptProcessor();
+				} catch (e) {
+					bufferSize = 2048;
+				}
+			}
+	
 			this.getRawSourceNode = function() {
-				var node = Pizzicato.context.createScriptProcessor(2048, 1, 1);
-				node.onaudioprocess = fn;
+				var node = Pizzicato.context.createScriptProcessor(bufferSize, 1, 1);
+				node.onaudioprocess = audioFunction;
 				return node;
 			};
 		}

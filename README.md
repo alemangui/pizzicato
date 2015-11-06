@@ -2,9 +2,11 @@
 
 [![Build Status](https://travis-ci.org/alemangui/pizzicato.svg?branch=master)](https://travis-ci.org/alemangui/pizzicato)
 
-##A Web Audio API wrapper in the making!
+##A Web Audio API library in the making!
 
-Pizzicato is still in its early stages. In the meantime, feel free to check out the project and also take a look at the [website](http://alemangui.github.io/pizzicato/). All contributions are welcome!
+Pizzicato aims to simplify the way you create and manipulate sounds via the Web Audio API.
+
+This library still in its early stages. In the meantime, feel free to check out the project and also take a look at the [website](http://alemangui.github.io/pizzicato/). All contributions are welcome!
 
 First install dependencies with 
 ```
@@ -16,7 +18,7 @@ And then run tests and build with
 gulp test
 ```
 
-Or to skip tests:
+Or to build without tests:
 ```
 gulp scripts
 ```
@@ -30,7 +32,10 @@ Include Pizzicato in your site
 Create a sound
 ```javascript
 var sawtoothWave = new Pizzicato.Sound({ 
-    wave: { type: 'sawtooth' }
+    source: 'wave',
+    options {
+        type: 'sawtooth'
+    }
 });
 ```
 
@@ -46,43 +51,101 @@ sawtoothWave.play();
 ```
 
 ## Create a sound
-To create a new sound, use the ```Pizzicato.Sound``` constructor, which takes an ```options``` argument and a callback that will be executed when the sound is ready to be used. If an error occurs, the callback will be called with the error as a parameter.
+To create a new sound, use the ```Pizzicato.Sound``` constructor, which takes an object with the sound's ```description``` as argument and a callback that will be executed when the sound is ready to be used. If an error occurs, the callback will be called with the error as a parameter.
 ```javascript
-var sound = new Pizzicato.Sound(Object options, [Function callback]);
+var sound = new Pizzicato.Sound(Object description, [Function callback]);
 ```
 For example:
 ```javascript
-var click = new Pizzicato.Sound({ source: './sounds/click.wav' }, function(error) {
+var click = new Pizzicato.Sound({ source: 'wave' }, function(error) {
     if (!error)
         console.log('Sound ready to use!');
 });
 ```
-Sounds can be created from a variety of sources.
-### Sounds from a waveform
-To create a sound from an oscillator with a certain waveform, include the object ```wave``` in the constructor options. 
 
-The ```wave``` object contains a ```type``` parameter for the type of waveform (```sine```, ```square```, ```sawtooth``` or ```triangle```) as well as a ```frequency``` parameter to indicate the frequency of the wave (e.g., 440 for an A note).
-```javascript.
-var sound = new Pizzicato.Sound({ 
-    wave: { 
-        type: 'sawtooth',
+Typically, the ```description``` object contains a string ```source``` and an object ```options```.
+
+For example, this objects describes a sine waveform with a frequency of 440:
+```javascript
+{
+    source: 'wave',
+    options: {
+        type: 'sine',
         frequency: 440
+    }
+}
+```
+
+Sounds can be created from a variety of sources.
+### Sounds from a wave
+To create a sound from an oscillator with a certain waveform, use the ```source: wave``` in your description. Additionally, the following optional parameters are possible inside the ```options``` object:
+* ```type``` _(Optional; ```sine```, ```square```, ```triangle``` or ```sawtooth```, defaults to ```sine```)_: Specifies the type of waveform.
+* ```frequency``` _(Optional; defaults to 440)_: Indicates the frequency of the wave (i.e., a 440 value will yield an A note).
+* ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
+* ```sustain``` _(Optional; defaults to 0)_: Value in seconds that indicate the fade-out time once the sound is stopped.
+
+```javascript
+var sound = new Pizzicato.Sound({ 
+        source: 'wave',
+        options: { type: 'sawtooth', frequency: 440 }
+});
+```
+
+Creating a Pizzicato Sound with an empty constructor will create a sound with a sine wave and a frequency of 440.
+
+```javascript
+var sound = new Pizzicato.Sound();
+```
+
+### Sounds from a file
+In order to load a sound from a file, include the ```source: file``` in your description. Additionally, the following  parameters are possible inside the ```options``` object:
+* ```path``` _(Mandatory; string)_: Specifies the type of waveform.
+* ```loop``` _(Optional; boolean, defaults to false)_: If set, the file will start playing again after the end.
+* ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
+* ```sustain``` _(Optional; defaults to 0)_: Value in seconds that indicate the fade-out time once the sound is stopped.
+```javascript
+var sound = new Pizzicato.Sound({ 
+    source: 'file',
+    options: { path: './audio/sound.wav' }
+}, function() {
+    console.log('sound file loaded!');
+});
+```
+Alternatively, you can also simply pass a string to the constructor with the path of the sound file.
+```
+var sound = new Pizzicato.Sound('./audio/sound.wav', function() {...});
+```
+
+### Sounds from the user input
+It is also possible to use the sound input from the computer. This is usually the microphone, but it could also be a line-in input. To use this, add ```source: input``` in your description. The following optional parameters are possible inside ```options``` object:
+* ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
+* ```sustain``` _(Optional; defaults to 0)_: Value in seconds that indicate the fade-out time once the sound is stopped.
+```javascript
+var voice = new Pizzicato.Sound({
+    source: 'input',
+    options: { volume: 0.8 }
+});
+```
+### Sounds from a function
+For more creative freedom, Pizzicato also allows direct audio processing. Sounds can be created from a Javascript function by including ```source: input``` in the description. The following parameters are possible in the ```options``` object:
+* ```audioFunction``` _(Mandatory; function(<audio processing event>))_: Function that will be called with the audio processing event.
+* ```bufferSize``` _(Optional; number - must be a power of 2.)_: This value controls how many sample frames will be processed at each audio process event. Lower values will result in lower latency, higher values help prevent glitches.
+* ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
+* ```sustain``` _(Optional; defaults to 0)_: Value in seconds that indicate the fade-out time once the sound is stopped.
+
+For example:
+```javascript
+var whiteNoise = Pizzicato.Sound({
+    type: 'script',
+    options: {
+        audioFunction: function(e) {
+            var output = e.outputBuffer.getChannelData(0);
+            for (var i = 0; i < e.outputBuffer.length; i++)
+                output[i] = Math.random();
+        }
     }
 });
 ```
-### Sounds from a file
-In order to load a sound from a file, include the ```source``` in the constructor options. You can also simply pass a string to the constructor with the path of the sound file.
-```javascript
-var sound = new Pizzicato.Sound({ source: './audio/sound.wav' });
-// is equivalent to:
-var sound = new Pizzicato.Sound('./audio/sound.wav');
-```
-### Sounds from the microphone
-It is also possible to use the sound input from the computer. This is usually the microphone, but it could also be a line-in. To use this, initialize a Pizzicato Sound with the ```microphone``` option set to ```true```.
-```javascript
-var voice = new Pizzicato.Sound({ microphone: true });
-```
-
 
 
 ## Add effects
@@ -184,20 +247,6 @@ sound.addEffect(lowPassFilter);
 sound.play();
 ```
 
-### Sustain
-Sustain is only effect included directly in the Pizzicato Sound object. To add sustain, you can either pass a ```sustain``` parameter in the constructor of the object:
-
-```javascript
-var sustainedSound = new Pizzicato.Sound({ sustain: 1 });
-```
-
-Or change the ```sustain``` property directly in the Sound object
-
-```javascript
-mySound = new Pizzicato.Sound();
-mySound.sustain = 0.4;
-```
-
 ## Support
 ### Browsers
 Pizzicato can only work in [browsers with Web Audio support](http://caniuse.com/#feat=audio-api), no shims have been added yet. This means:
@@ -207,4 +256,4 @@ Pizzicato can only work in [browsers with Web Audio support](http://caniuse.com/
 * Opera 30+
 
 ### Audio formats
-Pizzicato supports [supported by Web Audio](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility). These may vary depending on your system version and browser.
+Pizzicato supports audio formats [supported by Web Audio](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility). These may vary depending on your system version and browser.
