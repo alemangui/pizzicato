@@ -33,7 +33,10 @@
             <h3>Create sounds from wave forms</h3>
             <pre><code class="language-javascript">
 var sineWave = new Pizzicato.Sound({ 
-    wave: { type: 'sine' }
+    source: 'wave', 
+    options: {
+        frequency: 440
+    }
 });
 
 sineWave.play();
@@ -80,7 +83,7 @@ var acousticGuitar = new Pizzicato.Sound('./audio/acoustic.wav', function() {
             <h3>Use your microphone (make sure you have headphones!)</h3>
             <div class="error" id="microphone-error">Oops! We didn't get your permission to access the microphone.</div>
             <pre><code class="language-javascript">
-var voice = new Pizzicato.Sound({ microphone: true });
+var voice = new Pizzicato.Sound({ source: 'input' });
             </code></pre>
 
             <div class="slider-group">
@@ -124,7 +127,7 @@ var whiteNoise = new Pizzicato.Sound(function(e) {
             <h4>Sustain</h4>
             <pre><code class="language-javascript">
 var sineWave = new Pizzicato.Sound({ 
-    wave: { type: 'sine', frequency: 220 }
+    source: 'wave'
 });
 
 sineWave.sustain = 1;

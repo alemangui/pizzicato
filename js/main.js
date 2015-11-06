@@ -17,20 +17,57 @@ var distortion = new Pizzicato.Effects.Distortion({
 var flanger = new Pizzicato.Effects.Flanger();
 
 
-var sineWave         = new Pz.Sound({ wave: { type: 'sine' }});
-var sineWaveSustain  = new Pz.Sound({ wave: { type: 'sine', frequency: 220 }, sustain: 1});
-var acoustic         = new Pz.Sound('./audio/acoustic.m4a');
-var timba            = new Pz.Sound({ source: './audio/timba.m4a', loop: true }, function() { timba.addEffect(delay); });
-var electro          = new Pz.Sound({ source: './audio/electro.m4a', loop: true }, function() { electro.addEffect(compressor); });
-var synth            = new Pz.Sound({ source: './audio/synth.m4a', loop: true }, function() { synth.addEffect(lowPassFilter); });
-var guitar           = new Pz.Sound({ source: './audio/guitar.m4a', loop: true }, function() { guitar.addEffect(distortion); });
-var electricGuitar   = new Pz.Sound({ source: './audio/electric-guitar.m4a', loop: true }, function() { electricGuitar.addEffect(flanger); });
-var whiteNoise       = new Pz.Sound(function(e) {
+var sineWave = new Pz.Sound();
+var sineWaveSustain = new Pz.Sound({ source: 'wave', options: { frequency: 220, sustain: 1} });
+var acoustic = new Pz.Sound('./audio/acoustic.m4a');
+
+var timba = new Pz.Sound({ 
+	source: 'file', 
+	options: { 
+		path: './audio/timba.m4a', 
+		loop: true 
+	}
+}, function() { timba.addEffect(delay); });
+
+var electro = new Pz.Sound({ 
+	source: 'file', 
+	options: { 
+		path: './audio/electro.m4a', 
+		loop: true 
+	}
+}, function() { electro.addEffect(compressor); });
+
+var synth = new Pz.Sound({ 
+	source: 'file', 
+	options: { 
+		path: './audio/synth.m4a', 
+		loop: true 
+	}
+}, function() { synth.addEffect(lowPassFilter); });
+
+var guitar = new Pz.Sound({ 
+	source: 'file', 
+	options: { 
+		path: './audio/guitar.m4a', 
+		loop: true 
+	}
+}, function() { guitar.addEffect(distortion); });
+
+var electricGuitar = new Pz.Sound({ 
+	source: 'file', 
+	options: { 
+		path: './audio/electric-guitar.m4a', 
+		loop: true 
+	}
+}, function() { electricGuitar.addEffect(flanger); });
+
+var whiteNoise = new Pz.Sound(function(e) {
   var output = e.outputBuffer.getChannelData(0);
   for (var i = 0; i < e.outputBuffer.length; i++)
     output[i] = Math.random();
 });
-var voice 				= new Pizzicato.Sound({ microphone: true }, function(err) {
+
+var voice = new Pizzicato.Sound({ source: 'input' }, function(err) {
 	if (!err) return;
 	document.getElementById('play-voice').setAttribute('disabled', 'disabled');
 	document.getElementById('stop-voice').setAttribute('disabled', 'disabled');
