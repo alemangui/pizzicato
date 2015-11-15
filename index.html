@@ -330,7 +330,7 @@ sound.play();
             </div>
 
 
-            <h4>Low Pass Filter</h4>
+            <h4>Low-Pass Filter</h4>
 
             <pre><code class="language-javascript">
 var lowPassFilter = new Pizzicato.Effects.LowPassFilter({
@@ -363,6 +363,42 @@ sound.play();
             <div class="controls">
                 <button id="stop-synth" class="stop action"></button>
                 <button id="play-synth" class="play action"></button>
+            </div>
+
+
+            <h4>High-Pass Filter</h4>
+
+            <pre><code class="language-javascript">
+var highPassFilter = new Pizzicato.Effects.LowPassFilter({
+    frequency: 10,
+    peak: 10
+});
+
+sound.addEffect(lowPassFilter);
+sound.play();
+            </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-synth2">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-synth2" />
+                    <div class="slider-value">1</div>
+                </div>
+                <div class="slider">
+                    <label for="high-pass-filter-frequency">Frequency</label>
+                    <input type="range" min="10" max="22050" step="1" value="10" id="high-pass-filter-frequency" />
+                    <div class="slider-value">10</div>
+                </div>
+                <div class="slider">
+                    <label for="high-pass-filter-peak">Peak</label>
+                    <input type="range" min="0.0001" max="20" step="0.0001" value="10" id="high-pass-filter-peak" />
+                    <div class="slider-value">10</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="stop-synth2" class="stop action"></button>
+                <button id="play-synth2" class="play action"></button>
             </div>
 
         </div>
