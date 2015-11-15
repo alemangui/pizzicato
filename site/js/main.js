@@ -11,6 +11,10 @@ var lowPassFilter = new Pizzicato.Effects.LowPassFilter({
 	frequency: 400,
 	peak: 10
 });
+var highPassFilter = new Pizzicato.Effects.HighPassFilter({
+	frequency: 10,
+	peak: 10
+});
 var distortion = new Pizzicato.Effects.Distortion({
 	gain: 0.4
 });
@@ -44,6 +48,14 @@ var synth = new Pz.Sound({
 		loop: true 
 	}
 }, function() { synth.addEffect(lowPassFilter); });
+
+var synth2 = new Pz.Sound({ 
+	source: 'file', 
+	options: { 
+		path: './audio/synth2.m4a', 
+		loop: true 
+	}
+}, function() { synth2.addEffect(highPassFilter); });
 
 var guitar = new Pz.Sound({ 
 	source: 'file', 
@@ -152,6 +164,21 @@ var segments = [
 				parameters: {
 					frequency: document.getElementById('low-pass-filter-frequency'),
 					peak: document.getElementById('low-pass-filter-peak')
+				}
+			}
+		]
+	},
+	{
+		audio: synth2,
+		playButton: document.getElementById('play-synth2'),
+		stopButton: document.getElementById('stop-synth2'),
+		volumeSlider: document.getElementById('volume-synth2'),
+		effects: [
+			{
+				instance: highPassFilter,
+				parameters: {
+					frequency: document.getElementById('high-pass-filter-frequency'),
+					peak: document.getElementById('high-pass-filter-peak')
 				}
 			}
 		]

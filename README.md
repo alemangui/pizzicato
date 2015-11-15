@@ -230,10 +230,10 @@ sound.addEffect(compressor);
 sound.play();
 ```
 
-### Low pass filter
+### Low-pass filter
 A low-pass filter passes signals with a frequency lower than a pre-determined cutoff frequency and attenuates signals with frequencies higher than the cutoff frequency. 
 
-* ```frequency``` _(min: 10, max: 22050, defaults to 350)_: The cutoff frequency of the lowpass filter.
+* ```frequency``` _(min: 10, max: 22050, defaults to 350)_: The cutoff frequency of the low-pass filter.
 * ```peak``` _(min: 0.0001, max: 1000, defaults to 1)_: Indicates how peaked the frequency is around the cutoff frequency. The greater the value is, the greater is the peak.
 
 Example:
@@ -247,12 +247,29 @@ sound.addEffect(lowPassFilter);
 sound.play();
 ```
 
+### High-pass filter
+A high-pass filter is the opposite of a low-pass filter (described above). It attenuates signals with a frequency lower than a pre-determined cutoff frequency and passes signals with frequencies higher than the cutoff frequency. 
+
+* ```frequency``` _(min: 10, max: 22050, defaults to 350)_: The cutoff frequency of the high-pass filter.
+* ```peak``` _(min: 0.0001, max: 1000, defaults to 1)_: Indicates how peaked the frequency is around the cutoff frequency. The greater the value is, the greater is the peak.
+
+Example:
+```javascript
+var highPassFilter = new Pizzicato.Effects.HighPassFilter({
+    frequency: 120,
+    peak: 10
+});
+
+sound.addEffect(highPassFilter);
+sound.play();
+```
+
 ## Support
 ### Browsers
 Pizzicato can only work in [browsers with Web Audio support](http://caniuse.com/#feat=audio-api), no shims have been added yet. This means:
 * Firefox 31+
 * Chrome 31+
-* Safari 7+ (microphone audio input not available in Safari)
+* Safari 7+ (input source not available in Safari)
 * Opera 30+
 
 ### Audio formats

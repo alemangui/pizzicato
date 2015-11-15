@@ -1,4 +1,4 @@
-describe('Effects.LowPassFilter', function() {
+describe('Effects.Filters', function() {
 
 	it('Should override default options', function() {
 		var options = {
@@ -18,7 +18,7 @@ describe('Effects.LowPassFilter', function() {
 			peak: 'invalid'
 		};
 
-		var lowPassFilter = new Pizzicato.Effects.LowPassFilter(options);
+		var lowPassFilter = new Pizzicato.Effects.HighPassFilter(options);
 
 		expect(lowPassFilter.frequency).toBe(350);
 		expect(lowPassFilter.peak).toBe(1);		
@@ -41,7 +41,7 @@ describe('Effects.LowPassFilter', function() {
 	it('Should change the filter node Q value when changing the peak', function() {
 		var initialPeak = 5;
 		var newPeak = 100;
-		var lowPassFilter = new Pizzicato.Effects.LowPassFilter({ peak: initialPeak });
+		var lowPassFilter = new Pizzicato.Effects.HighPassFilter({ peak: initialPeak });
 
 		expect(lowPassFilter.filterNode.Q.value).toBe(initialPeak);
 

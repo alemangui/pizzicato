@@ -13,7 +13,7 @@
 	//= include ./Effects.js
 	//= include ./Effects/Delay.js
 	//= include ./Effects/Compressor.js
-	//= include ./Effects/LowPassFilter.js
+	//= include ./Effects/Filters.js
 	//= include ./Effects/Distortion.js
 	//= include ./Effects/Flanger.js
 	

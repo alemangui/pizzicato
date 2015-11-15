@@ -1,5 +1,25 @@
+/**
+ * Frequencies below the cutoff frequency pass 
+ * through; frequencies above it are attenuated.
+ */
 Pizzicato.Effects.LowPassFilter = function(options) {
+	Filter.call(this, options, 'lowpass');
+};
 
+/**
+ * Frequencies below the cutoff frequency are 
+ * attenuated; frequencies above it pass through.
+ */
+Pizzicato.Effects.HighPassFilter = function(options) {
+	Filter.call(this, options, 'highpass');
+};
+
+/**
+ * Filters used by Pizzicato stem from the biquad filter node. This 
+ * function acts as a common constructor. The only thing that changes 
+ * between filters is the 'type' of the biquad filter node.
+ */
+function Filter(options, type) {
 	this.options = {};
 	options = options || this.options;
 
@@ -9,7 +29,7 @@ Pizzicato.Effects.LowPassFilter = function(options) {
 	};
 
 	this.inputNode = this.filterNode = Pz.context.createBiquadFilter();
-	this.filterNode.type = 'lowpass';
+	this.filterNode.type = type;
 
 	this.outputNode = Pizzicato.context.createGain();
 
@@ -19,12 +39,12 @@ Pizzicato.Effects.LowPassFilter = function(options) {
 		this[key] = options[key];
 		this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
 	}
-};
+}
 
-Pizzicato.Effects.LowPassFilter.prototype = Object.create(null, {
+var filterPrototype = Object.create(null, {
 	
 	/**
-	 * The cutoff frequency of the lowpass filter.
+	 * The cutoff frequency of the filter.
 	 * MIN: 10
 	 * MAX: 22050 (half the sampling rate of the current context)
 	 */
@@ -59,3 +79,6 @@ Pizzicato.Effects.LowPassFilter.prototype = Object.create(null, {
 		}
 	}
 });
+
+Pizzicato.Effects.LowPassFilter.prototype = filterPrototype;
+Pizzicato.Effects.HighPassFilter.prototype = filterPrototype;
