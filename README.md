@@ -50,6 +50,24 @@ Use it!
 sawtoothWave.play();
 ```
 
+## Table of contents
+- [Create a sound](#create-a-sound)
+  - [Sounds from a wave](#sounds-from-a-wave)
+  - [Sounds from a file](#sounds-from-a-file)
+  - [Sounds from input](#sounds-from-input)
+  - [Sounds from a function](#sounds-from-a-function)
+- [Effects](#effects)
+  - [Delay](#delay)
+  - [Distortion](#distortion)
+  - [Flanger](#flanger)
+  - [Compressor](#compressor)
+  - [Low-pass filter](#low-pass-filter)
+  - [High-pass filter](#high-pass-filter)
+- [Support](#support)
+  - [Browsers](#browsers)
+  - [Audio formats](#audio-formats)
+
+<a name="create-a-sound"/>
 ## Create a sound
 To create a new sound, use the ```Pizzicato.Sound``` constructor, which takes an object with the sound's ```description``` as argument and a callback that will be executed when the sound is ready to be used. If an error occurs, the callback will be called with the error as a parameter.
 ```javascript
@@ -77,6 +95,8 @@ For example, this objects describes a sine waveform with a frequency of 440:
 ```
 
 Sounds can be created from a variety of sources.
+
+<a name="sounds-from-a-wave"/>
 ### Sounds from a wave
 To create a sound from an oscillator with a certain waveform, use the ```source: wave``` in your description. Additionally, the following optional parameters are possible inside the ```options``` object:
 * ```type``` _(Optional; ```sine```, ```square```, ```triangle``` or ```sawtooth```, defaults to ```sine```)_: Specifies the type of waveform.
@@ -97,6 +117,7 @@ Creating a Pizzicato Sound with an empty constructor will create a sound with a 
 var sound = new Pizzicato.Sound();
 ```
 
+<a name="sounds-from-a-file"/>
 ### Sounds from a file
 In order to load a sound from a file, include the ```source: file``` in your description. Additionally, the following  parameters are possible inside the ```options``` object:
 * ```path``` _(Mandatory; string)_: Specifies the type of waveform.
@@ -115,7 +136,9 @@ Alternatively, you can also simply pass a string to the constructor with the pat
 ```
 var sound = new Pizzicato.Sound('./audio/sound.wav', function() {...});
 ```
+Check the [supported audio files](#audio-formats) that can be played with Pizzicato.
 
+<a name="sounds-from-input"/>
 ### Sounds from the user input
 It is also possible to use the sound input from the computer. This is usually the microphone, but it could also be a line-in input. To use this, add ```source: input``` in your description. The following optional parameters are possible inside ```options``` object:
 * ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
@@ -126,6 +149,8 @@ var voice = new Pizzicato.Sound({
     options: { volume: 0.8 }
 });
 ```
+
+<a name="sounds-from-a-function"/>
 ### Sounds from a function
 For more creative freedom, Pizzicato also allows direct audio processing. Sounds can be created from a Javascript function by including ```source: input``` in the description. The following parameters are possible in the ```options``` object:
 * ```audioFunction``` _(Mandatory; function(<audio processing event>))_: Function that will be called with the audio processing event.
@@ -147,14 +172,16 @@ var whiteNoise = Pizzicato.Sound({
 });
 ```
 
-
-## Add effects
+<a name="effects"/>
+## Effects
 Once a sound is created you can add effects to it by using the ```addEffect``` function. To remove an effect, you can use the ```removeEffect``` function.
 ```javascript
 var delay = new Pizzicato.Effects.Delay();
 sound.addEffect(delay);
 sound.removeEffect(delay);
 ```
+
+<a name="delay"/>
 ### Delay
 The delay effect plays back the sound a certain number of times in defined intervals, giving the impression of an echo. The following options are available when creating a delay effect:
 * ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
@@ -172,6 +199,7 @@ sound.addEffect(delay);
 sound.play();
 ```
 
+<a name="distortion"/>
 ### Distortion
 The distortion effect adds an "override" to the sound, similar to the ones found in guitar amps. The distortion effect only takes one parameter:
 * ```gain``` _(min: 0, max: 1, defaults to 0.5)_: Amount of distortion applied.
@@ -185,6 +213,7 @@ sound.addEffect(delay);
 sound.play();
 ```
 
+<a name="flanger"/>
 ### Flanger
 The flanger produces a swirling effect by delaying a "copy" of the sound by a small, gradually changing period. The flanger effect takes the folloeing parameters:
 * ```time``` _(min: 0, max: 1, defaults to 0.45)_: Changes the small delay time applied to the copied signal.
@@ -207,6 +236,7 @@ sound.addEffect(flanger);
 sound.play();
 ```
 
+<a name="compressor"/>
 ### Compressor
 A compressor allows reducing the range between the loudest and the quietest parts of a sound. This is done by boosting the quiet segments and attenuating the loud ones.
 
@@ -230,6 +260,7 @@ sound.addEffect(compressor);
 sound.play();
 ```
 
+<a name="low-pass-filter"/>
 ### Low-pass filter
 A low-pass filter passes signals with a frequency lower than a pre-determined cutoff frequency and attenuates signals with frequencies higher than the cutoff frequency. 
 
@@ -247,6 +278,7 @@ sound.addEffect(lowPassFilter);
 sound.play();
 ```
 
+<a name="high-pass-filter"/>
 ### High-pass filter
 A high-pass filter is the opposite of a low-pass filter (described above). It attenuates signals with a frequency lower than a pre-determined cutoff frequency and passes signals with frequencies higher than the cutoff frequency. 
 
@@ -264,7 +296,10 @@ sound.addEffect(highPassFilter);
 sound.play();
 ```
 
+<a name="support"/>
 ## Support
+
+<a name="browsers"/>
 ### Browsers
 Pizzicato can only work in [browsers with Web Audio support](http://caniuse.com/#feat=audio-api), no shims have been added yet. This means:
 * Firefox 31+
@@ -272,5 +307,6 @@ Pizzicato can only work in [browsers with Web Audio support](http://caniuse.com/
 * Safari 7+ (input source not available in Safari)
 * Opera 30+
 
+<a name="audio-formats"/>
 ### Audio formats
 Pizzicato supports audio formats [supported by Web Audio](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility). These may vary depending on your system version and browser.
