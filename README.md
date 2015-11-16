@@ -8,7 +8,12 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
 
 This library still in its early stages. In the meantime, feel free to check out the project and also take a look at the [website](http://alemangui.github.io/pizzicato/). All contributions are welcome!
 
-First install dependencies with 
+You can use bower to get Pizzicato
+```
+bower install pizzicato
+```
+
+Or checkout the project, install dependencies with 
 ```
 npm install
 ```
