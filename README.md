@@ -1,4 +1,4 @@
-<img align="center" src="http://www.alemangui.com/index/img/work/pizzicato_horizontal.gif" alt="Pizzicato.js">
+<img align="center" src="http://www.alemangui.com/pizzicato/img/horizontal-logo.svg" alt="Pizzicato.js">
 
 [![Build Status](https://travis-ci.org/alemangui/pizzicato.svg?branch=master)](https://travis-ci.org/alemangui/pizzicato)
 
