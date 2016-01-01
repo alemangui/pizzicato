@@ -1,4 +1,4 @@
-<img align="center" src="http://www.alemangui.com/pizzicato/img/horizontal-logo.svg" alt="Pizzicato.js">
+<img align="center" src="https://alemangui.github.io/pizzicato/img/horizontal-logo.svg" alt="Pizzicato.js">
 
 [![Build Status](https://travis-ci.org/alemangui/pizzicato.svg?branch=master)](https://travis-ci.org/alemangui/pizzicato)
 
@@ -6,7 +6,7 @@
 
 Pizzicato aims to simplify the way you create and manipulate sounds via the Web Audio API.
 
-This library still in its early stages. In the meantime, feel free to check out the project and also take a look at the [website](http://alemangui.github.io/pizzicato/). All contributions are welcome!
+This library still in its early stages. In the meantime, feel free to check out the project and also take a look at the [website](https://alemangui.github.io/pizzicato/). All contributions are welcome!
 
 You can use bower to get Pizzicato
 ```
