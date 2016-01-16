@@ -1,6 +1,7 @@
 <img align="center" src="https://alemangui.github.io/pizzicato/img/horizontal-logo.svg" alt="Pizzicato.js">
 
 [![Build Status](https://travis-ci.org/alemangui/pizzicato.svg?branch=master)](https://travis-ci.org/alemangui/pizzicato)
+<img src="https://benschwarz.github.io/bower-badges/badge@2x.png" width="130" height="30">
 
 ##A Web Audio API library in the making!
 
