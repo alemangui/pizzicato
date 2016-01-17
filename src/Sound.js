@@ -3,6 +3,8 @@ Pizzicato.Sound = function(description, callback) {
 	var util = Pizzicato.Util;
 	var descriptionError = getDescriptionError(description);
 	var hasOptions = util.isObject(description) && util.isObject(description.options);
+	var defaultAttack = 0.04;
+	var defaultSustain = 0.04;
 
 	if (descriptionError) {
 		console.error(descriptionError);
@@ -14,9 +16,10 @@ Pizzicato.Sound = function(description, callback) {
 	this.effects = [];
 	this.playing = this.paused = false;
 	this.loop = hasOptions && description.options.loop;
-	this.sustain = hasOptions && description.options.sustain;
+	this.attack = hasOptions && util.isNumber(description.options.attack) ? description.options.attack : defaultAttack;
+	this.sustain = hasOptions && util.isNumber(description.options.sustain) ? description.options.sustain : defaultSustain;
 	this.volume = hasOptions && util.isNumber(description.options.volume) ? description.options.volume : 1;
-
+	
 	if (!description)
 		(initializeWithWave.bind(this))({}, callback);
 
@@ -150,14 +153,13 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 		value: function() {
 			if (this.playing) 
 				return;
-			
-			if (this.sustainActive && this.onSustainDone)
-				this.onSustainDone();
 
 			this.playing = true;
 			this.paused = false;
-
 			this.sourceNode = this.getSourceNode();
+
+			if (this.attack)
+				this.applyAttack();
 
 			if (Pz.Util.isFunction(this.sourceNode.start)) {
 				this.lastTimePlayed = Pizzicato.context.currentTime;
@@ -165,7 +167,6 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			}
 
 			this.trigger('play');
-
 		}
 	},
 
@@ -174,22 +175,22 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 		enumerable: true,
 		
 		value: function() {
-			if (!this.paused && !this.playing) return;
+			if (!this.paused && !this.playing) 
+				return;
 
-			var self = this;
 			this.paused = this.playing = false;
 
-			var stopSound = function() {
-				return Pz.Util.isFunction(self.sourceNode.stop) ? self.sourceNode.stop(0) : self.sourceNode.disconnect();
+			var stopSound = function(node) {
+				return Pz.Util.isFunction(node.stop) ? node.stop(0) : node.disconnect();
 			};
 
-			if (Pz.Util.isNumber(this.sustain))
-				this.prepareSustain(stopSound);
+			if (this.sustain)
+				this.applySustain(stopSound);
 			else 
-				stopSound();
+				stopSound(this.sourceNode);
 				
 			this.startTime = 0;
-			self.trigger('stop');
+			this.trigger('stop');
 		}
 	},
 
@@ -198,15 +199,20 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 		enumerable: true,
 		
 		value: function() {
-			if (this.paused || !this.playing) return;
+			if (this.paused || !this.playing) 
+				return;
 
 			this.paused = true;
 			this.playing = false;
-			
-			if (Pz.Util.isFunction(this.sourceNode.stop))
-				this.sourceNode.stop(0);
-			else 
-				this.sourceNode.disconnect();				
+
+			var stopSound = function(node) {
+				return Pz.Util.isFunction(node.stop) ? node.stop(0) : node.disconnect();
+			};
+
+			if (this.sustain)
+				this.applySustain(stopSound);
+			else
+				stopSound(this.sourceNode);		
 
 			this.startTime = Pz.context.currentTime - this.lastTimePlayed;
 			this.trigger('pause');
@@ -231,8 +237,8 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			this.effects.push(effect);
 			this.connectEffects();
 			if (!!this.sourceNode) {
-				this.sourceNode.disconnect();
-				this.sourceNode.connect(this.getInputNode());
+				this.sourceNode.fadeNode.disconnect();
+				this.sourceNode.fadeNode.connect(this.getInputNode());
 			}
 		}
 	},
@@ -303,18 +309,26 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 	/**
 	 * Returns the node that produces the sound. For example, an oscillator
-	 * if the Sound object was initialized with a wave option.
+	 * if the Sound object was initialized with a wave option. 
+	 * 
+	 * Each source node has its own attack/sustain gain node. so coming 
+	 * out of here are • source -> gain • This fade node can be accessed as 
+	 * the fadeNode property of the sourceNode.
 	 */
 	getSourceNode: {
 		enumerable: true,
 
 		value: function() {
-			var node = this.getRawSourceNode();
+			var sourceNode = this.getRawSourceNode();
+			var fadeNode = Pizzicato.context.createGain();
 
-			node.onended = this.onEnded.bind(this);
-			node.connect(this.getInputNode());
+			sourceNode.connect(fadeNode);
+			sourceNode.onended = this.onEnded.bind(this);
+			sourceNode.fadeNode = fadeNode;
 
-			return node;
+			fadeNode.connect(this.getInputNode());
+
+			return sourceNode;
 		}
 	},
 
@@ -336,10 +350,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 
 	/**
-	 * Returns the node used for the master volume. This node is connected
-	 * to a sustainNode that manages the sustain volume changes without 
-	 * modifying the masterVolume. The sustainNode is the one connected
-	 * to the destination.
+	 * Returns the node used for the master volume.
 	 */
 	getMasterVolume: {
 		enumerable: true,
@@ -349,44 +360,50 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 				return this.masterVolume;
 
 			var masterVolume = Pizzicato.context.createGain();
-			this.sustainNode = Pizzicato.context.createGain();
-
-			masterVolume.connect(this.sustainNode);
-			this.sustainNode.connect(Pizzicato.context.destination);
+			masterVolume.connect(Pizzicato.context.destination);
 
 			return masterVolume;
 		}
 	},
 
+	/**
+	 * Will take the current source node and work up the volume
+	 * gradually in as much time as specified in the attack property
+	 * of the sound.
+	 */
+	applyAttack: {
+		enumerable: false,
+
+		value: function() {
+			if (!this.attack)
+				return;
+
+			var fadeNode = this.sourceNode.fadeNode;
+			fadeNode.gain.setValueAtTime(0.00001, Pizzicato.context.currentTime);
+			fadeNode.gain.exponentialRampToValueAtTime(1, Pizzicato.context.currentTime + this.attack);
+		}
+	},
 
 	/**
-	 * To achieve the sustain effect, we use web API function linearRampToValueAtTime.
-	 * In order for it to work we must set first the initial value with setValueAtTime.
-	 * Since there is no callback for linearRampToValueAtTime, a setTimeout with the 
-	 * time of the sustain is necessary.
+	 * Will take the current source node and work down the volume
+	 * gradually in as much time as specified in the sustain property
+	 * of the sound. After the sustain, an optional callback is called with
+	 * the affected node as parameter (even if in the meanwhile the source
+	 * node has changed).
 	 */
-	prepareSustain: {
-		enumerable: true,
+	applySustain: {
+		enumerable: false,
 
-		value: function(stopSound) {
-			var self = this;
+		value: function(callback) {
+			if (!this.sustain)
+				return;
 
-			this.sustainNode.gain.setValueAtTime(1, Pz.context.currentTime);
-			this.sustainNode.gain.linearRampToValueAtTime(0.001, Pz.context.currentTime + this.sustain);
-			this.sustainActive = true;
-
-			this.onSustainDone = function() {
-				if (self.sustainTimeout) 
-					clearTimeout(self.sustainTimeout);
-
-				self.sustainNode.gain.cancelScheduledValues(Pz.context.currentTime);
-				self.sustainNode.gain.setValueAtTime(1, Pz.context.currentTime + 0.001);
-			
-				self.sustainActive = false;
-				stopSound();	
-			};
-
-			this.sustainTimeout = setTimeout(this.onSustainDone, self.sustain * 1000);
+			var node = this.sourceNode;
+			var fadeNode = node.fadeNode;
+			fadeNode.gain.setValueAtTime(fadeNode.gain.value, Pizzicato.context.currentTime);
+			fadeNode.gain.exponentialRampToValueAtTime(0.0001, Pizzicato.context.currentTime + this.sustain);
+			if (callback)
+				window.setTimeout(function() { callback(node); }, this.sustain * 1000);
 		}
 	}
 });
