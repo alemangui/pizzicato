@@ -476,10 +476,7 @@
 	
 	
 		/**
-		 * Returns the node used for the master volume. This node is connected
-		 * to a sustainNode that manages the sustain volume changes without 
-		 * modifying the masterVolume. The sustainNode is the one connected
-		 * to the destination.
+		 * Returns the node used for the master volume.
 		 */
 		getMasterVolume: {
 			enumerable: true,

@@ -18,6 +18,7 @@ gulp.task('scripts', ['hint'], function() {
 	var stream = gulp.src('./src/Pizzicato.js')
 		.pipe(include())
 		.pipe(gulp.dest('./distr'))
+		.pipe(gulp.dest('./site'))
 		.pipe(rename('Pizzicato.min.js'))
 		.pipe(uglify())
 		.pipe(gulp.dest('./distr'));
