@@ -128,12 +128,13 @@ var whiteNoise = new Pizzicato.Sound(function(e) {
             </div>
 
             <h3>Add effects</h3>
-            <h4>Sustain</h4>
+            <h4>Attack/Sustain</h4>
             <pre><code class="language-javascript">
 var sineWave = new Pizzicato.Sound({ 
     source: 'wave'
 });
 
+sineWave.attack = 0.5;
 sineWave.sustain = 1;
 sound.play();
             </code></pre>
@@ -143,6 +144,11 @@ sound.play();
                     <label for="volume-sustain">Volume</label>
                     <input type="range" min="0" max="1" step="0.01" value="1" id="volume-sustain" />
                     <div class="slider-value">1</div>
+                </div>
+                <div class="slider">
+                    <label for="value-attack">Attack</label>
+                    <input type="range" min="0" max="3" step="0.01" value="0.5" id="value-attack" />
+                    <div class="slider-value">0.5</div>
                 </div>
                 <div class="slider">
                     <label for="value-sustain">Sustain</label>
