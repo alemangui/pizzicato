@@ -506,7 +506,7 @@
 	
 				var fadeNode = this.sourceNode.fadeNode;
 				fadeNode.gain.setValueAtTime(0.00001, Pizzicato.context.currentTime);
-				fadeNode.gain.exponentialRampToValueAtTime(1, Pizzicato.context.currentTime + this.attack);
+				fadeNode.gain.linearRampToValueAtTime(1, Pizzicato.context.currentTime + this.attack);
 			}
 		},
 	
@@ -527,7 +527,7 @@
 				var node = this.sourceNode;
 				var fadeNode = node.fadeNode;
 				fadeNode.gain.setValueAtTime(fadeNode.gain.value, Pizzicato.context.currentTime);
-				fadeNode.gain.exponentialRampToValueAtTime(0.0001, Pizzicato.context.currentTime + this.sustain);
+				fadeNode.gain.linearRampToValueAtTime(0.0001, Pizzicato.context.currentTime + this.sustain);
 				if (callback)
 					window.setTimeout(function() { callback(node); }, this.sustain * 1000);
 			}

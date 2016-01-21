@@ -22,7 +22,7 @@ var flanger = new Pizzicato.Effects.Flanger();
 
 
 var sineWave = new Pz.Sound();
-var sineWaveSustain = new Pz.Sound({ source: 'wave', options: { frequency: 220, sustain: 1} });
+var sineWaveSustain = new Pz.Sound({ source: 'wave', options: { frequency: 220, sustain: 1, attack:0.5 } });
 var acoustic = new Pz.Sound('./audio/acoustic.m4a');
 
 var timba = new Pz.Sound({ 
@@ -117,7 +117,8 @@ var segments = [
 		playButton: document.getElementById('play-sustain'),
 		stopButton: document.getElementById('stop-sustain'),
 		volumeSlider: document.getElementById('volume-sustain'),
-		sustainSlider: document.getElementById('value-sustain')
+		sustainSlider: document.getElementById('value-sustain'),
+		attackSlider: document.getElementById('value-attack')
 	},
 	{
 		audio: timba,
@@ -252,6 +253,13 @@ for (var i = 0; i < segments.length; i++) {
 			segment.sustainSlider.addEventListener('input', function(e) {
 				var sustainDisplay = segment.sustainSlider.parentNode.getElementsByClassName('slider-value')[0];
 				sustainDisplay.innerHTML = segment.audio.sustain = e.target.valueAsNumber;
+			});
+		}
+
+		if (segment.attackSlider) {
+			segment.attackSlider.addEventListener('input', function(e) {
+				var attackDisplay = segment.attackSlider.parentNode.getElementsByClassName('slider-value')[0];
+				attackDisplay.innerHTML = segment.audio.attack = e.target.valueAsNumber;
 			});
 		}
 
