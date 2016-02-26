@@ -320,4 +320,4 @@ Pizzicato can only work in [browsers with Web Audio support](http://caniuse.com/
 
 <a name="audio-formats"/>
 ### Audio formats
-Pizzicato supports audio formats [supported by Web Audio](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility). These may vary depending on your system version and browser.
+Pizzicato supports audio formats [supported by your browser](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility). These may vary depending on your system version and browser.
