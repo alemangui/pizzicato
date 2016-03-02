@@ -213,6 +213,7 @@
 			request.onload = function(progressEvent) {
 				var response = progressEvent.target.response;
 				Pizzicato.context.decodeAudioData(response, (function(buffer) {
+	
 					self.getRawSourceNode = function() {
 						var node = Pizzicato.context.createBufferSource();
 						node.loop = this.loop;
@@ -221,6 +222,14 @@
 					};
 					if (util.isFunction(callback)) 
 						callback();
+	
+				}).bind(self), (function(error) {
+	
+					error = error || new Error('Error decoding audio file ' + url);
+	
+					if (util.isFunction(callback))
+						callback(error);
+	
 				}).bind(self));
 			};
 			request.onreadystatechange = function(event) {
@@ -527,7 +536,7 @@
 				var node = this.sourceNode;
 				var fadeNode = node.fadeNode;
 				fadeNode.gain.setValueAtTime(fadeNode.gain.value, Pizzicato.context.currentTime);
-				fadeNode.gain.linearRampToValueAtTime(0.0001, Pizzicato.context.currentTime + this.sustain);
+				fadeNode.gain.linearRampToValueAtTime(0.00001, Pizzicato.context.currentTime + this.sustain);
 				if (callback)
 					window.setTimeout(function() { callback(node); }, this.sustain * 1000);
 			}

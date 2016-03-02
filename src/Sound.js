@@ -87,6 +87,7 @@ Pizzicato.Sound = function(description, callback) {
 		request.onload = function(progressEvent) {
 			var response = progressEvent.target.response;
 			Pizzicato.context.decodeAudioData(response, (function(buffer) {
+
 				self.getRawSourceNode = function() {
 					var node = Pizzicato.context.createBufferSource();
 					node.loop = this.loop;
@@ -95,6 +96,14 @@ Pizzicato.Sound = function(description, callback) {
 				};
 				if (util.isFunction(callback)) 
 					callback();
+
+			}).bind(self), (function(error) {
+
+				error = error || new Error('Error decoding audio file ' + url);
+
+				if (util.isFunction(callback))
+					callback(error);
+
 			}).bind(self));
 		};
 		request.onreadystatechange = function(event) {
