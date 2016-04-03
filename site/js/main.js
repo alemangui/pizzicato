@@ -1,3 +1,8 @@
+// Dolby format detection - taken from https://s3-us-west-1.amazonaws.com/dolbydeveloper/1.1.0/js/dolby.min.js
+var Dolby=Dolby||{};!function(){"use strict";Dolby.supportDDPlus=!1;var e=new Audio;""!=e.canPlayType('audio/mp4;codecs="ec-3"')&&(-1!=navigator.userAgent.indexOf("Safari")&&-1!=navigator.userAgent.indexOf("Mac OS X 10_11")&&-1!=navigator.userAgent.indexOf("Version/9")&&(Dolby.supportDDPlus=!0),-1!=navigator.userAgent.indexOf("Edge")&&(Dolby.supportDDPlus=!0)),Dolby.checkDDPlus=function(){return Dolby.supportDDPlus}}();
+
+var dolbySupported = Dolby.checkDDPlus();
+
 var delay = new Pizzicato.Effects.Delay({
   repetitions: 6,
   time: 0.4,
@@ -20,15 +25,14 @@ var distortion = new Pizzicato.Effects.Distortion({
 });
 var flanger = new Pizzicato.Effects.Flanger();
 
-
 var sineWave = new Pz.Sound();
 var sineWaveSustain = new Pz.Sound({ source: 'wave', options: { frequency: 220, sustain: 1, attack:0.5 } });
-var acoustic = new Pz.Sound('./audio/acoustic.m4a');
+var acoustic = new Pz.Sound(dolbySupported ? './audio/acoustic_Dolby.mp4' : './audio/acoustic.m4a');
 
 var timba = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: './audio/timba.m4a', 
+		path: dolbySupported ? './audio/timba_Dolby.mp4' : './audio/timba.m4a', 
 		loop: true 
 	}
 }, function() { timba.addEffect(delay); });
@@ -36,7 +40,7 @@ var timba = new Pz.Sound({
 var electro = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: './audio/electro.m4a', 
+		path: dolbySupported ? './audio/electro_Dolby.mp4' : './audio/electro.m4a', 
 		loop: true 
 	}
 }, function() { electro.addEffect(compressor); });
@@ -44,7 +48,7 @@ var electro = new Pz.Sound({
 var synth = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: './audio/synth.m4a', 
+		path: dolbySupported ? './audio/synth_Dolby.mp4' : './audio/synth.m4a', 
 		loop: true 
 	}
 }, function() { synth.addEffect(lowPassFilter); });
@@ -52,7 +56,7 @@ var synth = new Pz.Sound({
 var synth2 = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: './audio/synth2.m4a', 
+		path: dolbySupported ? './audio/synth2_Dolby.mp4' : './audio/synth2.m4a', 
 		loop: true 
 	}
 }, function() { synth2.addEffect(highPassFilter); });
@@ -60,7 +64,7 @@ var synth2 = new Pz.Sound({
 var guitar = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: './audio/guitar.m4a', 
+		path: dolbySupported ? './audio/guitar_Dolby.mp4' : './audio/guitar.m4a', 
 		loop: true 
 	}
 }, function() { guitar.addEffect(distortion); });
@@ -68,7 +72,7 @@ var guitar = new Pz.Sound({
 var electricGuitar = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: './audio/electric-guitar.m4a', 
+		path: dolbySupported ? './audio/electric-guitar_Dolby.mp4' : './audio/electric-guitar.m4a', 
 		loop: true 
 	}
 }, function() { electricGuitar.addEffect(flanger); });

@@ -336,6 +336,7 @@ Pizzicato can only work in [browsers with Web Audio support](http://caniuse.com/
 * Chrome 31+
 * Safari 7+ (input source not available in Safari)
 * Opera 30+
+* Edge 13+
 
 <a name="audio-formats"/>
 ### Audio formats
