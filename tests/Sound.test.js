@@ -64,17 +64,38 @@ describe('Sound', function() {
 		describe('file source', function() {
 
 			it('should create an audio buffer node when initialized with a file source', function(done) {
-				var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
+				var sound = new Pizzicato.Sound('base/tests/bird.wav', function(error) {
+					expect(error).toBe(undefined);
 					done();
 				});
 			}, 5000);
 
 			it('should execute callback function when initializing file sound', function(done) {
-				var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
+				var sound = new Pizzicato.Sound('base/tests/bird.wav', function(error) {
+					expect(error).toBe(undefined);
 					done();
 				});
 			}, 5000);
 
+			it('should take a fallback path in case a file is not found', function(done) {
+				var sound = new Pizzicato.Sound({ 
+					source: 'file',
+					options: { path: ['base/tests/non-existent.wav', 'base/tests/bird.wav'] }
+				}, function(error) {
+					expect(error).toBe(undefined);
+					done();
+				});
+			});
+
+			it('should take a fallback path in case a file is not supported', function(done) {
+				var sound = new Pizzicato.Sound({ 
+					source: 'file',
+					options: { path: ['base/tests/ddplus-format.mp4', 'base/tests/bird.wav'] }
+				}, function(error) {
+					expect(error).toBe(undefined);
+					done();
+				});
+			});
 		});
 
 		describe('input source', function() {

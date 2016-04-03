@@ -6,8 +6,6 @@
 
 Pizzicato aims to simplify the way you create and manipulate sounds via the Web Audio API.
 
-This library still in its early stages. In the meantime, feel free to check out the project and also take a look at the [website](https://alemangui.github.io/pizzicato/). All contributions are welcome!
-
 You can use bower to get Pizzicato
 ```
 bower install pizzicato
@@ -50,7 +48,7 @@ var delay = new Pizzicato.Effects.Delay();
 sawtoothWave.addEffect(delay);
 ```
 
-Use it!
+Play it!
 ```javascript
 sawtoothWave.play();
 ```
@@ -68,6 +66,8 @@ sawtoothWave.play();
   - [Compressor](#compressor)
   - [Low-pass filter](#low-pass-filter)
   - [High-pass filter](#high-pass-filter)
+- [Advanced](#advanced)
+  - [Accessing the audio context](#accessing-the-context)
 - [Support](#support)
   - [Browsers](#browsers)
   - [Audio formats](#audio-formats)
@@ -126,7 +126,7 @@ var sound = new Pizzicato.Sound();
 <a name="sounds-from-a-file"/>
 ### Sounds from a file
 In order to load a sound from a file, include the ```source: file``` in your description. Additionally, the following  parameters are possible inside the ```options``` object:
-* ```path``` _(Mandatory; string)_: Specifies the type of waveform.
+* ```path``` _(Mandatory; string or array of strings)_: Specifies the path of the sound file. It is also possible to have an array of paths to fallback on. Pizzicato will attempt to load the paths in order, passing on to the next one in case of failure.
 * ```loop``` _(Optional; boolean, defaults to false)_: If set, the file will start playing again after the end.
 * ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
 * ```sustain``` _(Optional; defaults to 0)_: Value in seconds that indicates the fade-out time once the sound is stopped.
@@ -140,6 +140,16 @@ var sound = new Pizzicato.Sound({
     console.log('sound file loaded!');
 });
 ```
+It is possible to pass several paths to fallback in case of error:
+```javascript
+var sound = new Pizzicato.Sound({ 
+    source: 'file',
+    options: { path: ['./audio/sound-special-format.wav', './audio/sound.wav'] }
+}, function() {
+    console.log('sound file loaded!');
+});
+```
+
 Alternatively, you can also simply pass a string to the constructor with the path of the sound file.
 ```
 var sound = new Pizzicato.Sound('./audio/sound.wav', function() {...});
@@ -305,6 +315,15 @@ var highPassFilter = new Pizzicato.Effects.HighPassFilter({
 
 sound.addEffect(highPassFilter);
 sound.play();
+```
+<a name="advanced">
+## Advanced
+
+<a name="accessing-the-context">
+### Accessing the audio context
+If needed, the audio context used by Pizzicato is always accessible:
+```javascript
+var context = Pizzicato.context;
 ```
 
 <a name="support"/>

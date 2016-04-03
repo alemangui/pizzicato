@@ -16,6 +16,10 @@ Pizzicato.Util = {
 		return toString.call(arg) === '[object Number]' && arg === +arg;
 	},
 
+	isArray: function(arg) {
+		return toString.call(arg) === '[object Array]';
+	},
+
 	isInRange: function(arg, min, max) {
 		if (!Pz.Util.isNumber(arg) || !Pz.Util.isNumber(min) || !Pz.Util.isNumber(max))
 			return false;

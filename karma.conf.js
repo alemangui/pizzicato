@@ -8,12 +8,12 @@ module.exports = function(config) {
 		files: [
 			'distr/Pizzicato.js',
 			'tests/**/*.js',
-      { 
-      	pattern:  'tests/*.wav',
-        watched:  false,
-        served:   true,
-        included: false 
-      }
+			{ 
+				pattern:  'tests/*.*',
+				watched:  false,
+				served:   true,
+				included: false 
+			}
 		]
 	};
 
