@@ -83,6 +83,10 @@
 			return toString.call(arg) === '[object Number]' && arg === +arg;
 		},
 	
+		isArray: function(arg) {
+			return toString.call(arg) === '[object Array]';
+		},
+	
 		isInRange: function(arg, min, max) {
 			if (!Pz.Util.isNumber(arg) || !Pz.Util.isNumber(min) || !Pz.Util.isNumber(max))
 				return false;
@@ -205,14 +209,18 @@
 		}
 	
 	
-		function initializeWithUrl (url, callback) {
+		function initializeWithUrl (paths, callback) {
 			var request = new XMLHttpRequest();
 	
-			request.open('GET', url, true);
+			paths = util.isArray(paths) ? paths : [paths];
+			var index = 0;
+	
+			request.open('GET', paths[0], true);
 			request.responseType = 'arraybuffer';
+	
 			request.onload = function(progressEvent) {
-				var response = progressEvent.target.response;
-				Pizzicato.context.decodeAudioData(response, (function(buffer) {
+	
+				Pizzicato.context.decodeAudioData(progressEvent.target.response, (function(buffer) {
 	
 					self.getRawSourceNode = function() {
 						var node = Pizzicato.context.createBufferSource();
@@ -225,16 +233,26 @@
 	
 				}).bind(self), (function(error) {
 	
-					error = error || new Error('Error decoding audio file ' + url);
+					console.error('Error decoding audio file ' + paths[0]);
+	
+					if (paths.length > 1) {
+						paths.shift();
+						initializeWithUrl(paths, callback);
+						return;
+					}
+	
+					error = error || new Error('Error decoding audio file ' + paths[0]);
 	
 					if (util.isFunction(callback))
 						callback(error);
 	
 				}).bind(self));
+	
 			};
 			request.onreadystatechange = function(event) {
+	
 				if (request.readyState === 4 && request.status !== 200)
-					console.error('Error while fetching ' + url + '. ' + request.statusText);
+					console.error('Error while fetching ' + paths[0] + '. ' + request.statusText);
 			};
 			request.send();
 		}
