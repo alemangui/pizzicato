@@ -4,7 +4,7 @@
 
 ##A Web Audio library
 
-Pizzicato aims to simplify the way you create and manipulate sounds via the Web Audio API.
+Pizzicato aims to simplify the way you create and manipulate sounds via the Web Audio API. Take a look at the [demo site here](https://alemangui.github.io/pizzicato/).
 
 You can use bower to get Pizzicato
 ```
