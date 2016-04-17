@@ -6,6 +6,7 @@
 	var Context = window.AudioContext || window.webkitAudioContext;
 
 	Pizzicato.context = new Context();
+
 	Pizzicato.Events = {
 	
 		/**
@@ -64,7 +65,6 @@
 		}
 	
 	};
-
 	Pizzicato.Util = {
 	
 		isString: function(arg) {
@@ -127,7 +127,6 @@
 			return 1 - ((0.5 - mix) * 2);
 		}
 	};
-
 	Pizzicato.Sound = function(description, callback) {
 		var self = this;
 		var util = Pizzicato.Util;
@@ -171,7 +170,6 @@
 		else if (description.source === 'script')
 			(initializeWithFunction.bind(this))(description.options, callback);
 	
-		
 		function getDescriptionError (description) {
 			var supportedSources = ['wave', 'file', 'input', 'script'];
 	
@@ -210,11 +208,9 @@
 	
 	
 		function initializeWithUrl (paths, callback) {
-			var request = new XMLHttpRequest();
-	
 			paths = util.isArray(paths) ? paths : [paths];
-			var index = 0;
 	
+			var request = new XMLHttpRequest();
 			request.open('GET', paths[0], true);
 			request.responseType = 'arraybuffer';
 	
@@ -560,9 +556,7 @@
 			}
 		}
 	});
-
 	Pizzicato.Effects = {};
-
 	Pizzicato.Effects.Delay = function(options) {
 	
 		this.options = {};
@@ -656,7 +650,6 @@
 		}
 	
 	});
-
 	Pizzicato.Effects.Compressor = function(options) {
 	
 		this.options = {};
@@ -785,7 +778,6 @@
 		}
 	
 	});
-
 	/**
 	 * Frequencies below the cutoff frequency pass 
 	 * through; frequencies above it are attenuated.
@@ -870,7 +862,6 @@
 	
 	Pizzicato.Effects.LowPassFilter.prototype = filterPrototype;
 	Pizzicato.Effects.HighPassFilter.prototype = filterPrototype;
-
 	Pizzicato.Effects.Distortion = function(options) {
 	
 		this.options = {};
@@ -935,7 +926,6 @@
 		}
 	
 	});
-
 	Pizzicato.Effects.Flanger = function(options) {
 	
 		this.options = {};
@@ -1074,7 +1064,6 @@
 		}
 	
 	});
-
 	
 	return Pizzicato;
 })(this);
