@@ -172,7 +172,7 @@ var voice = new Pizzicato.Sound({
 
 <a name="sounds-from-a-function"/>
 ### Sounds from a function
-For more creative freedom, Pizzicato also allows direct audio processing. Sounds can be created from a Javascript function by including ```source: input``` in the description. The following parameters are possible in the ```options``` object:
+For more creative freedom, Pizzicato also allows direct audio processing. Sounds can be created from a Javascript function by including ```source: script``` in the description. The following parameters are possible in the ```options``` object:
 * ```audioFunction``` _(Mandatory; function(<audio processing event>))_: Function that will be called with the audio processing event.
 * ```bufferSize``` _(Optional; number - must be a power of 2.)_: This value controls how many sample frames will be processed at each audio process event. Lower values will result in lower latency, higher values help prevent glitches.
 * ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
