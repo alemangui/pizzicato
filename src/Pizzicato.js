@@ -7,15 +7,15 @@
 
 	Pizzicato.context = new Context();
 
-	//= include ./Events.js
-	//= include ./Util.js
-	//= include ./Sound.js
-	//= include ./Effects.js
-	//= include ./Effects/Delay.js
-	//= include ./Effects/Compressor.js
-	//= include ./Effects/Filters.js
-	//= include ./Effects/Distortion.js
-	//= include ./Effects/Flanger.js
+	//= require ./Events.js
+	//= require ./Util.js
+	//= require ./Sound.js
+	//= require ./Effects.js
+	//= require ./Effects/Delay.js
+	//= require ./Effects/Compressor.js
+	//= require ./Effects/Filters.js
+	//= require ./Effects/Distortion.js
+	//= require ./Effects/Flanger.js
 	
 	return Pizzicato;
 })(this);

@@ -9,8 +9,8 @@
 	}],
 	"main": "distr/pizzicato.js",
 	"repository": {
-	  "type": "git",
-	  "url": "https://github.com/alemangui/pizzicato.git"
+		"type": "git",
+		"url": "https://github.com/alemangui/pizzicato.git"
 	},
 	"license": "MIT",
 	"moduleType": [

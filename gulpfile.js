@@ -4,13 +4,16 @@ var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
-var karma = require('karma').server;
+var KarmaServer = require('karma').Server;
+
 
 gulp.task('hint', function() {
 	var stream = gulp.src('./src/**/*.js')
 		.pipe(jshint())
 		.pipe(jshint.reporter('jshint-stylish'))
 		.pipe(jshint.reporter('fail'));
+
+	return stream;
 });
 
 
@@ -22,14 +25,16 @@ gulp.task('scripts', ['hint'], function() {
 		.pipe(rename('Pizzicato.min.js'))
 		.pipe(uglify())
 		.pipe(gulp.dest('./distr'));
+
+	return stream;
 });
 
 
 gulp.task('test', ['scripts'], function(done) {
-	karma.start({
+	new KarmaServer({
 		configFile: __dirname + '/karma.conf.js',
 		singleRun: true
-	}, done);
+	}, done).start();
 })
 
 gulp.task('default', ['hint', 'scripts', 'test']);
