@@ -140,7 +140,11 @@
 			throw new Error('Error initializing Pizzicato Sound: ' + descriptionError);
 		}
 	
-		this.masterVolume = this.getMasterVolume();
+		this.masterVolume = Pizzicato.context.createGain();
+		this.masterVolume.connect(Pizzicato.context.destination);
+	
+		this.fadeNode = Pizzicato.context.createGain();
+	
 		this.lastTimePlayed = 0;
 		this.effects = [];
 		this.playing = this.paused = false;
@@ -306,9 +310,7 @@
 				this.playing = true;
 				this.paused = false;
 				this.sourceNode = this.getSourceNode();
-	
-				if (this.attack)
-					this.applyAttack();
+				this.applyAttack();
 	
 				if (Pz.Util.isFunction(this.sourceNode.start)) {
 					this.lastTimePlayed = Pizzicato.context.currentTime;
@@ -328,15 +330,7 @@
 					return;
 	
 				this.paused = this.playing = false;
-	
-				var stopSound = function(node) {
-					return Pz.Util.isFunction(node.stop) ? node.stop(0) : node.disconnect();
-				};
-	
-				if (this.sustain)
-					this.applySustain(stopSound);
-				else 
-					stopSound(this.sourceNode);
+				this.stopWithSustain();
 					
 				this.startTime = 0;
 				this.trigger('stop');
@@ -354,14 +348,7 @@
 				this.paused = true;
 				this.playing = false;
 	
-				var stopSound = function(node) {
-					return Pz.Util.isFunction(node.stop) ? node.stop(0) : node.disconnect();
-				};
-	
-				if (this.sustain)
-					this.applySustain(stopSound);
-				else
-					stopSound(this.sourceNode);		
+				this.stopWithSustain();	
 	
 				this.startTime = Pz.context.currentTime - this.lastTimePlayed;
 				this.trigger('pause');
@@ -386,8 +373,8 @@
 				this.effects.push(effect);
 				this.connectEffects();
 				if (!!this.sourceNode) {
-					this.sourceNode.fadeNode.disconnect();
-					this.sourceNode.fadeNode.connect(this.getInputNode());
+					this.fadeNode.disconnect();
+					this.fadeNode.connect(this.getInputNode());
 				}
 			}
 		},
@@ -413,7 +400,8 @@
 			value: function() {
 				for (var i = 0; i < this.effects.length; i++) {
 					
-					var destinationNode = i < this.effects.length - 1 ? this.effects[i + 1].inputNode : this.masterVolume;
+					var isLastEffect = i === this.effects.length - 1;
+					var destinationNode = isLastEffect ? this.masterVolume : this.effects[i + 1].inputNode;
 	
 					this.effects[i].outputNode.disconnect();
 					this.effects[i].outputNode.connect(destinationNode);
@@ -459,23 +447,19 @@
 		/**
 		 * Returns the node that produces the sound. For example, an oscillator
 		 * if the Sound object was initialized with a wave option. 
-		 * 
-		 * Each source node has its own attack/sustain gain node. so coming 
-		 * out of here are • source -> gain • This fade node can be accessed as 
-		 * the fadeNode property of the sourceNode.
 		 */
 		getSourceNode: {
 			enumerable: true,
 	
 			value: function() {
+				if (!!this.sourceNode)
+					this.sourceNode.disconnect();
+	
 				var sourceNode = this.getRawSourceNode();
-				var fadeNode = Pizzicato.context.createGain();
 	
-				sourceNode.connect(fadeNode);
+				sourceNode.connect(this.fadeNode);
 				sourceNode.onended = this.onEnded.bind(this);
-				sourceNode.fadeNode = fadeNode;
-	
-				fadeNode.connect(this.getInputNode());
+				this.fadeNode.connect(this.getInputNode());
 	
 				return sourceNode;
 			}
@@ -497,24 +481,6 @@
 			}
 		},
 	
-	
-		/**
-		 * Returns the node used for the master volume.
-		 */
-		getMasterVolume: {
-			enumerable: true,
-	
-			value: function() {
-				if (this.masterVolume)
-					return this.masterVolume;
-	
-				var masterVolume = Pizzicato.context.createGain();
-				masterVolume.connect(Pizzicato.context.destination);
-	
-				return masterVolume;
-			}
-		},
-	
 		/**
 		 * Will take the current source node and work up the volume
 		 * gradually in as much time as specified in the attack property
@@ -527,32 +493,32 @@
 				if (!this.attack)
 					return;
 	
-				var fadeNode = this.sourceNode.fadeNode;
-				fadeNode.gain.setValueAtTime(0.00001, Pizzicato.context.currentTime);
-				fadeNode.gain.linearRampToValueAtTime(1, Pizzicato.context.currentTime + this.attack);
+				this.fadeNode.gain.setValueAtTime(0.00001, Pizzicato.context.currentTime);
+				this.fadeNode.gain.linearRampToValueAtTime(1, Pizzicato.context.currentTime + this.attack);
 			}
 		},
 	
 		/**
 		 * Will take the current source node and work down the volume
 		 * gradually in as much time as specified in the sustain property
-		 * of the sound. After the sustain, an optional callback is called with
-		 * the affected node as parameter (even if in the meanwhile the source
-		 * node has changed).
+		 * of the sound before stopping the source node.
 		 */
-		applySustain: {
+		stopWithSustain: {
 			enumerable: false,
 	
 			value: function(callback) {
-				if (!this.sustain)
-					return;
 	
 				var node = this.sourceNode;
-				var fadeNode = node.fadeNode;
-				fadeNode.gain.setValueAtTime(fadeNode.gain.value, Pizzicato.context.currentTime);
-				fadeNode.gain.linearRampToValueAtTime(0.00001, Pizzicato.context.currentTime + this.sustain);
-				if (callback)
-					window.setTimeout(function() { callback(node); }, this.sustain * 1000);
+				var stopSound = function() {
+					return Pz.Util.isFunction(node.stop) ? node.stop(0) : node.disconnect();
+				};
+	
+				if (!this.sustain)
+					stopSound();
+	
+				this.fadeNode.gain.setValueAtTime(this.fadeNode.gain.value, Pizzicato.context.currentTime);
+				this.fadeNode.gain.linearRampToValueAtTime(0.00001, Pizzicato.context.currentTime + this.sustain);
+				window.setTimeout(function() { stopSound(); }, this.sustain * 1000);
 			}
 		}
 	});
