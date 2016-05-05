@@ -139,6 +139,20 @@ describe('Sound', function() {
 
 	});
 
+	describe('analyser', function() {
+
+		it('should lazy load upon request', function() {
+			var sound = new Pizzicato.Sound();
+
+			expect(sound.analyser).toBe(undefined);
+
+			var analyser = sound.getAnalyser();
+			
+			expect(sound.analyser).toBe(analyser);
+			expect(analyser.toString()).toContain('object AnalyserNode');
+		});
+
+	});
 
 	describe('actions', function() {
 

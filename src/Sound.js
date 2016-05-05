@@ -353,6 +353,26 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 	},
 
 	/**
+	 * Returns an analyser node located right after the master volume.
+	 * This node is created lazily.
+	 */
+	getAnalyser: {
+		enumerable: true,
+
+		value: function() {
+
+			if (this.analyser)
+				return this.analyser;
+	
+			this.analyser = Pizzicato.context.createAnalyser();
+			this.masterVolume.disconnect();
+			this.masterVolume.connect(this.analyser);
+			this.analyser.connect(Pizzicato.context.destination);
+			return this.analyser;
+		}
+	},
+
+	/**
 	 * Will take the current source node and work up the volume
 	 * gradually in as much time as specified in the attack property
 	 * of the sound.

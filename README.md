@@ -68,6 +68,7 @@ sawtoothWave.play();
   - [High-pass filter](#high-pass-filter)
 - [Advanced](#advanced)
   - [Accessing the audio context](#accessing-the-context)
+  - [Getting an analyser node for a sound](#analyser-node)
 - [Support](#support)
   - [Browsers](#browsers)
   - [Audio formats](#audio-formats)
@@ -324,6 +325,14 @@ sound.play();
 If needed, the audio context used by Pizzicato is always accessible:
 ```javascript
 var context = Pizzicato.context;
+```
+
+<a name="analyser-node">
+### Getting an analyser node for a sound object
+You can obtain an analyser node for a particular Pizzicato Sound object by using the function ```getAnalyser```:
+```javascript
+var sound = new Pizzicato.Sound();
+var analyser = sound.getAnalyser();
 ```
 
 <a name="support"/>
