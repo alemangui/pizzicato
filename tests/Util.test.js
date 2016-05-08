@@ -13,7 +13,7 @@ describe('Util', function() {
 	});
 
 
-	it('contains a working isString function', function() {
+	it('contains a working isObject function', function() {
 		var isObject = Pizzicato.Util.isObject;
 
 		expect(typeof isObject).toBe('function');

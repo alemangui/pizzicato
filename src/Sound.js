@@ -12,7 +12,7 @@ Pizzicato.Sound = function(description, callback) {
 	}
 
 	this.masterVolume = Pizzicato.context.createGain();
-	this.masterVolume.connect(Pizzicato.context.destination);
+	this.masterVolume.connect(Pizzicato.masterGainNode);
 
 	this.fadeNode = Pizzicato.context.createGain();
 
@@ -367,7 +367,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			this.analyser = Pizzicato.context.createAnalyser();
 			this.masterVolume.disconnect();
 			this.masterVolume.connect(this.analyser);
-			this.analyser.connect(Pizzicato.context.destination);
+			this.analyser.connect(Pizzicato.masterGainNode);
 			return this.analyser;
 		}
 	},

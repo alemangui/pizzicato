@@ -69,6 +69,7 @@ sawtoothWave.play();
 - [Advanced](#advanced)
   - [Accessing the audio context](#accessing-the-context)
   - [Getting an analyser node for a sound](#analyser-node)
+  - [General volume](#general-volume)
 - [Support](#support)
   - [Browsers](#browsers)
   - [Audio formats](#audio-formats)
@@ -333,6 +334,13 @@ You can obtain an analyser node for a particular Pizzicato Sound object by using
 ```javascript
 var sound = new Pizzicato.Sound();
 var analyser = sound.getAnalyser();
+```
+
+<a name="general-volume">
+### General volume
+In order to change the general volume of all Pizzicato sounds, you can directly modify the property ```volume```:
+```javascript
+Pizzicato.volume = 0.3;
 ```
 
 <a name="support"/>

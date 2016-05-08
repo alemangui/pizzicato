@@ -1,5 +1,18 @@
 describe('Pizzicato', function() {
 
+	it('Should have a master gain node', function() {
+		var masterGainNode = Pizzicato.masterGainNode;
+		expect(masterGainNode.toString()).toContain('[object GainNode]');
+	});
+
+	it('Should have a volume property which controls the master gain node', function() {
+		var masterGainNode = Pizzicato.masterGainNode;
+		expect(masterGainNode.gain.value).toBe(1);
+
+		Pizzicato.volume = 0.5;
+		expect(masterGainNode.gain.value).toBeCloseTo(0.5);
+	});
+
 	it('Should have a context object', function() {
 		expect(typeof Pizzicato.context).toBe('object');
 	});
