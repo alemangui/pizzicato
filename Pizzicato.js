@@ -1,70 +1,14 @@
 (function(root) {
 	'use strict';
 
+	var AudioContext = window.AudioContext || window.webkitAudioContext; 
+
 	var Pizzicato = root.Pz = root.Pizzicato = {};
+	Pizzicato.context = new AudioContext();
 
-	var Context = window.AudioContext || window.webkitAudioContext;
+	var masterGainNode = Pizzicato.context.createGain();
+	masterGainNode.connect(Pizzicato.context.destination);
 
-	Pizzicato.context = new Context();
-
-	Pizzicato.Events = {
-	
-		/**
-		 * Adds an event handler that will be treated upon
-		 * the triggering of that event.
-		 */
-		on: function(name, callback, context) {
-			if (!name || !callback)
-				return;
-	
-			this._events = this._events || {};
-			var _event = this._events[name] || (this._events[name] = []);
-	
-			_event.push({
-				callback: callback,
-				context: context || this,
-				handler: this
-			});
-		},
-	
-		/**
-		 * Triggers a particular event. If a handler
-		 * is linked to that event, the handler will be
-		 * executed.
-		 */
-		trigger: function(name) {
-			if (!name)
-				return;
-	
-			var _event, length, args, i;
-	
-			this._events = this._events || {};
-			_event = this._events[name] || (this._events[name] = []);
-	
-			if (!_event)
-				return;
-	
-			length = Math.max(0, arguments.length - 1);
-	    args = [];
-	    for (i = 0; i < length; i++) args[i] = arguments[i + 1];
-	
-	    for (i = 0; i < _event.length; i++)
-				_event[i].callback.apply(_event[i].context, args);	
-		},
-	
-		/**
-		 * Removes an event handler. If no name is provided,
-		 * all handlers for this object will be removed.
-		 */
-		off: function(name) {
-			if (name)
-				this._events[name] = undefined;
-	
-			else
-				this._events = {};
-		}
-	
-	};
 	Pizzicato.Util = {
 	
 		isString: function(arg) {
@@ -127,6 +71,89 @@
 			return 1 - ((0.5 - mix) * 2);
 		}
 	};
+
+	Object.defineProperty(Pizzicato, 'volume', {
+		enumerable: true,
+			
+		get: function() {
+			return masterGainNode.gain.value;
+		},
+
+		set: function(volume) {
+			if (Pz.Util.isInRange(volume, 0, 1) && masterGainNode)
+				masterGainNode.gain.value = volume;
+		}
+	});
+
+	Object.defineProperty(Pizzicato, 'masterGainNode', {
+		enumerable: false,
+
+		get: function() {
+			return masterGainNode;
+		},
+
+		set: function(volume) {
+			console.error('Can\'t set the master gain node');
+		}
+	});
+		Pizzicato.Events = {
+		
+			/**
+			 * Adds an event handler that will be treated upon
+			 * the triggering of that event.
+			 */
+			on: function(name, callback, context) {
+				if (!name || !callback)
+					return;
+		
+				this._events = this._events || {};
+				var _event = this._events[name] || (this._events[name] = []);
+		
+				_event.push({
+					callback: callback,
+					context: context || this,
+					handler: this
+				});
+			},
+		
+			/**
+			 * Triggers a particular event. If a handler
+			 * is linked to that event, the handler will be
+			 * executed.
+			 */
+			trigger: function(name) {
+				if (!name)
+					return;
+		
+				var _event, length, args, i;
+		
+				this._events = this._events || {};
+				_event = this._events[name] || (this._events[name] = []);
+		
+				if (!_event)
+					return;
+		
+				length = Math.max(0, arguments.length - 1);
+		    args = [];
+		    for (i = 0; i < length; i++) args[i] = arguments[i + 1];
+		
+		    for (i = 0; i < _event.length; i++)
+					_event[i].callback.apply(_event[i].context, args);	
+			},
+		
+			/**
+			 * Removes an event handler. If no name is provided,
+			 * all handlers for this object will be removed.
+			 */
+			off: function(name) {
+				if (name)
+					this._events[name] = undefined;
+		
+				else
+					this._events = {};
+			}
+		
+		};
 	Pizzicato.Sound = function(description, callback) {
 		var self = this;
 		var util = Pizzicato.Util;
@@ -141,7 +168,7 @@
 		}
 	
 		this.masterVolume = Pizzicato.context.createGain();
-		this.masterVolume.connect(Pizzicato.context.destination);
+		this.masterVolume.connect(Pizzicato.masterGainNode);
 	
 		this.fadeNode = Pizzicato.context.createGain();
 	
@@ -496,7 +523,7 @@
 				this.analyser = Pizzicato.context.createAnalyser();
 				this.masterVolume.disconnect();
 				this.masterVolume.connect(this.analyser);
-				this.analyser.connect(Pizzicato.context.destination);
+				this.analyser.connect(Pizzicato.masterGainNode);
 				return this.analyser;
 			}
 		},
