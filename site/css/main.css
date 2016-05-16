@@ -85,9 +85,27 @@ h3, h4 {
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
-    margin-bottom: 35px;
     text-align: center;
     z-index: -1;
+}
+
+.logo > img {
+    width: 550px;
+}
+
+#download-bower {
+    width: 330px;
+    margin-top: 10px
+}
+
+.bower-logo {
+    float: left;
+    margin-right: 10px;
+}
+
+.bower-logo > img {
+    width: 55px;
+    margin-top: 5px;
 }
 
 .controls {
