@@ -121,6 +121,7 @@ button{
     min-height: 50px;
     border-radius: 5px;
     position: relative;
+    outline: none;
 }
 
 button.play {
