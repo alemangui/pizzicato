@@ -387,6 +387,8 @@
 			enumerable: true,
 			
 			value: function() {
+				if (this.playing)
+					this.stop();
 				if (!this.paused)
 					this.trigger('end');
 			}

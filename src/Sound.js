@@ -231,6 +231,8 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 		enumerable: true,
 		
 		value: function() {
+			if (this.playing)
+				this.stop();
 			if (!this.paused)
 				this.trigger('end');
 		}

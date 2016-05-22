@@ -253,6 +253,18 @@ describe('Sound', function() {
 			expect(callback).not.toHaveBeenCalled();
 		});
 
+		it('should stop automatically when file sound is over', function(done) {
+			var click = new Pizzicato.Sound('base/tests/click.wav', function() {
+				click.play();
+
+				setTimeout(function() {
+					expect(click.playing).toBe(false);
+					expect(click.paused).toBe(false);
+					done();
+				}, 1000);
+			});
+		}, 2000);
+
 	});
 
 	describe('effects', function() {
