@@ -413,9 +413,16 @@
 			enumerable: true,
 			
 			value: function(effect) {
+	
 				var index = this.effects.indexOf(effect);
 	
-				if (index === -1) return;
+				if (index === -1) 
+					return;
+	
+				this.fadeNode.disconnect();
+	
+				for (var i = 0; i < this.effects.length; i++)
+					this.effects[i].outputNode.disconnect();
 	
 				this.effects.splice(index, 1);
 				this.connectEffects();
