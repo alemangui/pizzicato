@@ -263,6 +263,11 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			if (index === -1) 
 				return;
 
+			var shouldResumePlaying = this.playing;
+
+			if (shouldResumePlaying)
+				this.pause();
+
 			this.fadeNode.disconnect();
 
 			for (var i = 0; i < this.effects.length; i++)
@@ -270,6 +275,9 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 			this.effects.splice(index, 1);
 			this.connectEffects();
+
+			if (shouldResumePlaying)
+				this.play();
 		}
 	},
 

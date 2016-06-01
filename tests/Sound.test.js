@@ -281,5 +281,48 @@ describe('Sound', function() {
 				done();
 			});
 		}, 5000);
+
+		it('should continue playing when effects are added', function(done) {
+			var endCallback = jasmine.createSpy('endCallback');
+
+			var sound = new Pizzicato.Sound('base/tests/click.wav', function() {
+
+				var delay = new Pz.Effects.Delay();
+
+				sound.play();
+				sound.addEffect(delay);
+				expect(sound.playing).toBe(true);
+
+				setTimeout(function() {
+					expect(endCallback).toHaveBeenCalled();
+					done();
+				}, 2000);
+			});
+			
+			sound.on('end', endCallback);
+
+		}, 5500);
+
+		it('should continue playing when effects are removed', function(done) {
+			var endCallback = jasmine.createSpy('endCallback');
+			var delay = new Pz.Effects.Delay();
+
+			var sound = new Pizzicato.Sound('base/tests/click.wav', function() {
+
+				sound.play();
+				sound.removeEffect(delay);
+
+				expect(sound.playing).toBe(true);
+				
+				setTimeout(function() {
+					expect(endCallback).toHaveBeenCalled();
+					done();
+				}, 2000);
+			});
+
+			sound.on('end', endCallback);
+			sound.addEffect(delay);
+
+		}, 5500);
 	});
 });
