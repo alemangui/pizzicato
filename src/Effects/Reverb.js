@@ -24,10 +24,7 @@ Pizzicato.Effects.Reverb = function(options, callback) {
 	this.dryGainNode.connect(this.outputNode);
 	this.wetGainNode.connect(this.outputNode);
 
-
 	
-	//this.convolverNode.connect(this.outputNode);
-
 	for (var key in defaults) {
 		this[key] = options[key];
 		this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
@@ -50,14 +47,12 @@ Pizzicato.Effects.Reverb = function(options, callback) {
 					var node = Pizzicato.context.createBufferSource();
 					node.buffer = buffer;
 
-
 					return node;
 				};
 
 				self.convolverNode.buffer = buffer;
 
-				if (Pz.Util.isFunction(callback)) 
-
+				if (callback && Pz.Util.isFunction(callback)) 
 					callback();
 
 			}).bind(self), 
@@ -69,12 +64,11 @@ Pizzicato.Effects.Reverb = function(options, callback) {
 
 				error = error || new Error('Error decoding impulse file ' + options.impulse);
 
-				if (Pz.Util.isFunction(callback))
+				if (callback && Pz.Util.isFunction(callback))
 					callback(error);
 
 			}).bind(self)
 		);
-
 	};
 
 	request.onreadystatechange = function(event) {
@@ -89,11 +83,6 @@ Pizzicato.Effects.Reverb = function(options, callback) {
 
 Pizzicato.Effects.Reverb.prototype = Object.create(null, {
 
-	/**
-	 * Some value
-	 * MIN: ?
-	 * MAX: ?
-	 */
 	mix: {
 		enumberable: true,
 		
