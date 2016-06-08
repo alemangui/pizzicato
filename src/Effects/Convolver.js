@@ -2,8 +2,6 @@ Pizzicato.Effects.Convolver = function(options, callback) {
 	
 	var self = this;
 
-	console.log('Pizzicato.Effects.Convolver: request options %o, callback %o, self %o', options, callback, self);
-
 	this.options = {};
 	options = options || this.options;
 
@@ -39,30 +37,18 @@ Pizzicato.Effects.Convolver = function(options, callback) {
 };
 
 function loadImpulseFile(impulsepath, scope) {
-	console.log('Pizzicato.Effects.Convolver:loadImpulseFile impulsepath %o scope %o', impulsepath, scope);
-	//var self = this;
-
+	
 	var request = new XMLHttpRequest();
 	request.open('GET', impulsepath, true);
 	request.responseType = 'arraybuffer';
 
 	request.onload = function (e) {
-		console.log('Pizzicato.Effects.Convolver:loadImpulseFile request onload %o', e);
 		var audioData = e.target.response;
 
 		Pizzicato.context.decodeAudioData(
 			audioData, 
 			// success
 			(function(buffer) {
-
-
-				console.log('Pizzicato.Effects.Convolver:decodeAudioData buffer', buffer, scope);
-				// scope.getRawSourceNode = function() {
-				// 	var node = Pizzicato.context.createBufferSource();
-				// 	node.buffer = buffer;
-
-				// 	return node;
-				// };
 
 				scope.convolverNode.buffer = buffer;
 
@@ -73,8 +59,6 @@ function loadImpulseFile(impulsepath, scope) {
 
 			// error
 			(function(error) {
-
-				console.error('Pizzicato.Effects.Convolver:decodeAudioData Error decoding impulse file ' + impulsepath);
 
 				error = error || new Error('Error decoding impulse file ' + impulsepath);
 
@@ -102,7 +86,6 @@ Pizzicato.Effects.Convolver.prototype = Object.create(null, {
 		},
 
 		set: function(path) {
-			console.log('Pizzicato.Effects.Convolver: trying to set impulse path ', path);
 			if (!Pz.Util.isString(path))
 				return;
 
@@ -120,7 +103,6 @@ Pizzicato.Effects.Convolver.prototype = Object.create(null, {
 		},
 
 		set: function(mix) {
-			console.log('Pizzicato.Effects.Convolver: trying to set reverb mix', mix);
 			if (!Pz.Util.isInRange(mix, 0, 1))
 				return;
 
