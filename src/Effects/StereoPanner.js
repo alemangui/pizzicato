@@ -10,10 +10,15 @@ Pizzicato.Effects.StereoPanner = function(options) {
 	this.inputNode = Pizzicato.context.createGain();
 	this.outputNode = Pizzicato.context.createGain();
 
-	this.pannerNode = Pizzicato.context.createStereoPanner();
+	if (Pizzicato.context.createStereoPanner) {
+		this.pannerNode = Pizzicato.context.createStereoPanner();
+		this.inputNode.connect(this.pannerNode);
+		this.pannerNode.connect(this.outputNode);
+	}
+	else {
+		this.inputNode.connect(this.outputNode);
+	}
 
-	this.inputNode.connect(this.pannerNode);
-	this.pannerNode.connect(this.outputNode);
 
 	for (var key in defaults) {
 		this[key] = options[key];
@@ -38,7 +43,9 @@ Pizzicato.Effects.StereoPanner.prototype = Object.create(null, {
 				return;
 
 			this.options.pan = pan;
-			this.pannerNode.pan.value = pan;
+			if (this.pannerNode) {
+				this.pannerNode.pan.value = pan;	
+			}
 		}
 	}
 
