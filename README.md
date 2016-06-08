@@ -66,6 +66,7 @@ sawtoothWave.play();
   - [Compressor](#compressor)
   - [Low-pass filter](#low-pass-filter)
   - [High-pass filter](#high-pass-filter)
+  - [Stereo Panner](#stereo-panner)
 - [Advanced](#advanced)
   - [Accessing the audio context](#accessing-the-context)
   - [Getting an analyser node for a sound](#analyser-node)
@@ -319,7 +320,7 @@ sound.addEffect(highPassFilter);
 sound.play();
 ```
 
-<a name="stereopanner"/>
+<a name="stereo-panner"/>
 ### Stereo panner
 The stereo panner is used to pan an audio stream left or right.
 
