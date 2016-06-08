@@ -44,6 +44,7 @@
 	//= require ./Effects/Filters.js
 	//= require ./Effects/Distortion.js
 	//= require ./Effects/Flanger.js
+	//= require ./Effects/Panner.js
 	
 	return Pizzicato;
 })(this);
