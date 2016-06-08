@@ -67,6 +67,7 @@ sawtoothWave.play();
   - [Low-pass filter](#low-pass-filter)
   - [High-pass filter](#high-pass-filter)
   - [Stereo Panner](#stereo-panner)
+  - [Convolver](#convolver)
 - [Advanced](#advanced)
   - [Accessing the audio context](#accessing-the-context)
   - [Getting an analyser node for a sound](#analyser-node)
@@ -335,6 +336,24 @@ var stereoPanner = new Pizzicato.Effects.StereoPanner({
 sound.addEffect(stereoPanner);
 sound.play();
 ```
+
+<a name="convolver"/>
+### Convolver
+The convolver can be used to load in an impulse file, often for a reverb effect
+
+* ```impulse``` _(Mandatory; string)_: path to your impulse file.
+
+Example:
+```javascript
+var convolver = new Pizzicato.Effects.convolver({
+    impulse: './path/to/your/impulse.wav',
+    mix: 0.5
+});
+
+sound.addEffect(convolver);
+sound.play();
+```
+
 <a name="advanced">
 ## Advanced
 
