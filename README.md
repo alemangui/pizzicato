@@ -318,6 +318,22 @@ var highPassFilter = new Pizzicato.Effects.HighPassFilter({
 sound.addEffect(highPassFilter);
 sound.play();
 ```
+
+<a name="stereopanner"/>
+### Stereo panner
+The stereo panner is used to pan an audio stream left or right.
+
+* ```pan``` _(min: -1, max: 1, defaults to 0)_: Pan value between -1 (full left pan) and 1 (full right pan).
+
+Example:
+```javascript
+var stereoPanner = new Pizzicato.Effects.StereoPanner({
+    pan: 0.5
+});
+
+sound.addEffect(stereoPanner);
+sound.play();
+```
 <a name="advanced">
 ## Advanced
 
