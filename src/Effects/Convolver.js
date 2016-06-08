@@ -96,7 +96,7 @@ Pizzicato.Effects.Convolver.prototype = Object.create(null, {
 	},
 
 	mix: {
-		enumberable: true,
+		enumerable: true,
 		
 		get: function() {
 			return this.options.mix;
