@@ -1,10 +1,10 @@
-describe('Effects.Panner', function() {
+describe('Effects.StereoPanner', function() {
 
 	it('Should override default options', function() {
 		var options = {
 			pan: 0.5
 		};
-		var panner = new Pizzicato.Effects.Panner(options);
+		var panner = new Pizzicato.Effects.StereoPanner(options);
 
 		expect(panner.pan).toBe(options.pan);
 	});
@@ -15,7 +15,7 @@ describe('Effects.Panner', function() {
 			pan: 1.9
 		};
 
-		var panner = new Pizzicato.Effects.Panner(options);
+		var panner = new Pizzicato.Effects.StereoPanner(options);
 
 		expect(panner.pan).toBe(0);
 	});
@@ -24,7 +24,7 @@ describe('Effects.Panner', function() {
 	it('Should change the panner node pan value when changing the pan', function() {
 		var initialPan = -0.3;
 		var newPan = 0.5;
-		var panner = new Pizzicato.Effects.Panner({ pan: initialPan });
+		var panner = new Pizzicato.Effects.StereoPanner({ pan: initialPan });
 
 		expect(panner.pannerNode.pan.value).toBeCloseTo(initialPan);
 

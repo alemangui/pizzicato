@@ -1,4 +1,4 @@
-Pizzicato.Effects.Panner = function(options) {
+Pizzicato.Effects.StereoPanner = function(options) {
 
 	this.options = {};
 	options = options || this.options;
@@ -21,7 +21,7 @@ Pizzicato.Effects.Panner = function(options) {
 	}
 };
 
-Pizzicato.Effects.Panner.prototype = Object.create(null, {
+Pizzicato.Effects.StereoPanner.prototype = Object.create(null, {
 
 	/**
 	 * Pan position
