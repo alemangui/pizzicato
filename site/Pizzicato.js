@@ -1214,11 +1214,61 @@
 		}
 	
 	});
-	Pizzicato.Effects.Reverb = function(options, callback) {
+	Pizzicato.Effects.StereoPanner = function(options) {
+	
+		this.options = {};
+		options = options || this.options;
+	
+		var defaults = {
+			pan: 0
+		};
+	
+		this.inputNode = Pizzicato.context.createGain();
+		this.outputNode = Pizzicato.context.createGain();
+	
+		if (Pizzicato.context.createStereoPanner) {
+			this.pannerNode = Pizzicato.context.createStereoPanner();
+			this.inputNode.connect(this.pannerNode);
+			this.pannerNode.connect(this.outputNode);
+		}
+		else {
+			this.inputNode.connect(this.outputNode);
+		}
+	
+	
+		for (var key in defaults) {
+			this[key] = options[key];
+			this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
+		}
+	};
+	
+	Pizzicato.Effects.StereoPanner.prototype = Object.create(null, {
+	
+		/**
+		 * Pan position
+		 */
+		pan: {
+			enumerable: true,
+	
+			get: function() {
+				return this.options.pan;	
+			},
+	
+			set: function(pan) {
+				if (!Pz.Util.isInRange(pan, -1, 1))
+					return;
+	
+				this.options.pan = pan;
+				if (this.pannerNode) {
+					this.pannerNode.pan.value = pan;	
+				}
+			}
+		}
+	
+	});
+	Pizzicato.Effects.Convolver = function(options, callback) {
 		
 		var self = this;
-	
-		console.log('Pizzicato.Effects.Reverb: request options %o, callback %o, self %o', options, callback, self);
 	
 		this.options = {};
 		options = options || this.options;
@@ -1255,30 +1305,18 @@
 	};
 	
 	function loadImpulseFile(impulsepath, scope) {
-		console.log('Pizzicato.Effects.Reverb:loadImpulseFile impulsepath %o scope %o', impulsepath, scope);
-		//var self = this;
-	
+		
 		var request = new XMLHttpRequest();
 		request.open('GET', impulsepath, true);
 		request.responseType = 'arraybuffer';
 	
 		request.onload = function (e) {
-			console.log('Pizzicato.Effects.Reverb:loadImpulseFile request onload %o', e);
 			var audioData = e.target.response;
 	
 			Pizzicato.context.decodeAudioData(
 				audioData, 
 				// success
 				(function(buffer) {
-	
-	
-					console.log('Pizzicato.Effects.Reverb:decodeAudioData buffer', buffer, scope);
-					scope.getRawSourceNode = function() {
-						var node = Pizzicato.context.createBufferSource();
-						node.buffer = buffer;
-	
-						return node;
-					};
 	
 					scope.convolverNode.buffer = buffer;
 	
@@ -1289,8 +1327,6 @@
 	
 				// error
 				(function(error) {
-	
-					console.error('Pizzicato.Effects.Reverb:decodeAudioData Error decoding impulse file ' + impulsepath);
 	
 					error = error || new Error('Error decoding impulse file ' + impulsepath);
 	
@@ -1310,7 +1346,7 @@
 	}
 	
 	
-	Pizzicato.Effects.Reverb.prototype = Object.create(null, {
+	Pizzicato.Effects.Convolver.prototype = Object.create(null, {
 	
 		impulse: {
 			get: function() {
@@ -1318,27 +1354,23 @@
 			},
 	
 			set: function(path) {
-				console.log('Pizzicato.Effects.Reverb: trying to set impulse path ', path);
-				// if (!Pz.Util.isInRange(mix, 0, 1))
-				// 	return;
+				if (!Pz.Util.isString(path))
+					return;
 	
 				this.options.impulse = path;
-				// this.dryGainNode.gain.value = Pizzicato.Util.getDryLevel(this.mix);
-				// this.wetGainNode.gain.value = Pizzicato.Util.getWetLevel(this.mix);
 	
 				loadImpulseFile(this.options.impulse, this);
 			}
 		},
 	
 		mix: {
-			enumberable: true,
+			enumerable: true,
 			
 			get: function() {
 				return this.options.mix;
 			},
 	
 			set: function(mix) {
-				console.log('Pizzicato.Effects.Reverb: trying to set reverb mix', mix);
 				if (!Pz.Util.isInRange(mix, 0, 1))
 					return;
 	

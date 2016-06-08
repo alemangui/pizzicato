@@ -66,6 +66,7 @@ sawtoothWave.play();
   - [Compressor](#compressor)
   - [Low-pass filter](#low-pass-filter)
   - [High-pass filter](#high-pass-filter)
+  - [Stereo Panner](#stereo-panner)
 - [Advanced](#advanced)
   - [Accessing the audio context](#accessing-the-context)
   - [Getting an analyser node for a sound](#analyser-node)
@@ -316,6 +317,22 @@ var highPassFilter = new Pizzicato.Effects.HighPassFilter({
 });
 
 sound.addEffect(highPassFilter);
+sound.play();
+```
+
+<a name="stereo-panner"/>
+### Stereo panner
+The stereo panner is used to pan an audio stream left or right.
+
+* ```pan``` _(min: -1, max: 1, defaults to 0)_: Pan value between -1 (full left pan) and 1 (full right pan).
+
+Example:
+```javascript
+var stereoPanner = new Pizzicato.Effects.StereoPanner({
+    pan: 0.5
+});
+
+sound.addEffect(stereoPanner);
 sound.play();
 ```
 <a name="advanced">
