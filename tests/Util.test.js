@@ -59,7 +59,7 @@ describe('Util', function() {
 		expect(isBool('')).toBeFalsy();
 		expect(isBool(true)).toBeTruthy();
 		expect(isBool({ text: 'hello' })).toBeFalsy();
-		expect(isBool(false)).toBeFalsy();
+		expect(isBool(false)).toBeTruthy();
 		expect(isBool('true')).toBeFalsy();
 		expect(isBool('True')).toBeFalsy();
 	});

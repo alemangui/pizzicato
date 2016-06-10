@@ -1397,6 +1397,10 @@
 		}
 	
 	});
+	/**
+	 * Adapted from https://github.com/web-audio-components/simple-reverb
+	 */
+	
 	Pizzicato.Effects.Reverb = function(options) {
 		var self = this;
 	
@@ -1430,7 +1434,6 @@
 	
 		
 		for (var key in defaults) {
-			console.log('key', key);
 			this[key] = options[key];
 			this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
 		}
