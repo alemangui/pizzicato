@@ -228,7 +228,7 @@ describe('Sound', function() {
 		it('should trigger \'end\' when ended', function(done) {
 			var endCallback = jasmine.createSpy('endCallback');
 
-			var sound = new Pizzicato.Sound('.src/tests/click.wav', function() {
+			var sound = new Pizzicato.Sound('base/tests/click.wav', function() {
 				
 				sound.on('end', endCallback);
 				sound.play();
