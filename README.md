@@ -61,6 +61,7 @@ sawtoothWave.play();
   - [Sounds from a function](#sounds-from-a-function)
 - [Effects](#effects)
   - [Delay](#delay)
+  - [PingPongDelay](#pingpongdelay)
   - [Distortion](#distortion)
   - [Flanger](#flanger)
   - [Compressor](#compressor)
@@ -221,6 +222,24 @@ var delay = new Pizzicato.Effects.Delay({
     mix: 0.75
 });
 sound.addEffect(delay);
+sound.play();
+```
+
+<a name="pingpongdelay"/>
+### PingPongDelay
+This is the same as the delay effect, however on each feedback loop the output is swapped between left and right channels. The following options are available when creating a delay effect:
+* ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
+* ```time``` _(min: 0, max: 180, defaults to 0.3)_: Interval time in seconds.
+* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output (the delayed sound).
+
+Example:
+```javascript
+var pingpongdelay = new Pizzicato.Effects.PingPongDelay({
+    feedback: 0.3,
+    time: 0.2,
+    mix: 0.68
+});
+sound.addEffect(pingpongdelay);
 sound.play();
 ```
 
