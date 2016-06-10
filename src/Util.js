@@ -27,6 +27,14 @@ Pizzicato.Util = {
 		return arg >= min && arg <= max;
 	},
 
+	isBool: function(arg) {
+		if (typeof(arg) !== "boolean"){
+		  return false;
+		}
+
+		return true;
+	},
+
 	isOscillator: function(audioNode) {
 		return (audioNode && audioNode.toString() === "[object OscillatorNode]");
 	},
