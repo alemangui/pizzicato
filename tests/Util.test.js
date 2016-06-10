@@ -56,12 +56,12 @@ describe('Util', function() {
 		var isBool = Pizzicato.Util.isBool;
 
 		expect(typeof isBool).toBe('function');
-		expect(isBool('')).toBeFalsey();
+		expect(isBool('')).toBeFalsy();
 		expect(isBool(true)).toBeTruthy();
-		expect(isBool({ text: 'hello' })).toBeFalsey();
-		expect(isBool(false)).toBeFalsey();
-		expect(isBool('true')).toBeFalsey();
-		expect(isBool('True')).toBeFalsey();
+		expect(isBool({ text: 'hello' })).toBeFalsy();
+		expect(isBool(false)).toBeFalsy();
+		expect(isBool('true')).toBeFalsy();
+		expect(isBool('True')).toBeFalsy();
 	});
 
 	it('contains a working isInRange function', function() {
