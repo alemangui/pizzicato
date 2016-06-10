@@ -68,6 +68,7 @@ sawtoothWave.play();
   - [High-pass filter](#high-pass-filter)
   - [Stereo Panner](#stereo-panner)
   - [Convolver](#convolver)
+  - [Reverb](#reverb)
 - [Advanced](#advanced)
   - [Accessing the audio context](#accessing-the-context)
   - [Getting an analyser node for a sound](#analyser-node)

@@ -1,3 +1,7 @@
+/**
+ * Adapted from https://github.com/web-audio-components/simple-reverb
+ */
+
 Pizzicato.Effects.Reverb = function(options) {
 	var self = this;
 
