@@ -1408,8 +1408,8 @@
 	
 		var defaults = {
 			mix: 0.5,
-			seconds: 2,
-			decay: 2,
+			seconds: 0.5,
+			decay: 0.5,
 			reverse: false
 		};
 	
@@ -1443,7 +1443,7 @@
 		buildImpulse(self);
 	};
 	
-	function buildImpulse(scope) {
+	function buildImpulse(options) {
 		console.log('buildImpulse called', scope, scope.options);
 		console.log('buildImpulse scope.decay ', scope.decay);
 		console.log('buildImpulse scope.reverse ', scope.reverse);
@@ -1454,13 +1454,13 @@
 			decay = scope.options.decay, 
 			impulse = Pizzicato.context.createBuffer(2, length, rate), 
 			impulseL = impulse.getChannelData(0), 
-			//impulseR = impulse.getChannelData(1), 
+			impulseR = impulse.getChannelData(1), 
 			n, i;
 	
 		for (i = 0; i < length; i++) {
 			n = scope.reverse ? length - i : i;
 			impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay);
-			//impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay);
+			impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay);
 		}
 	
 		scope.reverbNode.buffer = impulse;
@@ -1494,10 +1494,13 @@
 			},
 	
 			set: function (seconds) {
-				if (!Pz.Util.isNumber(seconds))
+				if (!Pz.Util.isNumber(seconds)) {
+					console.log('not a number');
 					return;
+				}
 	
 				this.options.seconds = seconds;
+				buildImpulse(this);
 			}
 		},
 	
@@ -1509,10 +1512,13 @@
 			},
 	
 			set: function (decay) {
-				if (!Pz.Util.isNumber(decay))
+				if (!Pz.Util.isNumber(decay)) {
+					console.log('not a number');
 					return;
+				}
 	
 				this.options.decay = decay;
+				buildImpulse(this);
 			}
 	
 		},
@@ -1525,10 +1531,13 @@
 			},
 	
 			set: function (reverse) {
-				if (!!Pz.Util.isBool(reverse))
+				if (!Pz.Util.isBool(reverse)) {
+					console.log('not a bool');
 					return;
-	
+				}
+				
 				this.options.reverse = reverse;
+				buildImpulse(this);
 			}
 	
 		}

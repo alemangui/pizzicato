@@ -2,7 +2,10 @@ describe('Effects.Reverb', function() {
 
 	it('Should override default options', function() {
 		var options = {
-			mix: 0
+			mix: 0,
+			decay: 7,
+			seconds: 10,
+			reverse: true
 		};
 		var reverb = new Pizzicato.Effects.Reverb(options);
 
@@ -12,7 +15,10 @@ describe('Effects.Reverb', function() {
 
 	it('should choose default options if invalid parameters are passed', function() {
 		var options = {
-			mix: -100000
+			mix: -100000,
+			decay: 'tooth',
+			seconds: 'Rock Hudson movie',
+			reverse: 1
 		};
 
 		var reverb = new Pizzicato.Effects.Reverb(options);

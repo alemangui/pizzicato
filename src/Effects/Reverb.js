@@ -9,8 +9,8 @@ Pizzicato.Effects.Reverb = function(options) {
 
 	var defaults = {
 		mix: 0.5,
-		seconds: 2,
-		decay: 2,
+		seconds: 0.5,
+		decay: 0.5,
 		reverse: false
 	};
 
@@ -99,6 +99,7 @@ Pizzicato.Effects.Reverb.prototype = Object.create(null, {
 				return;
 
 			this.options.seconds = seconds;
+			buildImpulse(this);
 		}
 	},
 
@@ -114,6 +115,7 @@ Pizzicato.Effects.Reverb.prototype = Object.create(null, {
 				return;
 
 			this.options.decay = decay;
+			buildImpulse(this);
 		}
 
 	},
@@ -126,10 +128,11 @@ Pizzicato.Effects.Reverb.prototype = Object.create(null, {
 		},
 
 		set: function (reverse) {
-			if (!!Pz.Util.isBool(reverse))
+			if (!Pz.Util.isBool(reverse))
 				return;
 
 			this.options.reverse = reverse;
+			buildImpulse(this);
 		}
 
 	}
