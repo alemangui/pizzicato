@@ -1,3 +1,7 @@
+/**
+ * Adapted from https://github.com/mmckegg/web-audio-school/blob/master/lessons/3.%20Effects/18.%20Ping%20Pong%20Delay/answer.js
+ */
+
 Pizzicato.Effects.PingPongDelay = function(options) {
 
 	this.options = {};
