@@ -1398,13 +1398,10 @@
 	
 	});
 	Pizzicato.Effects.Reverb = function(options) {
-		console.log('Reverb called', options);
 		var self = this;
 	
 		this.options = {};
 		options = options || this.options;
-	
-		console.log('Reverb: options ', options);
 	
 		var defaults = {
 			mix: 0.5,
@@ -1438,16 +1435,10 @@
 			this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
 		}
 	
-		console.log('Reverb: self', self);
-	
 		buildImpulse(self);
 	};
 	
-	function buildImpulse(options) {
-		console.log('buildImpulse called', scope, scope.options);
-		console.log('buildImpulse scope.decay ', scope.decay);
-		console.log('buildImpulse scope.reverse ', scope.reverse);
-		console.log('buildImpulse scope.seconds ', scope.seconds);
+	function buildImpulse(scope) {
 	
 		var rate = Pizzicato.context.sampleRate, 
 			length = rate * scope.options.seconds, 
@@ -1494,10 +1485,8 @@
 			},
 	
 			set: function (seconds) {
-				if (!Pz.Util.isNumber(seconds)) {
-					console.log('not a number');
+				if (!Pz.Util.isNumber(seconds))
 					return;
-				}
 	
 				this.options.seconds = seconds;
 				buildImpulse(this);
@@ -1512,10 +1501,8 @@
 			},
 	
 			set: function (decay) {
-				if (!Pz.Util.isNumber(decay)) {
-					console.log('not a number');
+				if (!Pz.Util.isNumber(decay))
 					return;
-				}
 	
 				this.options.decay = decay;
 				buildImpulse(this);
@@ -1531,11 +1518,9 @@
 			},
 	
 			set: function (reverse) {
-				if (!Pz.Util.isBool(reverse)) {
-					console.log('not a bool');
+				if (!Pz.Util.isBool(reverse))
 					return;
-				}
-				
+	
 				this.options.reverse = reverse;
 				buildImpulse(this);
 			}

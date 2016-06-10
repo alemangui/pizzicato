@@ -1,11 +1,8 @@
 Pizzicato.Effects.Reverb = function(options) {
-	console.log('Reverb called', options);
 	var self = this;
 
 	this.options = {};
 	options = options || this.options;
-
-	console.log('Reverb: options ', options);
 
 	var defaults = {
 		mix: 0.5,
@@ -34,21 +31,14 @@ Pizzicato.Effects.Reverb = function(options) {
 
 	
 	for (var key in defaults) {
-		console.log('key', key);
 		this[key] = options[key];
 		this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
 	}
-
-	console.log('Reverb: self', self);
 
 	buildImpulse(self);
 };
 
 function buildImpulse(scope) {
-	console.log('buildImpulse called', scope, scope.options);
-	console.log('buildImpulse scope.decay ', scope.decay);
-	console.log('buildImpulse scope.reverse ', scope.reverse);
-	console.log('buildImpulse scope.seconds ', scope.seconds);
 
 	var rate = Pizzicato.context.sampleRate, 
 		length = rate * scope.options.seconds, 
