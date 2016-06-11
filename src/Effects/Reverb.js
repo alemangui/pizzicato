@@ -10,8 +10,8 @@ Pizzicato.Effects.Reverb = function(options) {
 
 	var defaults = {
 		mix: 0.5,
-		seconds: 0.5,
-		decay: 0.5,
+		seconds: 0.01,
+		decay: 0.01,
 		reverse: false
 	};
 

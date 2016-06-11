@@ -52,6 +52,7 @@ describe('Util', function() {
 		expect(isNumber(-42)).toBe(true);
 	});
 
+
 	it('contains a working isBool function', function() {
 		var isBool = Pizzicato.Util.isBool;
 
@@ -63,6 +64,7 @@ describe('Util', function() {
 		expect(isBool('true')).toBeFalsy();
 		expect(isBool('True')).toBeFalsy();
 	});
+
 
 	it('contains a working isInRange function', function() {
 		var isInRange = Pizzicato.Util.isInRange;

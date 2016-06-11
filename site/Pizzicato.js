@@ -69,11 +69,9 @@
 
 		isBool: function(arg) {
 
-			if (typeof(arg) !== "boolean"){
+			if (typeof(arg) !== "boolean")
 
 			  return false;
-
-			}
 
 	
 
@@ -1409,8 +1407,8 @@
 	
 		var defaults = {
 			mix: 0.5,
-			seconds: 0.5,
-			decay: 0.5,
+			seconds: 0.01,
+			decay: 0.01,
 			reverse: false
 		};
 	
