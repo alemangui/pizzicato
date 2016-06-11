@@ -30,7 +30,7 @@ Pizzicato.Util = {
 	isBool: function(arg) {
 		if (typeof(arg) !== "boolean")
 			return false;
-		
+
 		return true;
 	},
 
