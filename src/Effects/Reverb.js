@@ -15,6 +15,10 @@ Pizzicato.Effects.Reverb = function(options) {
 		reverse: false
 	};
 
+	this.callback = function () {
+		console.log('do nothing function');
+	};
+
 
 	this.inputNode = Pizzicato.context.createGain();
 
@@ -92,6 +96,11 @@ Pizzicato.Effects.Reverb.prototype = Object.create(null, {
 			if (!Pz.Util.isNumber(seconds))
 				return;
 
+			if (seconds <= 0)
+				return;
+
+			console.log('Effect: setting seconds', seconds);
+
 			this.options.seconds = seconds;
 			buildImpulse(this);
 		}
@@ -107,6 +116,11 @@ Pizzicato.Effects.Reverb.prototype = Object.create(null, {
 		set: function (decay) {
 			if (!Pz.Util.isNumber(decay))
 				return;
+
+			if (decay <= 0)
+				return;
+
+			console.log('Effect: setting decay', decay);
 
 			this.options.decay = decay;
 			buildImpulse(this);

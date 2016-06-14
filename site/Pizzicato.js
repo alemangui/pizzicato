@@ -71,7 +71,7 @@
 
 			if (typeof(arg) !== "boolean")
 
-			  return false;
+				return false;
 
 	
 
@@ -1412,6 +1412,10 @@
 			reverse: false
 		};
 	
+		this.callback = function () {
+			console.log('do nothing function');
+		};
+	
 	
 		this.inputNode = Pizzicato.context.createGain();
 	
@@ -1489,6 +1493,11 @@
 				if (!Pz.Util.isNumber(seconds))
 					return;
 	
+				if (seconds <= 0)
+					return;
+	
+				console.log('Effect: setting seconds', seconds);
+	
 				this.options.seconds = seconds;
 				buildImpulse(this);
 			}
@@ -1504,6 +1513,11 @@
 			set: function (decay) {
 				if (!Pz.Util.isNumber(decay))
 					return;
+	
+				if (decay <= 0)
+					return;
+	
+				console.log('Effect: setting decay', decay);
 	
 				this.options.decay = decay;
 				buildImpulse(this);

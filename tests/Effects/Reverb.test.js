@@ -9,7 +9,7 @@ describe('Effects.Reverb', function() {
 		};
 		var reverb = new Pizzicato.Effects.Reverb(options);
 
-		expect(reverb.mix).toBe(options.mix);
+		expect(reverb.mix).toEqual(options.mix);
 	});
 
 
@@ -21,15 +21,26 @@ describe('Effects.Reverb', function() {
 			reverse: 1
 		};
 
+		var defaults = {
+			mix: 0.5,
+			seconds: 0.01,
+			decay: 0.01,
+			reverse: false
+		};
+
+
 		var reverb = new Pizzicato.Effects.Reverb(options);
 
-		expect(reverb.mix).toBe(0.5);
+		expect(reverb.mix).toBe(defaults.mix);
+		expect(reverb.reverse).toBeFalsy();
+		expect(reverb.seconds).toBe(defaults.seconds);
+		expect(reverb.decay).toBe(defaults.decay);
+
 	});
 
 	it('Should modify the decay when changed', function() {
 		var initialDecay = 0.8;
 		var newDecay = 0.3;
-
 		var reverb = new Pizzicato.Effects.Reverb({ decay: initialDecay });
 
 		expect(reverb.decay).toEqual(initialDecay);
@@ -42,7 +53,6 @@ describe('Effects.Reverb', function() {
 	it('Should modify the seconds when changed', function() {
 		var initialSeconds = 0.8;
 		var newSeconds = 0.3;
-
 		var reverb = new Pizzicato.Effects.Reverb({ seconds: initialSeconds });
 
 		expect(reverb.seconds).toEqual(initialSeconds);
@@ -55,7 +65,6 @@ describe('Effects.Reverb', function() {
 	it('Should modify the reverse when changed', function() {
 		var initialReverse = false;
 		var newReverse = true;
-
 		var reverb = new Pizzicato.Effects.Reverb({ reverse: initialReverse });
 
 		expect(reverb.reverse).toEqual(initialReverse);
