@@ -187,7 +187,7 @@ For more creative freedom, Pizzicato also allows direct audio processing. Sounds
 For example:
 ```javascript
 var whiteNoise = Pizzicato.Sound({
-    type: 'script',
+    source: 'script',
     options: {
         audioFunction: function(e) {
             var output = e.outputBuffer.getChannelData(0);
