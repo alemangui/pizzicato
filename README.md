@@ -69,6 +69,7 @@ sawtoothWave.play();
   - [High-pass filter](#high-pass-filter)
   - [Stereo Panner](#stereo-panner)
   - [Convolver](#convolver)
+  - [Reverb](#reverb)
 - [Advanced](#advanced)
   - [Accessing the audio context](#accessing-the-context)
   - [Getting an analyser node for a sound](#analyser-node)
@@ -364,12 +365,33 @@ The convolver can be used to load in an impulse file, often for a reverb effect
 
 Example:
 ```javascript
-var convolver = new Pizzicato.Effects.convolver({
+var convolver = new Pizzicato.Effects.Convolver({
     impulse: './path/to/your/impulse.wav',
     mix: 0.5
 });
 
 sound.addEffect(convolver);
+sound.play();
+```
+
+<a name="reverb"/>
+### Reverb
+Unlike the convolver, the Reverb effect generates the impulse for you.
+
+* ```seconds``` _(number)_: duration of impulse, in seconds.
+* ```decay``` _(number)_: decay duration of impulse, in seconds.
+* ```reverse``` _(boolean)_: whether to reverse the impulse shape.
+
+Example:
+```javascript
+var reverb = new Pizzicato.Effects.Reverb({
+    seconds: 1,
+    decay: 0.8,
+    reverse: true,
+    mix: 0.5
+});
+
+sound.addEffect(reverb);
 sound.play();
 ```
 
