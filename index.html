@@ -172,7 +172,7 @@ sound.play();
             </div>
 
 
-            <h4>Delay</h4>
+            <a name="delay"></a><h4>Delay</h4>
 
             <pre><code class="language-javascript">
 var delay = new Pizzicato.Effects.Delay({
@@ -213,8 +213,49 @@ sound.play();
                 <button id="play-timba" class="play action"></button>
             </div>
 
+            <a name="ping-pong-delay"></a><h4>Ping-Pong Delay</h4>
 
-            <h4>Distortion</h4>
+            <pre><code class="language-javascript">
+var pingPongDelay = new Pizzicato.Effects.PingPongDelay({
+    feedback: 0.6,
+    time: 0.4,
+    mix: 0.5
+});
+
+sound.addEffect(pingPongDelay);
+sound.play();
+            </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-wah">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-wah" />
+                    <div class="slider-value">1</div>
+                </div>
+                <div class="slider">
+                    <label for="ping-pong-delay-feedback">Feedback</label>
+                    <input type="range" min="0" max="1" step="0.01" value="0.6" id="ping-pong-delay-feedback" />
+                    <div class="slider-value">0.6</div>
+                </div>
+                <div class="slider">
+                    <label for="ping-pong-delay-time">Time</label>
+                    <input type="range" min="0" max="5" step="0.001" value="0.3" id="ping-pong-delay-time" />
+                    <div class="slider-value">0.3</div>
+                </div>
+                <div class="slider">
+                    <label for="ping-pong-delay-mix">Mix</label>
+                    <input type="range" min="0" max="1" step="0.001" value="0.5" id="ping-pong-delay-mix" />
+                    <div class="slider-value">0.5</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="stop-wah" class="stop action"></button>
+                <button id="play-wah" class="play action"></button>
+            </div>
+
+
+            <a name="distortion"></a><h4>Distortion</h4>
 
             <pre><code class="language-javascript">
 var distortion = new Pizzicato.Effects.Distortion({
@@ -244,7 +285,7 @@ sound.play();
             </div>
 
 
-            <h4>Flanger</h4>
+            <a name="flanger"></a><h4>Flanger</h4>
 
             <pre><code class="language-javascript">
 var flanger = new Pizzicato.Effects.Flanger({
@@ -298,7 +339,112 @@ sound.play();
             </div>
 
 
-            <h4>Compressor</h4>
+            <a name="reverb"></a><h4>Reverb</h4>
+
+            <pre><code class="language-javascript">
+var reverb = new Pizzicato.Effects.Reverb({
+    time: 0.01,
+    decay: 0.01,
+    reverse: false,
+    mix: 0.5
+});
+
+sound.addEffect(reverb);
+sound.play();
+            </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-cavaquinho">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-cavaquinho" />
+                    <div class="slider-value">1</div>
+                </div>
+                <div class="slider">
+                    <label for="reverb-time">Time</label>
+                    <input type="range" min="0.01" max="3" step="0.01" value="0.01" id="reverb-time" />
+                    <div class="slider-value">0.01</div>
+                </div>
+                <div class="slider">
+                    <label for="reverb-decay">Decay</label>
+                    <input type="range" min="0.0" max="3" step="0.01" value="0.01" id="reverb-decay" />
+                    <div class="slider-value">0.01</div>
+                </div>
+                <div class="slider">
+                    <label for="reverb-mix">Mix</label>
+                    <input type="range" min="0" max="1" step="0.01" value="0.5" id="reverb-mix" />
+                    <div class="slider-value">0.5</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="stop-cavaquinho" class="stop action"></button>
+                <button id="play-cavaquinho" class="play action"></button>
+            </div>
+
+
+
+            <a name="convolver"></a><h4>Convolver</h4>
+
+            <pre><code class="language-javascript">
+var convolver = new Pizzicato.Effects.Convolver({
+    impulse: './audio/scala-milan.wav'
+    mix: 0.5
+}, function(error) {
+    sound.addEffect(convolver);
+    sound.play();
+});
+            </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-drums">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-drums" />
+                    <div class="slider-value">1</div>
+                </div>
+                <div class="slider">
+                    <label for="convolver-mix">Mix</label>
+                    <input type="range" min="0" max="1" step="0.01" value="0.5" id="convolver-mix" />
+                    <div class="slider-value">0.5</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="stop-drums" class="stop action"></button>
+                <button id="play-drums" class="play action"></button>
+            </div>
+
+
+            <a name="stereo-panner"></a><h4>Stereo panner</h4>
+
+            <pre><code class="language-javascript">
+var stereoPanner = new Pizzicato.Effects.StereoPanner({
+    pan: 0.0
+});
+
+sound.addEffect(stereoPanner);
+sound.play();
+            </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-stance-bass">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-stance-bass" />
+                    <div class="slider-value">1</div>
+                </div>
+                <div class="slider">
+                    <label for="stereo-panner-pan">Pan</label>
+                    <input type="range" min="-1" max="1" step="0.01" value="0.0" id="stereo-panner-pan" />
+                    <div class="slider-value">0.0</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="stop-stance-bass" class="stop action"></button>
+                <button id="play-stance-bass" class="play action"></button>
+            </div>
+
+
+            <a name="compressor"></a><h4>Compressor</h4>
 
             <pre><code class="language-javascript">
 var compressor = new Pizzicato.Effects.Compressor({
@@ -349,7 +495,7 @@ sound.play();
             </div>
 
 
-            <h4>Low-Pass Filter</h4>
+            <a name="low-pass-filter"></a><h4>Low-Pass Filter</h4>
 
             <pre><code class="language-javascript">
 var lowPassFilter = new Pizzicato.Effects.LowPassFilter({
@@ -385,7 +531,7 @@ sound.play();
             </div>
 
 
-            <h4>High-Pass Filter</h4>
+            <a name="high-pass-filter"></a><h4>High-Pass Filter</h4>
 
             <pre><code class="language-javascript">
 var highPassFilter = new Pizzicato.Effects.HighPassFilter({
