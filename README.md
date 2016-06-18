@@ -209,7 +209,7 @@ sound.removeEffect(delay);
 ```
 
 <a name="delay"/>
-### Delay
+### Delay ([example](https://alemangui.github.io/pizzicato/#delay))
 The delay effect plays back the sound a certain number of times in defined intervals, giving the impression of an echo. The following options are available when creating a delay effect:
 * ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
 * ```time``` _(min: 0, max: 180, defaults to 0.3)_: Interval time in seconds.
@@ -227,7 +227,7 @@ sound.play();
 ```
 
 <a name="pingpongdelay"/>
-### PingPongDelay
+### PingPongDelay ([example](https://alemangui.github.io/pizzicato/#ping-pong-delay))
 The ping pong delay effect is similar to a regular [Delay](#delay) effect, however on each feedback loop the output is swapped between left and right channels. The following options are available when creating a delay effect:
 * ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
 * ```time``` _(min: 0, max: 180, defaults to 0.3)_: Interval time in seconds.
@@ -245,7 +245,7 @@ sound.play();
 ```
 
 <a name="distortion"/>
-### Distortion
+### Distortion ([example](https://alemangui.github.io/pizzicato/#distortion))
 The distortion effect adds an "override" to the sound, similar to the ones found in guitar amps. The distortion effect only takes one parameter:
 * ```gain``` _(min: 0, max: 1, defaults to 0.5)_: Amount of distortion applied.
 * ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output.
@@ -260,7 +260,7 @@ sound.play();
 ```
 
 <a name="flanger"/>
-### Flanger
+### Flanger ([example](https://alemangui.github.io/pizzicato/#flanger))
 The flanger produces a swirling effect by delaying a "copy" of the sound by a small, gradually changing period. The flanger effect takes the folloeing parameters:
 * ```time``` _(min: 0, max: 1, defaults to 0.45)_: Changes the small delay time applied to the copied signal.
 * ```speed``` _(min: 0, max: 1, defaults to 0.2)_: Changes the speed at which the flanging occurs.
@@ -283,7 +283,7 @@ sound.play();
 ```
 
 <a name="compressor"/>
-### Compressor
+### Compressor ([example](https://alemangui.github.io/pizzicato/#compressor))
 A compressor allows reducing the range between the loudest and the quietest parts of a sound. This is done by boosting the quiet segments and attenuating the loud ones.
 
 The following options are available when creating a compressor effect:
@@ -308,7 +308,7 @@ sound.play();
 ```
 
 <a name="low-pass-filter"/>
-### Low-pass filter
+### Low-pass filter ([example](https://alemangui.github.io/pizzicato/#low-pass-filter))
 A low-pass filter passes signals with a frequency lower than a pre-determined cutoff frequency and attenuates signals with frequencies higher than the cutoff frequency. 
 
 * ```frequency``` _(min: 10, max: 22050, defaults to 350)_: The cutoff frequency of the low-pass filter.
@@ -327,7 +327,7 @@ sound.play();
 ```
 
 <a name="high-pass-filter"/>
-### High-pass filter
+### High-pass filter ([example](https://alemangui.github.io/pizzicato/#high-pass-filter))
 A high-pass filter is the opposite of a low-pass filter (described above). It attenuates signals with a frequency lower than a pre-determined cutoff frequency and passes signals with frequencies higher than the cutoff frequency. 
 
 * ```frequency``` _(min: 10, max: 22050, defaults to 350)_: The cutoff frequency of the high-pass filter.
@@ -346,7 +346,7 @@ sound.play();
 ```
 
 <a name="stereo-panner"/>
-### Stereo panner
+### Stereo panner ([example](https://alemangui.github.io/pizzicato/#stereo-panner))
 The stereo panner is used to adjust the level of a sound through the left and right speakers. A ```-1``` value will channel all the sound through the left speaker, whereas a ```1``` value will do so through the right speaker.
 
 * ```pan``` _(min: -1, max: 1, defaults to 0)_: Pan value between -1 (full left pan) and 1 (full right pan).
@@ -362,7 +362,7 @@ sound.play();
 ```
 
 <a name="convolver"/>
-### Convolver
+### Convolver ([example](https://alemangui.github.io/pizzicato/#convolver))
 The convolver effect allows the sound to be heard with a certain ressonance or repercussion. This can be useful to simulate certain environments such as auditoriums, concert halls, or small rooms. 
 
 In order to get this acoustic environment, an external audio file must be used as a sound sample. This audio file must contain the desired ambience that will shape the convolution. Due to this file, this effect is asynchronous, so a callback can be provided and will be executed once the effect is ready to be used.
@@ -392,7 +392,7 @@ sound.play();
 ```
 
 <a name="reverb"/>
-### Reverb
+### Reverb ([example](https://alemangui.github.io/pizzicato/#reverb))
 The reverb effect is similar to the convolver effect in that it allows the sound to be heard with a certain ressonance or repercussion. This simulates a particular physical environment in which the sound could be played (e.g., an auditorium, a concert hall, etc).
 
 Unlike the convolver effect, the reverb can be adjusted programatically without the need for any external elements.
