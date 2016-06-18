@@ -1,13 +1,12 @@
 Pizzicato.Effects.Convolver = function(options, callback) {
-	
-	var self = this;
 
 	this.options = {};
 	options = options || this.options;
 
+	var self = this;
+	var request = new XMLHttpRequest();
 	var defaults = {
-		mix: 0.5,
-		impulse: ''
+		mix: 0.5
 	};
 
 	this.callback = callback;
@@ -33,67 +32,41 @@ Pizzicato.Effects.Convolver = function(options, callback) {
 		this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
 	}
 
-	loadImpulseFile(options.impulse, self);
-};
-
-function loadImpulseFile(impulsepath, scope) {
+	if (!options.impulse) {
+		console.error('No impulse file specified.');
+		return;
+	}
 	
-	var request = new XMLHttpRequest();
-	request.open('GET', impulsepath, true);
+	request.open('GET', options.impulse, true);
 	request.responseType = 'arraybuffer';
-
 	request.onload = function (e) {
 		var audioData = e.target.response;
 
-		Pizzicato.context.decodeAudioData(
-			audioData, 
-			// success
-			(function(buffer) {
+		Pizzicato.context.decodeAudioData(audioData, function(buffer) {
 
-				scope.convolverNode.buffer = buffer;
+			self.convolverNode.buffer = buffer;
 
-				if (scope.callback && Pz.Util.isFunction(scope.callback)) 
-					scope.callback();
+			if (self.callback && Pz.Util.isFunction(self.callback)) 
+				self.callback();
 
-			}).bind(scope), 
+		}, function(error) {
 
-			// error
-			(function(error) {
+			error = error || new Error('Error decoding impulse file');
 
-				error = error || new Error('Error decoding impulse file ' + impulsepath);
-
-				if (scope.callback && Pz.Util.isFunction(scope.callback))
-					scope.callback(error);
-
-			}).bind(scope)
-		);
+			if (self.callback && Pz.Util.isFunction(self.callback))
+				self.callback(error);
+		});
 	};
 
 	request.onreadystatechange = function(event) {
-
 		if (request.readyState === 4 && request.status !== 200)
-			console.error('Error while fetching ' + impulsepath + '. ' + request.statusText);
+			console.error('Error while fetching ' + options.impulse + '. ' + request.statusText);
 	};
-	request.send();
-}
 
+	request.send();
+};
 
 Pizzicato.Effects.Convolver.prototype = Object.create(null, {
-
-	impulse: {
-		get: function() {
-			return this.options.impulse;
-		},
-
-		set: function(path) {
-			if (!Pz.Util.isString(path))
-				return;
-
-			this.options.impulse = path;
-
-			loadImpulseFile(this.options.impulse, this);
-		}
-	},
 
 	mix: {
 		enumerable: true,
@@ -111,5 +84,4 @@ Pizzicato.Effects.Convolver.prototype = Object.create(null, {
 			this.wetGainNode.gain.value = Pizzicato.Util.getWetLevel(this.mix);
 		}
 	}
-
 });

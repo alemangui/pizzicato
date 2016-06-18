@@ -10,7 +10,7 @@ Pizzicato.Effects.Reverb = function(options) {
 
 	var defaults = {
 		mix: 0.5,
-		seconds: 0.01,
+		time: 0.01,
 		decay: 0.01,
 		reverse: false
 	};
@@ -19,52 +19,25 @@ Pizzicato.Effects.Reverb = function(options) {
 		console.log('do nothing function');
 	};
 
-
 	this.inputNode = Pizzicato.context.createGain();
-
 	this.reverbNode = Pizzicato.context.createConvolver();
-	
 	this.outputNode = Pizzicato.context.createGain();
-
 	this.wetGainNode = Pizzicato.context.createGain();
 	this.dryGainNode = Pizzicato.context.createGain();
 
 	this.inputNode.connect(this.reverbNode);
-
 	this.reverbNode.connect(this.wetGainNode);
 	this.inputNode.connect(this.dryGainNode);
-
 	this.dryGainNode.connect(this.outputNode);
 	this.wetGainNode.connect(this.outputNode);
-
 	
 	for (var key in defaults) {
 		this[key] = options[key];
 		this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
 	}
 
-	buildImpulse(self);
+	(buildImpulse.bind(this))();
 };
-
-function buildImpulse(scope) {
-
-	var rate = Pizzicato.context.sampleRate, 
-		length = rate * scope.options.seconds, 
-		decay = scope.options.decay, 
-		impulse = Pizzicato.context.createBuffer(2, length, rate), 
-		impulseL = impulse.getChannelData(0), 
-		impulseR = impulse.getChannelData(1), 
-		n, i;
-
-	for (i = 0; i < length; i++) {
-		n = scope.reverse ? length - i : i;
-		impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay);
-		impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay);
-	}
-
-	scope.reverbNode.buffer = impulse;
-}
-
 
 Pizzicato.Effects.Reverb.prototype = Object.create(null, {
 
@@ -85,24 +58,19 @@ Pizzicato.Effects.Reverb.prototype = Object.create(null, {
 		}
 	},
 
-	seconds: {
+	time: {
 		enumerable: true,
 
 		get: function () {
-			return this.options.seconds;
+			return this.options.time;
 		},
 
-		set: function (seconds) {
-			if (!Pz.Util.isNumber(seconds))
+		set: function (time) {
+			if (!Pz.Util.isInRange(time, 0.0001, 10))
 				return;
 
-			if (seconds <= 0)
-				return;
-
-			console.log('Effect: setting seconds', seconds);
-
-			this.options.seconds = seconds;
-			buildImpulse(this);
+			this.options.time = time;
+			(buildImpulse.bind(this))();
 		}
 	},
 
@@ -114,16 +82,11 @@ Pizzicato.Effects.Reverb.prototype = Object.create(null, {
 		},
 
 		set: function (decay) {
-			if (!Pz.Util.isNumber(decay))
+			if (!Pz.Util.isInRange(decay, 0.0001, 10))
 				return;
-
-			if (decay <= 0)
-				return;
-
-			console.log('Effect: setting decay', decay);
 
 			this.options.decay = decay;
-			buildImpulse(this);
+			(buildImpulse.bind(this))();
 		}
 
 	},
@@ -140,9 +103,25 @@ Pizzicato.Effects.Reverb.prototype = Object.create(null, {
 				return;
 
 			this.options.reverse = reverse;
-			buildImpulse(this);
+			(buildImpulse.bind(this))();
 		}
-
 	}
 
 });
+
+function buildImpulse() {
+
+	var length = Pz.context.sampleRate * this.time;
+	var impulse = Pizzicato.context.createBuffer(2, length, Pz.context.sampleRate);
+	var impulseL = impulse.getChannelData(0);
+	var impulseR = impulse.getChannelData(1);
+	var n, i;
+
+	for (i = 0; i < length; i++) {
+		n = this.reverse ? length - i : i;
+		impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, this.decay);
+		impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, this.decay);
+	}
+
+	this.reverbNode.buffer = impulse;
+}

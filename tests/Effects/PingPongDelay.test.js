@@ -6,11 +6,11 @@ describe('Effects.PingPongDelay', function() {
 			time: 0.6,
 			mix: 0
 		};
-		var pingpongdelay = new Pizzicato.Effects.PingPongDelay(options);
+		var pingPongDelay = new Pizzicato.Effects.PingPongDelay(options);
 
-		expect(pingpongdelay.feedback).toBe(options.feedback);
-		expect(pingpongdelay.time).toBe(options.time);
-		expect(pingpongdelay.mix).toBe(options.mix);
+		expect(pingPongDelay.feedback).toBe(options.feedback);
+		expect(pingPongDelay.time).toBe(options.time);
+		expect(pingPongDelay.mix).toBe(options.mix);
 	});
 
 
@@ -21,54 +21,54 @@ describe('Effects.PingPongDelay', function() {
 			mix: -100000
 		};
 
-		var pingpongdelay = new Pizzicato.Effects.PingPongDelay(options);
+		var pingPongDelay = new Pizzicato.Effects.PingPongDelay(options);
 
-		expect(pingpongdelay.feedback).toBe(0.5);
-		expect(pingpongdelay.time).toBe(0.3);
-		expect(pingpongdelay.mix).toBe(0.5);
+		expect(pingPongDelay.feedback).toBe(0.5);
+		expect(pingPongDelay.time).toBe(0.3);
+		expect(pingPongDelay.mix).toBe(0.5);
 	});
 
 
 	it('Should change the gain node values when changing the mix', function() {
 		var initialMix = 0;
 		var newMix = 0.5;
-		var pingpongdelay = new Pizzicato.Effects.PingPongDelay({ mix: initialMix });
+		var pingPongDelay = new Pizzicato.Effects.PingPongDelay({ mix: initialMix });
 
-		expect(pingpongdelay.dryGainNode.gain.value).toBeCloseTo(Pz.Util.getDryLevel(initialMix));
-		expect(pingpongdelay.wetGainNode.gain.value).toBeCloseTo(Pz.Util.getWetLevel(initialMix));
+		expect(pingPongDelay.dryGainNode.gain.value).toBeCloseTo(Pz.Util.getDryLevel(initialMix));
+		expect(pingPongDelay.wetGainNode.gain.value).toBeCloseTo(Pz.Util.getWetLevel(initialMix));
 
-		pingpongdelay.mix = newMix;
+		pingPongDelay.mix = newMix;
 
-		expect(pingpongdelay.dryGainNode.gain.value).toBeCloseTo(Pz.Util.getDryLevel(newMix));
-		expect(pingpongdelay.wetGainNode.gain.value).toBeCloseTo(Pz.Util.getWetLevel(newMix));
+		expect(pingPongDelay.dryGainNode.gain.value).toBeCloseTo(Pz.Util.getDryLevel(newMix));
+		expect(pingPongDelay.wetGainNode.gain.value).toBeCloseTo(Pz.Util.getWetLevel(newMix));
 	});
 
 
 	it('Should change the delay node time values when changing the time', function() {
 		var initialTime = 0.3;
 		var newTime = 0.5;
-		var pingpongdelay = new Pizzicato.Effects.PingPongDelay({ time: initialTime });
+		var pingPongDelay = new Pizzicato.Effects.PingPongDelay({ time: initialTime });
 
-		expect(pingpongdelay.delayNodeLeft.delayTime.value).toBeCloseTo(initialTime);
-		expect(pingpongdelay.delayNodeRight.delayTime.value).toBeCloseTo(initialTime);
+		expect(pingPongDelay.delayNodeLeft.delayTime.value).toBeCloseTo(initialTime);
+		expect(pingPongDelay.delayNodeRight.delayTime.value).toBeCloseTo(initialTime);
 
-		pingpongdelay.time = newTime;
+		pingPongDelay.time = newTime;
 
-		expect(pingpongdelay.delayNodeLeft.delayTime.value).toBeCloseTo(newTime);
-		expect(pingpongdelay.delayNodeRight.delayTime.value).toBeCloseTo(newTime);
+		expect(pingPongDelay.delayNodeLeft.delayTime.value).toBeCloseTo(newTime);
+		expect(pingPongDelay.delayNodeRight.delayTime.value).toBeCloseTo(newTime);
 	});
 
 
 	it('Should change the feedback strength when changing the feedback', function() {
 		var initialFeedback = 0.4;
 		var newFeedback = 0.5;
-		var pingpongdelay = new Pizzicato.Effects.PingPongDelay({ feedback: initialFeedback });
+		var pingPongDelay = new Pizzicato.Effects.PingPongDelay({ feedback: initialFeedback });
 
-		expect(pingpongdelay.feedbackGainNode.gain.value).toBeCloseTo(initialFeedback);
+		expect(pingPongDelay.feedbackGainNode.gain.value).toBeCloseTo(initialFeedback);
 
-		pingpongdelay.feedback = newFeedback;
+		pingPongDelay.feedback = newFeedback;
 
-		expect(pingpongdelay.feedbackGainNode.gain.value).toBeCloseTo(newFeedback);
+		expect(pingPongDelay.feedbackGainNode.gain.value).toBeCloseTo(newFeedback);
 	});
 
 });

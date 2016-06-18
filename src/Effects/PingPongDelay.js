@@ -15,7 +15,6 @@ Pizzicato.Effects.PingPongDelay = function(options) {
 
 	this.inputNode = Pizzicato.context.createGain();
 	this.outputNode = Pizzicato.context.createGain();
-
 	this.delayNodeLeft = Pizzicato.context.createDelay();
 	this.delayNodeRight = Pizzicato.context.createDelay();
 
@@ -23,8 +22,6 @@ Pizzicato.Effects.PingPongDelay = function(options) {
 
 	this.dryGainNode = Pizzicato.context.createGain();
 	this.wetGainNode = Pizzicato.context.createGain();
-
-	// feedback loop
 	this.feedbackGainNode = Pizzicato.context.createGain();
 	this.feedbackGainNode.connect(this.delayNodeLeft);
 	this.delayNodeRight.connect(this.feedbackGainNode);

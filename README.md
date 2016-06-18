@@ -228,19 +228,19 @@ sound.play();
 
 <a name="pingpongdelay"/>
 ### PingPongDelay
-This is the same as the delay effect, however on each feedback loop the output is swapped between left and right channels. The following options are available when creating a delay effect:
+The ping pong delay effect is similar to a regular [Delay](#delay) effect, however on each feedback loop the output is swapped between left and right channels. The following options are available when creating a delay effect:
 * ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
 * ```time``` _(min: 0, max: 180, defaults to 0.3)_: Interval time in seconds.
 * ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output (the delayed sound).
 
 Example:
 ```javascript
-var pingpongdelay = new Pizzicato.Effects.PingPongDelay({
+var pingPongDelay = new Pizzicato.Effects.PingPongDelay({
     feedback: 0.3,
     time: 0.2,
     mix: 0.68
 });
-sound.addEffect(pingpongdelay);
+sound.addEffect(pingPongDelay);
 sound.play();
 ```
 
@@ -248,6 +248,7 @@ sound.play();
 ### Distortion
 The distortion effect adds an "override" to the sound, similar to the ones found in guitar amps. The distortion effect only takes one parameter:
 * ```gain``` _(min: 0, max: 1, defaults to 0.5)_: Amount of distortion applied.
+* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output.
 
 Example:
 ```javascript
@@ -286,11 +287,12 @@ sound.play();
 A compressor allows reducing the range between the loudest and the quietest parts of a sound. This is done by boosting the quiet segments and attenuating the loud ones.
 
 The following options are available when creating a compressor effect:
-* ```threshold``` _(min: -100, max: 0, defaults to -24)_ The decibel value above which the compression will start taking effect.
-* ```knee``` _(min: 0, max: 40, defaults to 30)_ A value representing the range above the threshold where the curve smoothly transitions to the "ratio" portion.
-* ```attack``` _(min: 0, max: 1, defaults to 0.003)_ How soon the compressor starts to compress the dynamics after the threshold is exceeded. Short values will result in a fast response to sudden, loud sounds, but will make the changes in volume more obvious to listeners.
-* ```release``` _(min: 0, max: 1, defaults to 0.025)_ How soon the compressor starts to release the volume level back to normal after the level drops below the threshold. 
-* ```ratio``` _(min: 1, max: 20, defaults to 12)_  The amount of compression applied to the audio once it passes the threshold level. The higher the Ratio the more the loud parts of the audio will be compressed.
+* ```threshold``` _(min: -100, max: 0, defaults to -24)_: The decibel value above which the compression will start taking effect.
+* ```knee``` _(min: 0, max: 40, defaults to 30)_: A value representing the range above the threshold where the curve smoothly transitions to the "ratio" portion.
+* ```attack``` _(min: 0, max: 1, defaults to 0.003)_: How soon the compressor starts to compress the dynamics after the threshold is exceeded. Short values will result in a fast response to sudden, loud sounds, but will make the changes in volume more obvious to listeners.
+* ```release``` _(min: 0, max: 1, defaults to 0.025)_: How soon the compressor starts to release the volume level back to normal after the level drops below the threshold. 
+* ```ratio``` _(min: 1, max: 20, defaults to 12)_:  The amount of compression applied to the audio once it passes the threshold level. The higher the Ratio the more the loud parts of the audio will be compressed.
+* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output.
 
 Example:
 ```javascript
@@ -311,6 +313,7 @@ A low-pass filter passes signals with a frequency lower than a pre-determined cu
 
 * ```frequency``` _(min: 10, max: 22050, defaults to 350)_: The cutoff frequency of the low-pass filter.
 * ```peak``` _(min: 0.0001, max: 1000, defaults to 1)_: Indicates how peaked the frequency is around the cutoff frequency. The greater the value is, the greater is the peak.
+* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output.
 
 Example:
 ```javascript
@@ -329,6 +332,7 @@ A high-pass filter is the opposite of a low-pass filter (described above). It at
 
 * ```frequency``` _(min: 10, max: 22050, defaults to 350)_: The cutoff frequency of the high-pass filter.
 * ```peak``` _(min: 0.0001, max: 1000, defaults to 1)_: Indicates how peaked the frequency is around the cutoff frequency. The greater the value is, the greater is the peak.
+* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output.
 
 Example:
 ```javascript
@@ -343,7 +347,7 @@ sound.play();
 
 <a name="stereo-panner"/>
 ### Stereo panner
-The stereo panner is used to pan an audio stream left or right.
+The stereo panner is used to adjust the level of a sound through the left and right speakers. A ```-1``` value will channel all the sound through the left speaker, whereas a ```1``` value will do so through the right speaker.
 
 * ```pan``` _(min: -1, max: 1, defaults to 0)_: Pan value between -1 (full left pan) and 1 (full right pan).
 
@@ -359,15 +363,28 @@ sound.play();
 
 <a name="convolver"/>
 ### Convolver
-The convolver can be used to load in an impulse file, often for a reverb effect
+The convolver effect allows the sound to be heard with a certain ressonance or repercussion. This can be useful to simulate certain environments such as auditoriums, concert halls, or small rooms. 
 
-* ```impulse``` _(Mandatory; string)_: path to your impulse file.
+In order to get this acoustic environment, an external audio file must be used as a sound sample. This audio file must contain the desired ambience that will shape the convolution. Due to this file, this effect is asynchronous, so a callback can be provided and will be executed once the effect is ready to be used.
+
+The [reverb](#reverb) is similar but allows programatic adjustments instead of requiring an external impulse file.
+
+_options object_
+
+* ```impulse``` _(Mandatory; string)_: Path to your impulse file.
+* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output.
+
+_callback_
+
+* ```callback``` _(function)_: function executed when the impulse file has been correctly loaded and the effect is ready to be used.
 
 Example:
 ```javascript
 var convolver = new Pizzicato.Effects.Convolver({
     impulse: './path/to/your/impulse.wav',
     mix: 0.5
+}, function() {
+    console.log('Convolver ready to be used.');
 });
 
 sound.addEffect(convolver);
@@ -376,16 +393,19 @@ sound.play();
 
 <a name="reverb"/>
 ### Reverb
-Unlike the convolver, the Reverb effect generates the impulse for you.
+The reverb effect is similar to the convolver effect in that it allows the sound to be heard with a certain ressonance or repercussion. This simulates a particular physical environment in which the sound could be played (e.g., an auditorium, a concert hall, etc).
 
-* ```seconds``` _(number)_: duration of impulse, in seconds.
-* ```decay``` _(number)_: decay duration of impulse, in seconds.
-* ```reverse``` _(boolean)_: whether to reverse the impulse shape.
+Unlike the convolver effect, the reverb can be adjusted programatically without the need for any external elements.
+
+* ```time``` _(min: 0.0001, max: 10, defaults to 0.01)_: Duration of impulse, in seconds.
+* ```decay``` _(min: 0, max: 10, defaults to 0.01)_: The rate for the reflections of sound to fade away.
+* ```reverse``` _(boolean)_: Whether or not to reverse the impulse shape.
+* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output.
 
 Example:
 ```javascript
 var reverb = new Pizzicato.Effects.Reverb({
-    seconds: 1,
+    time: 1,
     decay: 0.8,
     reverse: true,
     mix: 0.5

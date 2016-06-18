@@ -5,7 +5,6 @@ describe('Effects.Convolver', function() {
 			mix: 0
 		};
 		var convolver = new Pizzicato.Effects.Convolver(options);
-
 		expect(convolver.mix).toBe(options.mix);
 	});
 
@@ -34,5 +33,29 @@ describe('Effects.Convolver', function() {
 		expect(convolver.dryGainNode.gain.value).toBeCloseTo(Pz.Util.getDryLevel(newMix));
 		expect(convolver.wetGainNode.gain.value).toBeCloseTo(Pz.Util.getWetLevel(newMix));
 	});
+
+
+	it('Should execute the callback when loading an impulse file', function(done) {
+		var options = {
+			mix: 0,
+			impulse: 'base/tests/scala-milan.wav'
+		};
+		var convolver = new Pizzicato.Effects.Convolver(options, function(error) {
+			expect(error).toBe(undefined);
+			done();
+		});
+	}, 5000);
+
+
+	it('Should execute the callback with an error if the file does not exist', function(done) {
+		var options = {
+			mix: 0,
+			impulse: 'base/tests/non-existent.wav'
+		};
+		var convolver = new Pizzicato.Effects.Convolver(options, function(error) {
+			expect(error).not.toBe(undefined);
+			done();
+		});
+	}, 5000);
 
 });

@@ -4,7 +4,7 @@ describe('Effects.Reverb', function() {
 		var options = {
 			mix: 0,
 			decay: 7,
-			seconds: 10,
+			time: 10,
 			reverse: true
 		};
 		var reverb = new Pizzicato.Effects.Reverb(options);
@@ -17,13 +17,13 @@ describe('Effects.Reverb', function() {
 		var options = {
 			mix: -100000,
 			decay: 'tooth',
-			seconds: 'Rock Hudson movie',
+			time: 'Rock Hudson movie',
 			reverse: 1
 		};
 
 		var defaults = {
 			mix: 0.5,
-			seconds: 0.01,
+			time: 0.01,
 			decay: 0.01,
 			reverse: false
 		};
@@ -33,7 +33,7 @@ describe('Effects.Reverb', function() {
 
 		expect(reverb.mix).toBe(defaults.mix);
 		expect(reverb.reverse).toBeFalsy();
-		expect(reverb.seconds).toBe(defaults.seconds);
+		expect(reverb.time).toBe(defaults.time);
 		expect(reverb.decay).toBe(defaults.decay);
 
 	});
@@ -50,16 +50,16 @@ describe('Effects.Reverb', function() {
 		expect(reverb.decay).toEqual(newDecay);
 	});
 
-	it('Should modify the seconds when changed', function() {
-		var initialSeconds = 0.8;
-		var newSeconds = 0.3;
-		var reverb = new Pizzicato.Effects.Reverb({ seconds: initialSeconds });
+	it('Should modify the time when changed', function() {
+		var initialTime = 0.8;
+		var newTime = 0.3;
+		var reverb = new Pizzicato.Effects.Reverb({ time: initialTime });
 
-		expect(reverb.seconds).toEqual(initialSeconds);
+		expect(reverb.time).toEqual(initialTime);
 
-		reverb.seconds = newSeconds;
+		reverb.time = newTime;
 
-		expect(reverb.seconds).toEqual(newSeconds);
+		expect(reverb.time).toEqual(newTime);
 	});
 
 	it('Should modify the reverse when changed', function() {
