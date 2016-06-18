@@ -1,16 +1,21 @@
 // Dolby format detection - taken from https://s3-us-west-1.amazonaws.com/dolbydeveloper/1.1.0/js/dolby.min.js
 var Dolby=Dolby||{};!function(){"use strict";Dolby.supportDDPlus=!1;var e=new Audio;""!=e.canPlayType('audio/mp4;codecs="ec-3"')&&(-1==navigator.userAgent.indexOf("CPU iPhone OS 9_3")&&-1==navigator.userAgent.indexOf("CPU OS 9_3")||-1==navigator.userAgent.indexOf("Safari")||-1==navigator.userAgent.indexOf("Version/9")||(Dolby.supportDDPlus=!0),-1!=navigator.userAgent.indexOf("Mac OS X 10_1")&&-1!=navigator.userAgent.indexOf("Safari")&&-1!=navigator.userAgent.indexOf("Version/9")&&(Dolby.supportDDPlus=!0),-1!=navigator.userAgent.indexOf("Edge")&&(Dolby.supportDDPlus=!0),-1!=navigator.userAgent.indexOf("Windows Phone 10")&&(Dolby.supportDDPlus=!1)),Dolby.checkDDPlus=function(){return Dolby.supportDDPlus}}();
-
 var dolbySupported = Dolby.checkDDPlus();
 
+// Effects
 var delay = new Pizzicato.Effects.Delay({
-  repetitions: 6,
+  feedback: 0.6,
   time: 0.4,
   mix: 0.5
 });
+var pingPongDelay = new Pizzicato.Effects.PingPongDelay({
+	feedback: 0.6,
+	time: 0.4,
+	mix: 0.5
+});
 var compressor = new Pizzicato.Effects.Compressor({
-  threshold: -24,
-  ratio: 12
+	threshold: -24,
+	ratio: 12
 });
 var lowPassFilter = new Pizzicato.Effects.LowPassFilter({
 	frequency: 400,
@@ -24,7 +29,11 @@ var distortion = new Pizzicato.Effects.Distortion({
 	gain: 0.4
 });
 var flanger = new Pizzicato.Effects.Flanger();
+var stereoPanner = new Pizzicato.Effects.StereoPanner();
+var reverb = new Pizzicato.Effects.Reverb();
+var convolver = new Pizzicato.Effects.Convolver({ impulse: './audio/scala-milan.wav' });
 
+// Sounds
 var sineWave = new Pz.Sound();
 var sineWaveSustain = new Pz.Sound({ source: 'wave', options: { frequency: 220, sustain: 1, attack:0.5 } });
 var acoustic = new Pz.Sound(dolbySupported ? './audio/acoustic_Dolby.mp4' : './audio/acoustic.m4a');
@@ -76,6 +85,40 @@ var electricGuitar = new Pz.Sound({
 		loop: true 
 	}
 }, function() { electricGuitar.addEffect(flanger); });
+
+var wah = new Pz.Sound({ 
+	source: 'file', 
+	options: { 
+		path: './audio/wah.m4a', 
+		loop: true 
+	}
+}, function() { wah.addEffect(pingPongDelay); });
+
+var stanceBass = new Pz.Sound({ 
+	source: 'file', 
+	options: { 
+		path: './audio/stance-bass.m4a', 
+		loop: true 
+	}
+}, function() { stanceBass.addEffect(stereoPanner); });
+
+var cavaquinho = new Pz.Sound({ 
+	source: 'file', 
+	options: { 
+		path: './audio/cavaquinho.m4a', 
+		loop: true 
+	}
+}, function() { cavaquinho.addEffect(reverb); });
+
+var drums = new Pz.Sound({ 
+	source: 'file', 
+	options: { 
+		path: './audio/drums.m4a', 
+		loop: true 
+	}
+}, function() { 
+	drums.addEffect(convolver); 
+});
 
 var whiteNoise = new Pz.Sound(function(e) {
   var output = e.outputBuffer.getChannelData(0);
@@ -136,6 +179,66 @@ var segments = [
 					feedback: document.getElementById('delay-feedback'),
 					time: document.getElementById('delay-time'),
 					mix: document.getElementById('delay-mix')
+				}
+			}
+		]
+	},
+	{
+		audio: wah,
+		playButton: document.getElementById('play-wah'),
+		stopButton: document.getElementById('stop-wah'),
+		volumeSlider: document.getElementById('volume-wah'),
+		effects: [
+			{
+				instance: pingPongDelay,
+				parameters: {
+					feedback: document.getElementById('ping-pong-delay-feedback'),
+					time: document.getElementById('ping-pong-delay-time'),
+					mix: document.getElementById('ping-pong-delay-mix')
+				}
+			}
+		]
+	},
+	{
+		audio: stanceBass,
+		playButton: document.getElementById('play-stance-bass'),
+		stopButton: document.getElementById('stop-stance-bass'),
+		volumeSlider: document.getElementById('volume-stance-bass'),
+		effects: [
+			{
+				instance: stereoPanner,
+				parameters: {
+					pan: document.getElementById('stereo-panner-pan')
+				}
+			}
+		]
+	},
+	{
+		audio: cavaquinho,
+		playButton: document.getElementById('play-cavaquinho'),
+		stopButton: document.getElementById('stop-cavaquinho'),
+		volumeSlider: document.getElementById('volume-cavaquinho'),
+		effects: [
+			{
+				instance: reverb,
+				parameters: {
+					time: document.getElementById('reverb-time'),
+					decay: document.getElementById('reverb-decay'),
+					mix: document.getElementById('reverb-mix')
+				}
+			}
+		]
+	},
+	{
+		audio: drums,
+		playButton: document.getElementById('play-drums'),
+		stopButton: document.getElementById('stop-drums'),
+		volumeSlider: document.getElementById('volume-drums'),
+		effects: [
+			{
+				instance: convolver,
+				parameters: {
+					mix: document.getElementById('convolver-mix')
 				}
 			}
 		]
