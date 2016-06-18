@@ -1364,11 +1364,7 @@
 			decay: 0.01,
 			reverse: false
 		};
-	
-		this.callback = function () {
-			console.log('do nothing function');
-		};
-	
+		
 		this.inputNode = Pizzicato.context.createGain();
 		this.reverbNode = Pizzicato.context.createConvolver();
 		this.outputNode = Pizzicato.context.createGain();
