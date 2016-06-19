@@ -238,7 +238,41 @@ describe('Sound', function() {
 					done();
 				}, 1000);
 			});
-		}, 5000);
+		}, 10000);
+
+		it('should offset upon playing when specified', function(done) {
+			var endCallback = jasmine.createSpy('endCallback');
+			var clipDuration = 4;
+			var offset = 3;
+
+			var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
+				
+				sound.on('end', endCallback);
+				sound.play(0, offset);
+
+				setTimeout(function() {
+					expect(endCallback).toHaveBeenCalled();
+					done();
+				}, 2000);
+			});
+		}, 8000);
+
+		it('should wait before playing when specified', function(done) {
+			var endCallback = jasmine.createSpy('endCallback');
+			var clipDuration = 4;
+			var when = 2;
+
+			var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
+				
+				sound.on('end', endCallback);
+				sound.play(when, 0);
+
+				setTimeout(function() {
+					expect(endCallback).not.toHaveBeenCalled();
+					done();
+				}, 5000);
+			});
+		}, 8000);
 
 		it('Pausing or stopping should have no effect when no source node is available', function() {
 			var callback = jasmine.createSpy('endCallback');		
