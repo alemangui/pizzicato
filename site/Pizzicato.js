@@ -186,7 +186,7 @@
 		this.attack = hasOptions && util.isNumber(description.options.attack) ? description.options.attack : defaultAttack;
 		this.sustain = hasOptions && util.isNumber(description.options.sustain) ? description.options.sustain : defaultSustain;
 		this.volume = hasOptions && util.isNumber(description.options.volume) ? description.options.volume : 1;
-		
+	
 		if (!description)
 			(initializeWithWave.bind(this))({}, callback);
 	
@@ -208,14 +208,14 @@
 		else if (description.source === 'script')
 			(initializeWithFunction.bind(this))(description.options, callback);
 	
-		function getDescriptionError (description) {
+		function getDescriptionError(description) {
 			var supportedSources = ['wave', 'file', 'input', 'script'];
 	
 			if (description && (!util.isFunction(description) && !util.isString(description) && !util.isObject(description)))
 				return 'Description type not supported. Initialize a sound using an object, a function or a string.';
 	
 			if (util.isObject(description)) {
-				
+	
 				if (!util.isString(description.source) || supportedSources.indexOf(description.source) === -1)
 					return 'Specified source not supported. Sources can be wave, file, input or script';
 	
@@ -228,7 +228,7 @@
 		}
 	
 	
-		function initializeWithWave (waveOptions, callback) {
+		function initializeWithWave(waveOptions, callback) {
 			waveOptions = waveOptions || {};
 			this.getRawSourceNode = function() {
 				var frequency = this.sourceNode ? this.sourceNode.frequency.value : waveOptions.frequency;
@@ -240,12 +240,12 @@
 			};
 			this.sourceNode = this.getRawSourceNode();
 	
-			if (util.isFunction(callback)) 
+			if (util.isFunction(callback))
 				callback();
 		}
 	
 	
-		function initializeWithUrl (paths, callback) {
+		function initializeWithUrl(paths, callback) {
 			paths = util.isArray(paths) ? paths : [paths];
 	
 			var request = new XMLHttpRequest();
@@ -262,7 +262,7 @@
 						node.buffer = buffer;
 						return node;
 					};
-					if (util.isFunction(callback)) 
+					if (util.isFunction(callback))
 						callback();
 	
 				}).bind(self), (function(error) {
@@ -295,9 +295,11 @@
 		function initializeWithInput(options, callback) {
 			navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 	
-			if (!navigator.getUserMedia) return; 
+			if (!navigator.getUserMedia) return;
 	
-			navigator.getUserMedia({ audio: true }, (function(stream) {
+			navigator.getUserMedia({
+				audio: true
+			}, (function(stream) {
 				self.getRawSourceNode = function() {
 					return Pizzicato.context.createMediaStreamSource(stream);
 				};
@@ -336,19 +338,27 @@
 	
 		play: {
 			enumerable: true,
-			
-			value: function() {
-				if (this.playing) 
+	
+			value: function(when, offset) {
+	
+				if (this.playing)
 					return;
+	
+				if (!Pz.Util.isNumber(offset))
+					offset = this.offsetTime || 0;
+	
+				if (!Pz.Util.isNumber(when))
+					when = 0;
 	
 				this.playing = true;
 				this.paused = false;
 				this.sourceNode = this.getSourceNode();
+	
 				this.applyAttack();
 	
 				if (Pz.Util.isFunction(this.sourceNode.start)) {
-					this.lastTimePlayed = Pizzicato.context.currentTime;
-					this.sourceNode.start(0, this.startTime || 0);
+					this.lastTimePlayed = Pizzicato.context.currentTime - offset;
+					this.sourceNode.start(Pz.context.currentTime + when, offset);
 				}
 	
 				this.trigger('play');
@@ -358,15 +368,15 @@
 	
 		stop: {
 			enumerable: true,
-			
+	
 			value: function() {
-				if (!this.paused && !this.playing) 
+				if (!this.paused && !this.playing)
 					return;
 	
 				this.paused = this.playing = false;
 				this.stopWithSustain();
-					
-				this.startTime = 0;
+	
+				this.offsetTime = 0;
 				this.trigger('stop');
 			}
 		},
@@ -374,17 +384,17 @@
 	
 		pause: {
 			enumerable: true,
-			
+	
 			value: function() {
-				if (this.paused || !this.playing) 
+				if (this.paused || !this.playing)
 					return;
 	
 				this.paused = true;
 				this.playing = false;
 	
-				this.stopWithSustain();	
+				this.stopWithSustain();
 	
-				this.startTime = Pz.context.currentTime - this.lastTimePlayed;
+				this.offsetTime = Pz.context.currentTime - this.lastTimePlayed;
 				this.trigger('pause');
 			}
 		},
@@ -392,7 +402,7 @@
 	
 		onEnded: {
 			enumerable: true,
-			
+	
 			value: function() {
 				if (this.playing)
 					this.stop();
@@ -404,7 +414,7 @@
 	
 		addEffect: {
 			enumerable: true,
-			
+	
 			value: function(effect) {
 				this.effects.push(effect);
 				this.connectEffects();
@@ -418,12 +428,12 @@
 	
 		removeEffect: {
 			enumerable: true,
-			
+	
 			value: function(effect) {
 	
 				var index = this.effects.indexOf(effect);
 	
-				if (index === -1) 
+				if (index === -1)
 					return;
 	
 				var shouldResumePlaying = this.playing;
@@ -447,23 +457,23 @@
 	
 		connectEffects: {
 			enumerable: true,
-			
+	
 			value: function() {
 				for (var i = 0; i < this.effects.length; i++) {
-					
+	
 					var isLastEffect = i === this.effects.length - 1;
 					var destinationNode = isLastEffect ? this.masterVolume : this.effects[i + 1].inputNode;
 	
 					this.effects[i].outputNode.disconnect();
 					this.effects[i].outputNode.connect(destinationNode);
 				}
-			}	
+			}
 		},
 	
 	
 		volume: {
 			enumerable: true,
-			
+	
 			get: function() {
 				if (this.masterVolume)
 					return this.masterVolume.gain.value;
@@ -525,7 +535,7 @@
 			enumerable: true,
 	
 			value: function() {
-				if (this.effects.length > 0) 
+				if (this.effects.length > 0)
 					return this.effects[0].inputNode;
 	
 				return this.masterVolume;
@@ -543,7 +553,7 @@
 	
 				if (this.analyser)
 					return this.analyser;
-		
+	
 				this.analyser = Pizzicato.context.createAnalyser();
 				this.masterVolume.disconnect();
 				this.masterVolume.connect(this.analyser);
@@ -589,11 +599,12 @@
 	
 				this.fadeNode.gain.setValueAtTime(this.fadeNode.gain.value, Pizzicato.context.currentTime);
 				this.fadeNode.gain.linearRampToValueAtTime(0.00001, Pizzicato.context.currentTime + this.sustain);
-				window.setTimeout(function() { stopSound(); }, this.sustain * 1000);
+				window.setTimeout(function() {
+					stopSound();
+				}, this.sustain * 1000);
 			}
 		}
 	});
-	
 	Pizzicato.Effects = {};
 	Pizzicato.Effects.Delay = function(options) {
 	

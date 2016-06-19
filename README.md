@@ -59,6 +59,10 @@ sawtoothWave.play();
   - [Sounds from a file](#sounds-from-a-file)
   - [Sounds from input](#sounds-from-input)
   - [Sounds from a function](#sounds-from-a-function)
+- [Using sounds](#using-sounds)
+  - [Play](#sounds-play)
+  - [Pause](#sounds-pause)
+  - [Stop](#sounds-stop)
 - [Effects](#effects)
   - [Delay](#delay)
   - [PingPongDelay](#pingpongdelay)
@@ -197,6 +201,41 @@ var whiteNoise = Pizzicato.Sound({
         }
     }
 });
+```
+
+<a name="using-sounds"/>
+## Using sounds
+
+<a name="sounds-play"/>
+### Play
+
+You can play a sound by calling it's ```play``` function. It takes two optional parameters:
+
+* ```when``` _(number, defaults to 0)_: Time in seconds to wait before playing the sound.
+* ```offset``` _(number, defaults to 0)_: Time in seconds where the sound will start.
+
+For example, the following code will wait two seconds, then play a sound starting from position 00:04:
+
+```javascript
+sound.play(2, 4);
+```
+
+<a name="sounds-pause"/>
+### Pause
+
+You can pause a sound by calling it's ```pause``` function. Next time the sound is played, it will continue from where it left off.
+
+```javascript
+sound.pause();
+```
+
+<a name="sounds-stop"/>
+### Stop
+
+You can stop a sound by calling it's ```stop``` function. Next time the sound is played, it will continue from the start of the sound.
+
+```javascript
+sound.stop();
 ```
 
 <a name="effects"/>
