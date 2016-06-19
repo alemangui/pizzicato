@@ -238,7 +238,7 @@ describe('Sound', function() {
 					done();
 				}, 1000);
 			});
-		}, 5000);
+		}, 10000);
 
 		it('should offset upon playing when specified', function(done) {
 			var endCallback = jasmine.createSpy('endCallback');
