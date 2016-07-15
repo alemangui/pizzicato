@@ -63,6 +63,7 @@ sawtoothWave.play();
   - [Play](#sounds-play)
   - [Pause](#sounds-pause)
   - [Stop](#sounds-stop)
+  - [Clone](#sounds-clone)
 - [Effects](#effects)
   - [Delay](#delay)
   - [PingPongDelay](#pingpongdelay)
@@ -236,6 +237,15 @@ You can stop a sound by calling it's ```stop``` function. Next time the sound is
 
 ```javascript
 sound.stop();
+```
+
+<a name="sounds-clone"/>
+### Clone
+
+You can clone a sound object by calling it's ```clone``` function. The object returned will have the same parameters as the original sound.
+
+```javascript
+sound.clone();
 ```
 
 <a name="effects"/>
