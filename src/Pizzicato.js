@@ -48,6 +48,7 @@
 	//= require ./Effects/Convolver.js
 	//= require ./Effects/PingPongDelay.js
 	//= require ./Effects/Reverb.js
+	//= require ./Effects/DubDelay.js
 	
 	return Pizzicato;
 })(this);

@@ -750,12 +750,21 @@
 		this.feedbackGainNode = Pizzicato.context.createGain();
 		this.delayNode = Pizzicato.context.createDelay();
 	
+		// line in to dry mix
 		this.inputNode.connect(this.dryGainNode);
-		this.inputNode.connect(this.delayNode);
-		this.delayNode.connect(this.feedbackGainNode);
-		this.delayNode.connect(this.wetGainNode);
-		this.feedbackGainNode.connect(this.delayNode);
+		// dry line out
 		this.dryGainNode.connect(this.outputNode);
+	
+		// feedback loop
+		this.delayNode.connect(this.feedbackGainNode);
+		this.feedbackGainNode.connect(this.delayNode);
+	
+		// line in to wet mix
+		this.inputNode.connect(this.delayNode);
+		// wet out
+		this.delayNode.connect(this.wetGainNode);
+		
+		// wet line out
 		this.wetGainNode.connect(this.outputNode);
 	
 		for (var key in defaults) {
@@ -1397,24 +1406,28 @@
 		this.outputNode = Pizzicato.context.createGain();
 		this.delayNodeLeft = Pizzicato.context.createDelay();
 		this.delayNodeRight = Pizzicato.context.createDelay();
-	
-		this.delayNodeLeft.connect(this.delayNodeRight);
-	
 		this.dryGainNode = Pizzicato.context.createGain();
 		this.wetGainNode = Pizzicato.context.createGain();
 		this.feedbackGainNode = Pizzicato.context.createGain();
+		this.channelMerger = Pizzicato.context.createChannelMerger(2);
+	
+		// our dry channel
+		this.inputNode.connect(this.dryGainNode);
+		// dry out
+		this.dryGainNode.connect(this.outputNode);
+	
+		// the feedback loop
+		this.delayNodeLeft.connect(this.channelMerger, 0, 0);
+		this.delayNodeRight.connect(this.channelMerger, 0, 1);
+		this.delayNodeLeft.connect(this.delayNodeRight);
 		this.feedbackGainNode.connect(this.delayNodeLeft);
 		this.delayNodeRight.connect(this.feedbackGainNode);
 	
-		this.inputNode.connect(this.dryGainNode);
+		// our wet channel
 		this.inputNode.connect(this.feedbackGainNode);
 	
-		this.channelMerger = Pizzicato.context.createChannelMerger(2);
-		this.delayNodeLeft.connect(this.channelMerger, 0, 0);
-		this.delayNodeRight.connect(this.channelMerger, 0, 1);
+		// wet out
 		this.channelMerger.connect(this.wetGainNode);
-	
-		this.dryGainNode.connect(this.outputNode);
 		this.wetGainNode.connect(this.outputNode);
 	
 		for (var key in defaults) {
@@ -1608,6 +1621,133 @@
 	
 		this.reverbNode.buffer = impulse;
 	}
+	Pizzicato.Effects.DubDelay = function(options) {
+	
+		this.options = {};
+		options = options || this.options;
+	
+		var defaults = {
+			feedback: 0.6,
+			time: 0.7,
+			mix: 0.5,
+			cutoff: 1600
+		};
+	
+		this.inputNode = Pizzicato.context.createGain();
+		this.outputNode = Pizzicato.context.createGain();
+		this.dryGainNode = Pizzicato.context.createGain();
+		this.wetGainNode = Pizzicato.context.createGain();
+		this.feedbackGainNode = Pizzicato.context.createGain();
+		this.delayNode = Pizzicato.context.createDelay();
+		this.BQfilterNode = Pizzicato.context.createBiquadFilter(); 
+	
+	
+		// line in to dry mix
+		this.inputNode.connect(this.dryGainNode);
+		// dry line out
+		this.dryGainNode.connect(this.outputNode);
+	
+		// the feedback loop
+		this.delayNode.connect(this.feedbackGainNode);
+		this.feedbackGainNode.connect(this.BQfilterNode);
+		this.BQfilterNode.connect(this.delayNode);
+	
+		// line in to wet mix
+		this.inputNode.connect(this.delayNode);
+		// wet out
+		this.delayNode.connect(this.wetGainNode);
+		
+		// wet line out
+		this.wetGainNode.connect(this.outputNode);
+	
+		for (var key in defaults) {
+			this[key] = options[key];
+			this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
+		}
+	};
+	
+	Pizzicato.Effects.DubDelay.prototype = Object.create(null, {
+	
+		/**
+		 * Gets and sets the dry/wet mix.
+		 */
+		mix: {
+			enumerable: true,
+	
+			get: function() {
+				return this.options.mix	;	
+			},
+	
+			set: function(mix) {
+				if (!Pz.Util.isInRange(mix, 0, 1))
+					return;
+	
+				this.options.mix = mix;
+				this.dryGainNode.gain.value = Pizzicato.Util.getDryLevel(this.mix);
+				this.wetGainNode.gain.value = Pizzicato.Util.getWetLevel(this.mix);
+			}
+		},
+	
+		/**
+		 * Time between each delayed sound
+		 */
+		time: {
+			enumerable: true,
+	
+			get: function() {
+				return this.options.time;	
+			},
+	
+			set: function(time) {
+				if (!Pz.Util.isInRange(time, 0, 180))
+					return;
+	
+				this.options.time = time;
+				this.delayNode.delayTime.value = time;
+			}
+		},
+	
+		/**
+		 * Strength of each of the echoed delayed sounds.
+		 */
+		feedback: {
+			enumerable: true,
+	
+			get: function() {
+				return this.options.feedback;	
+			},
+	
+			set: function(feedback) {
+				if (!Pz.Util.isInRange(feedback, 0, 1))
+					return;
+				console.log('setting feedback', feedback);
+				this.options.feedback = parseFloat(feedback, 10);
+				this.feedbackGainNode.gain.value = this.feedback;
+			}
+		},
+	
+		/**
+		 * Frequency on delay repeats
+		 */
+		cutoff: {
+			enumerable: true,
+	
+			get: function() {
+				return this.options.cutoff;	
+			},
+	
+			set: function(cutoff) {
+				if (!Pz.Util.isInRange(cutoff, 0, 4000))
+					return;
+				console.log('setting filter', cutoff);
+				this.options.cutoff = cutoff;
+				this.BQfilterNode.frequency.value = this.cutoff;
+			}
+		}
+	
+	
+	
+	});
 	
 	return Pizzicato;
 })(this);
