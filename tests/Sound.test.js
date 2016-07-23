@@ -136,7 +136,6 @@ describe('Sound', function() {
 			sound.volume = 0.3;
 			expect(sound.masterVolume.gain.value).toBeCloseTo(0.3);
 		});
-
 	});
 
 	describe('analyser', function() {
@@ -151,7 +150,6 @@ describe('Sound', function() {
 			expect(sound.analyser).toBe(analyser);
 			expect(analyser.toString()).toContain('object AnalyserNode');
 		});
-
 	});
 
 	describe('actions', function() {
@@ -299,6 +297,33 @@ describe('Sound', function() {
 			});
 		}, 2000);
 
+		it('should return a new sound object when cloning', function() {
+			var sound = new Pizzicato.Sound();
+			var clone = sound.clone();
+
+			expect(sound).not.toBe(clone);
+		});
+
+		it('should return a sound with the same parameters when cloning', function() {
+			var sound = new Pizzicato.Sound();
+			sound.frequency = 220;
+			sound.loop = true;
+
+			var clone = sound.clone();
+
+			expect(sound.frequency).toBe(clone.frequency);
+			expect(sound.loop).toBe(clone.loop);
+		});
+
+		it('should return a sound with the same effects when cloning', function() {
+			var sound = new Pizzicato.Sound();
+			var delay = new Pizzicato.Effects.Delay();
+			sound.addEffect(delay);
+
+			var clone = sound.clone();
+
+			expect(clone.effects[0]).toBe(delay);
+		});
 	});
 
 	describe('effects', function() {
