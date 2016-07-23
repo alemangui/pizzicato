@@ -334,8 +334,12 @@
 		else if (description.source === 'script')
 			(initializeWithFunction.bind(this))(description.options, callback);
 	
+		else if (description.source === 'sound')
+			(initializeWithSoundObject.bind(this))(description.options, callback);
+	
+	
 		function getDescriptionError(description) {
-			var supportedSources = ['wave', 'file', 'input', 'script'];
+			var supportedSources = ['wave', 'file', 'input', 'script', 'sound'];
 	
 			if (description && (!util.isFunction(description) && !util.isString(description) && !util.isObject(description)))
 				return 'Description type not supported. Initialize a sound using an object, a function or a string.';
@@ -457,6 +461,16 @@
 				return node;
 			};
 		}
+	
+	
+		function initializeWithSoundObject(options, callback) {
+			this.getRawSourceNode = options.sound.getRawSourceNode;
+	
+			if (options.sound.sourceNode && Pz.Util.isOscillator(options.sound.sourceNode)) {
+				this.sourceNode = this.getRawSourceNode();
+				this.frequency = options.sound.frequency;
+			}
+		}
 	};
 	
 	
@@ -522,6 +536,29 @@
 	
 				this.offsetTime = Pz.context.currentTime - this.lastTimePlayed;
 				this.trigger('pause');
+			}
+		},
+	
+	
+		clone: {
+			enumerable: true,
+	
+			value: function() {
+				var clone = new Pizzicato.Sound({
+					source: 'sound',
+					options: {
+						loop: this.loop,
+						attack: this.attack,
+						sustain: this.sustain,
+						volume: this.volume,
+						sound: this
+					}
+				});
+	
+				for (var i = 0; i < this.effects.length; i++)
+					clone.addEffect(this.effects[i]);
+	
+				return clone;
 			}
 		},
 	
@@ -1411,9 +1448,9 @@
 		this.feedbackGainNode = Pizzicato.context.createGain();
 		this.channelMerger = Pizzicato.context.createChannelMerger(2);
 	
-		// our dry channel
+		// dry mix
 		this.inputNode.connect(this.dryGainNode);
-		// dry out
+		// dry mix out
 		this.dryGainNode.connect(this.outputNode);
 	
 		// the feedback loop
@@ -1423,7 +1460,7 @@
 		this.feedbackGainNode.connect(this.delayNodeLeft);
 		this.delayNodeRight.connect(this.feedbackGainNode);
 	
-		// our wet channel
+		// wet mix
 		this.inputNode.connect(this.feedbackGainNode);
 	
 		// wet out
@@ -1642,9 +1679,9 @@
 		this.BQfilterNode = Pizzicato.context.createBiquadFilter(); 
 	
 	
-		// line in to dry mix
+		// dry mix
 		this.inputNode.connect(this.dryGainNode);
-		// dry line out
+		// dry mix out
 		this.dryGainNode.connect(this.outputNode);
 	
 		// the feedback loop
@@ -1652,12 +1689,10 @@
 		this.feedbackGainNode.connect(this.BQfilterNode);
 		this.BQfilterNode.connect(this.delayNode);
 	
-		// line in to wet mix
+		// wet mix
 		this.inputNode.connect(this.delayNode);
-		// wet out
+		// wet mix out
 		this.delayNode.connect(this.wetGainNode);
-		
-		// wet line out
 		this.wetGainNode.connect(this.outputNode);
 	
 		for (var key in defaults) {
@@ -1720,7 +1755,7 @@
 			set: function(feedback) {
 				if (!Pz.Util.isInRange(feedback, 0, 1))
 					return;
-				console.log('setting feedback', feedback);
+	
 				this.options.feedback = parseFloat(feedback, 10);
 				this.feedbackGainNode.gain.value = this.feedback;
 			}
@@ -1739,7 +1774,7 @@
 			set: function(cutoff) {
 				if (!Pz.Util.isInRange(cutoff, 0, 4000))
 					return;
-				console.log('setting filter', cutoff);
+	
 				this.options.cutoff = cutoff;
 				this.BQfilterNode.frequency.value = this.cutoff;
 			}

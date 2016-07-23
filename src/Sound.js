@@ -45,8 +45,12 @@ Pizzicato.Sound = function(description, callback) {
 	else if (description.source === 'script')
 		(initializeWithFunction.bind(this))(description.options, callback);
 
+	else if (description.source === 'sound')
+		(initializeWithSoundObject.bind(this))(description.options, callback);
+
+
 	function getDescriptionError(description) {
-		var supportedSources = ['wave', 'file', 'input', 'script'];
+		var supportedSources = ['wave', 'file', 'input', 'script', 'sound'];
 
 		if (description && (!util.isFunction(description) && !util.isString(description) && !util.isObject(description)))
 			return 'Description type not supported. Initialize a sound using an object, a function or a string.';
@@ -168,6 +172,16 @@ Pizzicato.Sound = function(description, callback) {
 			return node;
 		};
 	}
+
+
+	function initializeWithSoundObject(options, callback) {
+		this.getRawSourceNode = options.sound.getRawSourceNode;
+
+		if (options.sound.sourceNode && Pz.Util.isOscillator(options.sound.sourceNode)) {
+			this.sourceNode = this.getRawSourceNode();
+			this.frequency = options.sound.frequency;
+		}
+	}
 };
 
 
@@ -233,6 +247,29 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 			this.offsetTime = Pz.context.currentTime - this.lastTimePlayed;
 			this.trigger('pause');
+		}
+	},
+
+
+	clone: {
+		enumerable: true,
+
+		value: function() {
+			var clone = new Pizzicato.Sound({
+				source: 'sound',
+				options: {
+					loop: this.loop,
+					attack: this.attack,
+					sustain: this.sustain,
+					volume: this.volume,
+					sound: this
+				}
+			});
+
+			for (var i = 0; i < this.effects.length; i++)
+				clone.addEffect(this.effects[i]);
+
+			return clone;
 		}
 	},
 
