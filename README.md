@@ -75,6 +75,7 @@ sawtoothWave.play();
   - [Stereo Panner](#stereo-panner)
   - [Convolver](#convolver)
   - [Reverb](#reverb)
+  - [Ring Modulator](#ringmod)
 - [Advanced](#advanced)
   - [Accessing the audio context](#accessing-the-context)
   - [Getting an analyser node for a sound](#analyser-node)
@@ -461,6 +462,26 @@ var reverb = new Pizzicato.Effects.Reverb({
 });
 
 sound.addEffect(reverb);
+sound.play();
+```
+
+<a name="ringmod"/>
+### Ring Modulator ([example](https://alemangui.github.io/pizzicato/#ring-modulator))
+The ring modulator effect combines two input signals, where one of the inputs is a sine wave modulating the other. The 'ring' in this effect derives from the layout of diode nodes in the original analogue equipment, and the also refers to the sound being increasingly modulated as it travels through the ring of diodes. 
+
+* ```distortion``` _(min: 0.2, max: 50, defaults to 1)_: Level of distortion applied to the diode nodes.
+* ```speed``` _(min: 0, max: 2000, defaults to 30)_: The frequency of the modulating signal.
+* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output.
+
+Example:
+```javascript
+var ringModulator = new Pizzicato.Effects.RingModulator({
+    speed: 10,
+    distortion: 4,
+    mix: 0.5
+});
+
+sound.addEffect(ringModulator);
 sound.play();
 ```
 
