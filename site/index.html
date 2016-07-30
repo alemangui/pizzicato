@@ -413,6 +413,37 @@ var convolver = new Pizzicato.Effects.Convolver({
                 <button id="play-drums" class="play action"></button>
             </div>
 
+            <a name="tremolo"></a><h4>Tremolo</h4>
+
+            <pre><code class="language-javascript">
+var tremolo = new Pizzicato.Effects.Tremolo({
+    speed: 4
+    mix: 0.8
+});
+            </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-tremolodrums">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-tremolodrums" />
+                    <div class="slider-value">1</div>
+                </div>
+                <div class="slider">
+                    <label for="tremolo-speed">Speed</label>
+                    <input type="range" min="0" max="20" step="0.01" value="4" id="tremolo-speed" />
+                    <div class="slider-value">4</div>
+                </div>
+                <div class="slider">
+                    <label for="tremolo-mix">Mix</label>
+                    <input type="range" min="0" max="1" step="0.01" value="0.5" id="tremolo-mix" />
+                    <div class="slider-value">0.5</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="stop-tremolodrums" class="stop action"></button>
+                <button id="play-tremolodrums" class="play action"></button>
+            </div>
 
             <a name="stereo-panner"></a><h4>Stereo panner</h4>
 

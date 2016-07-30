@@ -32,6 +32,10 @@ var flanger = new Pizzicato.Effects.Flanger();
 var stereoPanner = new Pizzicato.Effects.StereoPanner();
 var reverb = new Pizzicato.Effects.Reverb();
 var convolver = new Pizzicato.Effects.Convolver({ impulse: './audio/scala-milan.wav' });
+var tremolo = new Pizzicato.Effects.Tremolo({
+	speed: 4,
+	mix: 0.8
+});
 
 // Sounds
 var sineWave = new Pz.Sound();
@@ -119,6 +123,19 @@ var drums = new Pz.Sound({
 }, function() { 
 	drums.addEffect(convolver); 
 });
+
+var tremoloDrums = new Pz.Sound({ 
+	source: 'file', 
+	options: { 
+		path: './audio/drums.m4a', 
+		loop: true 
+	}
+}, function() { 
+	tremoloDrums.addEffect(tremolo); 
+});
+
+
+
 
 var whiteNoise = new Pz.Sound(function(e) {
   var output = e.outputBuffer.getChannelData(0);
@@ -243,6 +260,23 @@ var segments = [
 			}
 		]
 	},
+
+	{
+		audio: tremoloDrums,
+		playButton: document.getElementById('play-tremolodrums'),
+		stopButton: document.getElementById('stop-tremolodrums'),
+		volumeSlider: document.getElementById('volume-tremolodrums'),
+		effects: [
+			{
+				instance: tremolo,
+				parameters: {
+					speed: document.getElementById('tremolo-speed'),
+					mix: document.getElementById('tremolo-mix')
+				}
+			}
+		]
+	},
+
 	{
 		audio: electro,
 		playButton: document.getElementById('play-electro'),
