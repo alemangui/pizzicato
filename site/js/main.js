@@ -141,7 +141,7 @@ var voice = new Pizzicato.Sound({ source: 'input' }, function(err) {
 var filteredDrums = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: './audio/drums.m4a', 
+		path: './audio/countdown.m4a', 
 		loop: true 
 	}
 }, function() { 
