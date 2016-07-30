@@ -1,4 +1,4 @@
-API.js
-SCAFFOLDING.js
 node_modules
 logos
+*.sublime-project
+*.sublime-workspace

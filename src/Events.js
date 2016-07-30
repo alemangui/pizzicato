@@ -36,10 +36,12 @@ Pizzicato.Events = {
 			return;
 
 		length = Math.max(0, arguments.length - 1);
-    args = [];
-    for (i = 0; i < length; i++) args[i] = arguments[i + 1];
+		args = [];
 
-    for (i = 0; i < _event.length; i++)
+		for (i = 0; i < length; i++) 
+			args[i] = arguments[i + 1];
+
+		for (i = 0; i < _event.length; i++)
 			_event[i].callback.apply(_event[i].context, args);	
 	},
 
