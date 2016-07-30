@@ -32,7 +32,11 @@ var flanger = new Pizzicato.Effects.Flanger();
 var stereoPanner = new Pizzicato.Effects.StereoPanner();
 var reverb = new Pizzicato.Effects.Reverb();
 var convolver = new Pizzicato.Effects.Convolver({ impulse: './audio/scala-milan.wav' });
-
+var ringModulator = new Pizzicato.Effects.RingModulator({
+	speed: 30,
+	distortion: 1,
+	mix: 0.5
+});
 // Sounds
 var sineWave = new Pz.Sound();
 var sineWaveSustain = new Pz.Sound({ source: 'wave', options: { frequency: 220, sustain: 1, attack:0.5 } });
@@ -133,6 +137,17 @@ var voice = new Pizzicato.Sound({ source: 'input' }, function(err) {
 	document.getElementById('volume-voice').setAttribute('disabled', 'disabled');
 	document.getElementById('microphone-error').style.display = 'block';
 });
+
+var filteredDrums = new Pz.Sound({ 
+	source: 'file', 
+	options: { 
+		path: './audio/drums.m4a', 
+		loop: true 
+	}
+}, function() { 
+	filteredDrums.addEffect(ringModulator); 
+});
+
 
 var segments = [
 	{
@@ -319,6 +334,22 @@ var segments = [
 					speed: document.getElementById('flanger-speed'),
 					mix: document.getElementById('flanger-mix'),
 					feedback: document.getElementById('flanger-feedback')
+				}
+			}
+		]
+	},
+	{
+		audio: filteredDrums,
+		playButton: document.getElementById('play-recorded-voice'),
+		stopButton: document.getElementById('stop-recorded-voice'),
+		volumeSlider: document.getElementById('volume-recorded-voice'),
+		effects: [
+			{
+				instance: ringModulator,
+				parameters: {
+					speed: document.getElementById('ringmod-speed'),
+					mix: document.getElementById('ringmod-mix'),
+					distortion: document.getElementById('ringmod-distortion')
 				}
 			}
 		]
