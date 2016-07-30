@@ -614,6 +614,49 @@ sound.play();
                 <button id="play-synth2" class="play action"></button>
             </div>
 
+            <a name="ring-modulator"></a><h4>Ring Modulator</h4>
+
+            <pre><code class="language-javascript">
+var ringModulator = new Pizzicato.Effects.RingModulator({
+    speed: 30,
+    distortion: 1,
+    mix: 0.5
+});
+
+sound.addEffect(ringModulator);
+sound.play();
+            </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-recorded-voice">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-recorded-voice" />
+                    <div class="slider-value">1</div>
+                </div>
+                <div class="slider">
+                    <label for="ringmod-speed">Speed</label>
+                    <input type="range" min="0" max="2000" step="1" value="30" id="ringmod-speed" />
+                    <div class="slider-value">30</div>
+                </div>
+                <div class="slider">
+                    <label for="ringmod-distortion">Distortion</label>
+                    <input type="range" min="0.2" max="50" step="0.0001" value="1" id="ringmod-distortion" />
+                    <div class="slider-value">1</div>
+                </div>
+                <div class="slider">
+                    <label for="ringmod-mix">Mix</label>
+                    <input type="range" min="0" max="1" step="0.01" value="0.5" id="ringmod-mix" />
+                    <div class="slider-value">0.5</div>
+                </div>
+
+            </div>
+
+            <div class="controls">
+                <button id="stop-recorded-voice" class="stop action"></button>
+                <button id="play-recorded-voice" class="play action"></button>
+            </div>
+
+
         </div>
 
 
