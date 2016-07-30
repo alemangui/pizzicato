@@ -68,6 +68,7 @@ sawtoothWave.play();
   - [Delay](#delay)
   - [PingPongDelay](#pingpongdelay)
   - [DubDelay](#dubdelay)
+>>>>>>> bad71ef29e197fb8c6a33850d9bccae35b9a5661
   - [Distortion](#distortion)
   - [Flanger](#flanger)
   - [Compressor](#compressor)
@@ -76,7 +77,7 @@ sawtoothWave.play();
   - [Stereo Panner](#stereo-panner)
   - [Convolver](#convolver)
   - [Reverb](#reverb)
-  - [Ring Modulator](#ringmod)
+  - [Ring Modulator](#ring-modulator)
 - [Advanced](#advanced)
   - [Accessing the audio context](#accessing-the-context)
   - [Getting an analyser node for a sound](#analyser-node)
@@ -277,8 +278,8 @@ sound.addEffect(delay);
 sound.play();
 ```
 
-<a name="pingpongdelay"/>
-### PingPongDelay ([example](https://alemangui.github.io/pizzicato/#ping-pong-delay))
+<a name="ping-pong-delay"/>
+### Ping Pong Delay ([example](https://alemangui.github.io/pizzicato/#ping-pong-delay))
 The ping pong delay effect is similar to a regular [Delay](#delay) effect, however on each feedback loop the output is swapped between left and right channels. The following options are available when creating a delay effect:
 * ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
 * ```time``` _(min: 0, max: 180, defaults to 0.3)_: Interval time in seconds.
@@ -486,9 +487,9 @@ sound.addEffect(reverb);
 sound.play();
 ```
 
-<a name="ringmod"/>
+<a name="ring-modulator"/>
 ### Ring Modulator ([example](https://alemangui.github.io/pizzicato/#ring-modulator))
-The ring modulator effect combines two input signals, where one of the inputs is a sine wave modulating the other. The 'ring' in this effect derives from the layout of diode nodes in the original analogue equipment, and the also refers to the sound being increasingly modulated as it travels through the ring of diodes. 
+The ring modulator effect combines two input signals, where one of the inputs is a sine wave modulating the other. [This article from the BBC](http://webaudio.prototyping.bbc.co.uk/ring-modulator/) goes into deeper detail and explains how to recreate it. The 'ring' in this effect derives from the layout of diode nodes in the original analogue equipment, and also refers to the sound being increasingly modulated as it travels through the ring of diodes. 
 
 * ```distortion``` _(min: 0.2, max: 50, defaults to 1)_: Level of distortion applied to the diode nodes.
 * ```speed``` _(min: 0, max: 2000, defaults to 30)_: The frequency of the modulating signal.

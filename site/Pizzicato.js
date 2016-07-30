@@ -1787,6 +1787,9 @@
 	
 	
 	});
+	/**
+	 * See http://webaudio.prototyping.bbc.co.uk/ring-modulator/
+	 */
 	Pizzicato.Effects.RingModulator = function(options) {
 	
 		this.options = {};
@@ -1798,8 +1801,6 @@
 			mix: 0.5
 		};
 	
-		// create nodes
-	
 		this.inputNode = Pizzicato.context.createGain();
 		this.outputNode = Pizzicato.context.createGain();
 		this.dryGainNode = Pizzicato.context.createGain();
@@ -1808,9 +1809,8 @@
 	
 		/**
 		 * `vIn` is the modulation oscillator input 
-		 * `vc` is the voice input.
+		 * `vc` is the audio input.
 		 */
-	
 		this.vIn = Pizzicato.context.createOscillator();
 		this.vIn.start(0);
 		this.vInGain = Pizzicato.context.createGain();
@@ -1827,11 +1827,13 @@
 		this.vcInverter1.gain.value = -1;
 		this.vcDiode3 = new DiodeNode(Pizzicato.context);
 		this.vcDiode4 = new DiodeNode(Pizzicato.context);
-		this.outGain = Pizzicato.context.createGain();
-		this.outGain.gain.value = 4;
-		this.compressor = Pizzicato.context.createDynamicsCompressor();
-		this.compressor.threshold.value = -12;
 	
+		this.outGain = Pizzicato.context.createGain();
+		this.outGain.gain.value = 3;
+	
+		this.compressor = Pizzicato.context.createDynamicsCompressor();
+		this.compressor.threshold.value = -24;
+		this.compressor.ratio.value = 16;
 	
 		// dry mix
 		this.inputNode.connect(this.dryGainNode);
