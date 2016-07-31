@@ -29,7 +29,7 @@ describe('Effects.DubDelay', function() {
 		expect(dubDelay.feedback).toBe(0.6);
 		expect(dubDelay.time).toBe(0.7);
 		expect(dubDelay.mix).toBe(0.5);
-		expect(dubDelay.cutoff).toBe(1600);
+		expect(dubDelay.cutoff).toBe(700);
 	});
 
 
@@ -78,11 +78,11 @@ describe('Effects.DubDelay', function() {
 		var newFrequency = 1600;
 		var dubDelay = new Pizzicato.Effects.DubDelay({ cutoff: initialFrequency });
 
-		expect(dubDelay.BQfilterNode.frequency.value).toBeCloseTo(initialFrequency);
+		expect(dubDelay.bqFilterNode.frequency.value).toBeCloseTo(initialFrequency);
 
 		dubDelay.cutoff = newFrequency;
 
-		expect(dubDelay.BQfilterNode.frequency.value).toBeCloseTo(newFrequency);
+		expect(dubDelay.bqFilterNode.frequency.value).toBeCloseTo(newFrequency);
 	});
 
 

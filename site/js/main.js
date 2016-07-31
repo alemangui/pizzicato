@@ -17,7 +17,7 @@ var dubDelay = new Pizzicato.Effects.DubDelay({
 	feedback: 0.6,
 	time: 0.7,
 	mix: 0.5,
-	cutoff: 1600
+	cutoff: 700
 });
 
 var compressor = new Pizzicato.Effects.Compressor({
@@ -105,13 +105,13 @@ var wah = new Pz.Sound({
 	}
 }, function() { wah.addEffect(pingPongDelay); });
 
-var dubwah = new Pz.Sound({ 
+var chop = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
 		path: './audio/chop.mp3', 
 		loop: true 
 	}
-}, function() { dubwah.addEffect(dubDelay); });
+}, function() { chop.addEffect(dubDelay); });
 
 var stanceBass = new Pz.Sound({ 
 	source: 'file', 
@@ -230,10 +230,10 @@ var segments = [
 		]
 	},
 	{
-		audio: dubwah,
-		playButton: document.getElementById('play-dubwah'),
-		stopButton: document.getElementById('stop-dubwah'),
-		volumeSlider: document.getElementById('volume-dubwah'),
+		audio: chop,
+		playButton: document.getElementById('play-chop'),
+		stopButton: document.getElementById('stop-chop'),
+		volumeSlider: document.getElementById('volume-chop'),
 		effects: [
 			{
 				instance: dubDelay,

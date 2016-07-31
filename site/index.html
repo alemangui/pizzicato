@@ -261,7 +261,7 @@ var dubDelay = new Pizzicato.Effects.DubDelay({
     feedback: 0.6,
     time: 0.7,
     mix: 0.5,
-    cutoff: 1600
+    cutoff: 700
 });
 
 sound.addEffect(dubDelay);
@@ -270,8 +270,8 @@ sound.play();
 
             <div class="slider-group">
                 <div class="slider">
-                    <label for="volume-dubwah">Volume</label>
-                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-dubwah" />
+                    <label for="volume-chop">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-chop" />
                     <div class="slider-value">1</div>
                 </div>
                 <div class="slider">
@@ -286,8 +286,8 @@ sound.play();
                 </div>
                 <div class="slider">
                     <label for="dub-delay-cutoff">Cutoff Frequency</label>
-                    <input type="range" min="0" max="4000" step="100" value="1600" id="dub-delay-cutoff" />
-                    <div class="slider-value">1600</div>
+                    <input type="range" min="0" max="4000" step="100" value="700" id="dub-delay-cutoff" />
+                    <div class="slider-value">700</div>
                 </div>
                 <div class="slider">
                     <label for="dub-delay-mix">Mix</label>
@@ -297,8 +297,8 @@ sound.play();
             </div>
 
             <div class="controls">
-                <button id="stop-dubwah" class="stop action"></button>
-                <button id="play-dubwah" class="play action"></button>
+                <button id="stop-chop" class="stop action"></button>
+                <button id="play-chop" class="play action"></button>
             </div>
 
 

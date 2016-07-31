@@ -10,141 +10,73 @@
 	masterGainNode.connect(Pizzicato.context.destination);
 
 	Pizzicato.Util = {
-
 	
-
 		isString: function(arg) {
-
 			return toString.call(arg) === '[object String]';
-
 		},
-
 	
-
 		isObject: function(arg) {
-
 			return toString.call(arg) === '[object Object]';
-
 		},
-
 	
-
 		isFunction: function(arg) {
-
 			return toString.call(arg) === '[object Function]';
-
 		},
-
 	
-
 		isNumber: function(arg) {
-
 			return toString.call(arg) === '[object Number]' && arg === +arg;
-
 		},
-
 	
-
 		isArray: function(arg) {
-
 			return toString.call(arg) === '[object Array]';
-
 		},
-
 	
-
 		isInRange: function(arg, min, max) {
-
 			if (!Pz.Util.isNumber(arg) || !Pz.Util.isNumber(min) || !Pz.Util.isNumber(max))
-
 				return false;
-
 	
-
 			return arg >= min && arg <= max;
-
 		},
-
 	
-
 		isBool: function(arg) {
-
 			if (typeof(arg) !== "boolean")
-
 				return false;
-
 	
-
 			return true;
-
 		},
-
 	
-
 		isOscillator: function(audioNode) {
-
 			return (audioNode && audioNode.toString() === "[object OscillatorNode]");
-
 		},
-
 	
-
 		// Takes a number from 0 to 1 and normalizes it 
-
 		// to fit within range floor to ceiling
-
 		normalize: function(num, floor, ceil) {
-
 			if (!Pz.Util.isNumber(num) || !Pz.Util.isNumber(floor) || !Pz.Util.isNumber(ceil))
-
 				return;
-
 			
-
 			return ((ceil - floor) * num) / 1 + floor;
-
 		},
-
 	
-
 		getDryLevel: function(mix) {
-
 			if (!Pz.Util.isNumber(mix) || mix > 1 || mix < 0)
-
 				return 0;
-
 	
-
 			if (mix <= 0.5)
-
 				return 1;
-
 	
-
 			return 1 - ((mix - 0.5) * 2);
-
 		},
-
 	
-
 		getWetLevel: function(mix) {
-
 			if (!Pz.Util.isNumber(mix) || mix > 1 || mix < 0)
-
 				return 0;
-
 	
-
 			if (mix >= 0.5)
-
 				return 1;
-
 	
-
 			return 1 - ((0.5 - mix) * 2);
-
 		}
-
 	};
 
 	Object.defineProperty(Pizzicato, 'volume', {
@@ -171,126 +103,66 @@
 			console.error('Can\'t set the master gain node');
 		}
 	});
-	
-	Pizzicato.Events = {
-	
-	
-	
-		/**
-	
-		 * Adds an event handler that will be treated upon
-	
-		 * the triggering of that event.
-	
-		 */
-	
-		on: function(name, callback, context) {
-	
-			if (!name || !callback)
-	
-				return;
-	
-	
-	
-			this._events = this._events || {};
-	
-			var _event = this._events[name] || (this._events[name] = []);
-	
-	
-	
-			_event.push({
-	
-				callback: callback,
-	
-				context: context || this,
-	
-				handler: this
-	
-			});
-	
-		},
-	
-	
-	
-		/**
-	
-		 * Triggers a particular event. If a handler
-	
-		 * is linked to that event, the handler will be
-	
-		 * executed.
-	
-		 */
-	
-		trigger: function(name) {
-	
-			if (!name)
-	
-				return;
-	
-	
-	
-			var _event, length, args, i;
-	
-	
-	
-			this._events = this._events || {};
-	
-			_event = this._events[name] || (this._events[name] = []);
-	
-	
-	
-			if (!_event)
-	
-				return;
-	
-	
-	
-			length = Math.max(0, arguments.length - 1);
-	
-			args = [];
-	
-	
-	
-			for (i = 0; i < length; i++) 
-	
-				args[i] = arguments[i + 1];
-	
-	
-	
-			for (i = 0; i < _event.length; i++)
-	
-				_event[i].callback.apply(_event[i].context, args);	
-	
-		},
-	
-	
-	
-		/**
-	
-		 * Removes an event handler. If no name is provided,
-	
-		 * all handlers for this object will be removed.
-	
-		 */
-	
-		off: function(name) {
-	
-			if (name)
-	
-				this._events[name] = undefined;
-	
-	
-	
-			else
-	
-				this._events = {};
-	
-		}
-	
-	
-	
-	};
+		Pizzicato.Events = {
+		
+			/**
+			 * Adds an event handler that will be treated upon
+			 * the triggering of that event.
+			 */
+			on: function(name, callback, context) {
+				if (!name || !callback)
+					return;
+		
+				this._events = this._events || {};
+				var _event = this._events[name] || (this._events[name] = []);
+		
+				_event.push({
+					callback: callback,
+					context: context || this,
+					handler: this
+				});
+			},
+		
+			/**
+			 * Triggers a particular event. If a handler
+			 * is linked to that event, the handler will be
+			 * executed.
+			 */
+			trigger: function(name) {
+				if (!name)
+					return;
+		
+				var _event, length, args, i;
+		
+				this._events = this._events || {};
+				_event = this._events[name] || (this._events[name] = []);
+		
+				if (!_event)
+					return;
+		
+				length = Math.max(0, arguments.length - 1);
+				args = [];
+		
+				for (i = 0; i < length; i++) 
+					args[i] = arguments[i + 1];
+		
+				for (i = 0; i < _event.length; i++)
+					_event[i].callback.apply(_event[i].context, args);	
+			},
+		
+			/**
+			 * Removes an event handler. If no name is provided,
+			 * all handlers for this object will be removed.
+			 */
+			off: function(name) {
+				if (name)
+					this._events[name] = undefined;
+		
+				else
+					this._events = {};
+			}
+		
+		};
 	Pizzicato.Sound = function(description, callback) {
 		var self = this;
 		var util = Pizzicato.Util;
@@ -1671,7 +1543,7 @@
 			feedback: 0.6,
 			time: 0.7,
 			mix: 0.5,
-			cutoff: 1600
+			cutoff: 700
 		};
 	
 		this.inputNode = Pizzicato.context.createGain();
@@ -1680,23 +1552,22 @@
 		this.wetGainNode = Pizzicato.context.createGain();
 		this.feedbackGainNode = Pizzicato.context.createGain();
 		this.delayNode = Pizzicato.context.createDelay();
-		this.BQfilterNode = Pizzicato.context.createBiquadFilter(); 
+		this.bqFilterNode = Pizzicato.context.createBiquadFilter(); 
 	
 	
 		// dry mix
 		this.inputNode.connect(this.dryGainNode);
-		// dry mix out
 		this.dryGainNode.connect(this.outputNode);
 	
-		// the feedback loop
-		this.delayNode.connect(this.feedbackGainNode);
-		this.feedbackGainNode.connect(this.BQfilterNode);
-		this.BQfilterNode.connect(this.delayNode);
-	
 		// wet mix
-		this.inputNode.connect(this.delayNode);
-		// wet mix out
+		this.inputNode.connect(this.wetGainNode);
+		this.inputNode.connect(this.feedbackGainNode);
+	
+		this.feedbackGainNode.connect(this.bqFilterNode);
+		this.bqFilterNode.connect(this.delayNode);
+		this.delayNode.connect(this.feedbackGainNode);
 		this.delayNode.connect(this.wetGainNode);
+	
 		this.wetGainNode.connect(this.outputNode);
 	
 		for (var key in defaults) {
@@ -1780,7 +1651,7 @@
 					return;
 	
 				this.options.cutoff = cutoff;
-				this.BQfilterNode.frequency.value = this.cutoff;
+				this.bqFilterNode.frequency.value = this.cutoff;
 			}
 		}
 	

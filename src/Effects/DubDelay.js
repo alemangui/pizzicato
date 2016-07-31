@@ -7,7 +7,7 @@ Pizzicato.Effects.DubDelay = function(options) {
 		feedback: 0.6,
 		time: 0.7,
 		mix: 0.5,
-		cutoff: 1600
+		cutoff: 700
 	};
 
 	this.inputNode = Pizzicato.context.createGain();
@@ -16,23 +16,22 @@ Pizzicato.Effects.DubDelay = function(options) {
 	this.wetGainNode = Pizzicato.context.createGain();
 	this.feedbackGainNode = Pizzicato.context.createGain();
 	this.delayNode = Pizzicato.context.createDelay();
-	this.BQfilterNode = Pizzicato.context.createBiquadFilter(); 
+	this.bqFilterNode = Pizzicato.context.createBiquadFilter(); 
 
 
 	// dry mix
 	this.inputNode.connect(this.dryGainNode);
-	// dry mix out
 	this.dryGainNode.connect(this.outputNode);
 
-	// the feedback loop
-	this.delayNode.connect(this.feedbackGainNode);
-	this.feedbackGainNode.connect(this.BQfilterNode);
-	this.BQfilterNode.connect(this.delayNode);
-
 	// wet mix
-	this.inputNode.connect(this.delayNode);
-	// wet mix out
+	this.inputNode.connect(this.wetGainNode);
+	this.inputNode.connect(this.feedbackGainNode);
+
+	this.feedbackGainNode.connect(this.bqFilterNode);
+	this.bqFilterNode.connect(this.delayNode);
+	this.delayNode.connect(this.feedbackGainNode);
 	this.delayNode.connect(this.wetGainNode);
+
 	this.wetGainNode.connect(this.outputNode);
 
 	for (var key in defaults) {
@@ -116,7 +115,7 @@ Pizzicato.Effects.DubDelay.prototype = Object.create(null, {
 				return;
 
 			this.options.cutoff = cutoff;
-			this.BQfilterNode.frequency.value = this.cutoff;
+			this.bqFilterNode.frequency.value = this.cutoff;
 		}
 	}
 
