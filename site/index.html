@@ -254,6 +254,54 @@ sound.play();
                 <button id="play-wah" class="play action"></button>
             </div>
 
+            <a name="dub-delay"></a><h4>Dub Delay</h4>
+
+            <pre><code class="language-javascript">
+var dubDelay = new Pizzicato.Effects.DubDelay({
+    feedback: 0.6,
+    time: 0.7,
+    mix: 0.5,
+    cutoff: 700
+});
+
+sound.addEffect(dubDelay);
+sound.play();
+            </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-chop">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-chop" />
+                    <div class="slider-value">1</div>
+                </div>
+                <div class="slider">
+                    <label for="dub-delay-feedback">Feedback</label>
+                    <input type="range" min="0" max="1" step="0.01" value="0.6" id="dub-delay-feedback" />
+                    <div class="slider-value">0.6</div>
+                </div>
+                <div class="slider">
+                    <label for="dub-delay-time">Time</label>
+                    <input type="range" min="0" max="5" step="0.001" value="0.7" id="dub-delay-time" />
+                    <div class="slider-value">0.3</div>
+                </div>
+                <div class="slider">
+                    <label for="dub-delay-cutoff">Cutoff Frequency</label>
+                    <input type="range" min="0" max="4000" step="100" value="700" id="dub-delay-cutoff" />
+                    <div class="slider-value">700</div>
+                </div>
+                <div class="slider">
+                    <label for="dub-delay-mix">Mix</label>
+                    <input type="range" min="0" max="1" step="0.001" value="0.5" id="dub-delay-mix" />
+                    <div class="slider-value">0.5</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="stop-chop" class="stop action"></button>
+                <button id="play-chop" class="play action"></button>
+            </div>
+
+
 
             <a name="distortion"></a><h4>Distortion</h4>
 

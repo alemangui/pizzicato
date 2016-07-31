@@ -13,6 +13,13 @@ var pingPongDelay = new Pizzicato.Effects.PingPongDelay({
 	time: 0.4,
 	mix: 0.5
 });
+var dubDelay = new Pizzicato.Effects.DubDelay({
+	feedback: 0.6,
+	time: 0.7,
+	mix: 0.5,
+	cutoff: 700
+});
+
 var compressor = new Pizzicato.Effects.Compressor({
 	threshold: -24,
 	ratio: 12
@@ -97,6 +104,14 @@ var wah = new Pz.Sound({
 		loop: true 
 	}
 }, function() { wah.addEffect(pingPongDelay); });
+
+var chop = new Pz.Sound({ 
+	source: 'file', 
+	options: { 
+		path: './audio/chop.mp3', 
+		loop: true 
+	}
+}, function() { chop.addEffect(dubDelay); });
 
 var stanceBass = new Pz.Sound({ 
 	source: 'file', 
@@ -210,6 +225,23 @@ var segments = [
 					feedback: document.getElementById('ping-pong-delay-feedback'),
 					time: document.getElementById('ping-pong-delay-time'),
 					mix: document.getElementById('ping-pong-delay-mix')
+				}
+			}
+		]
+	},
+	{
+		audio: chop,
+		playButton: document.getElementById('play-chop'),
+		stopButton: document.getElementById('stop-chop'),
+		volumeSlider: document.getElementById('volume-chop'),
+		effects: [
+			{
+				instance: dubDelay,
+				parameters: {
+					feedback: document.getElementById('dub-delay-feedback'),
+					time: document.getElementById('dub-delay-time'),
+					mix: document.getElementById('dub-delay-mix'),
+					cutoff: document.getElementById('dub-delay-cutoff')
 				}
 			}
 		]

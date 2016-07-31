@@ -66,7 +66,9 @@ sawtoothWave.play();
   - [Clone](#sounds-clone)
 - [Effects](#effects)
   - [Delay](#delay)
-  - [PingPongDelay](#ping-pong-delay)
+  - [PingPongDelay](#pingpongdelay)
+  - [DubDelay](#dubdelay)
+>>>>>>> bad71ef29e197fb8c6a33850d9bccae35b9a5661
   - [Distortion](#distortion)
   - [Flanger](#flanger)
   - [Compressor](#compressor)
@@ -291,6 +293,26 @@ var pingPongDelay = new Pizzicato.Effects.PingPongDelay({
     mix: 0.68
 });
 sound.addEffect(pingPongDelay);
+sound.play();
+```
+
+<a name="dubdelay"/>
+### Dub Delay ([example](https://alemangui.github.io/pizzicato/#dub-delay))
+The dub delay effect is similar to a regular [Delay](#delay) effect, however on each feedback loop the output is routed through a biquad filter. The following options are available when creating a delay effect:
+* ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
+* ```time``` _(min: 0, max: 180, defaults to 0.3)_: Interval time in seconds.
+* ```cutoff``` _(min: 0, max: 4000, defaults to 700)_: Frequency value applied to each successive loop. The lower the value, the more different each repetition will be perceived.
+* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output (the delayed sound).
+
+Example:
+```javascript
+var dubDelay = new Pizzicato.Effects.DubDelay({
+    feedback: 0.6,
+    time: 0.7,
+    mix: 0.5,
+    cutoff: 700
+});
+sound.addEffect(dubDelay);
 sound.play();
 ```
 
