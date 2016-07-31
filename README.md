@@ -66,9 +66,8 @@ sawtoothWave.play();
   - [Clone](#sounds-clone)
 - [Effects](#effects)
   - [Delay](#delay)
-  - [PingPongDelay](#pingpongdelay)
-  - [DubDelay](#dubdelay)
->>>>>>> bad71ef29e197fb8c6a33850d9bccae35b9a5661
+  - [Ping Pong Delay](#pingpongdelay)
+  - [Dub Delay](#dubdelay)
   - [Distortion](#distortion)
   - [Flanger](#flanger)
   - [Compressor](#compressor)
