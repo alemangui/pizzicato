@@ -59,9 +59,7 @@ gulp test
 ```
 
 Or to build without tests:
-```
-gulp scripts
-```
+```gulp scripts``` or ```gulp watch```
 
 <a name="tldr"/>
 ## TL;DR: How does it work?

@@ -30,6 +30,7 @@
 	},
 	"scripts": {
 		"build": "gulp scripts",
+		"watch": "gulp watch",
 		"test": "gulp test"
 	},
 	"keywords": [
