@@ -6,54 +6,9 @@
 
 Pizzicato aims to simplify the way you create and manipulate sounds via the Web Audio API. Take a look at the [demo site here](https://alemangui.github.io/pizzicato/).
 
-You can use bower to get Pizzicato
-```
-bower install pizzicato
-```
-
-Or checkout the project, install dependencies with 
-```
-npm install
-```
-
-And then run tests and build with
-```
-gulp test
-```
-
-Or to build without tests:
-```
-gulp scripts
-```
-
-## TL;DR: How does it work?
-Include Pizzicato in your site
-```html
-<script src="./Pizzicato.js"></script>
-```
-
-Create a sound
-```javascript
-var sawtoothWave = new Pizzicato.Sound({ 
-    source: 'wave',
-    options {
-        type: 'sawtooth'
-    }
-});
-```
-
-Add effects
-```javascript
-var delay = new Pizzicato.Effects.Delay();
-sawtoothWave.addEffect(delay);
-```
-
-Play it!
-```javascript
-sawtoothWave.play();
-```
-
 ## Table of contents
+- [Get Pizzicato](#get-pizzicato)
+- [TL;DR: How does it work?](#tldr)
 - [Create a sound](#create-a-sound)
   - [Sounds from a wave](#sounds-from-a-wave)
   - [Sounds from a file](#sounds-from-a-file)
@@ -84,6 +39,57 @@ sawtoothWave.play();
 - [Support](#support)
   - [Browsers](#browsers)
   - [Audio formats](#audio-formats)
+
+<a name="get-pizzicato"/>
+## Get Pizzicato
+
+You can use bower to get Pizzicato
+```
+bower install pizzicato
+```
+
+Or checkout the project, install dependencies with 
+```
+npm install
+```
+
+And then run tests and build with
+```
+gulp test
+```
+
+Or to build without tests:
+```
+gulp scripts
+```
+
+<a name="tldr"/>
+## TL;DR: How does it work?
+Include Pizzicato in your site
+```html
+<script src="./Pizzicato.js"></script>
+```
+
+Create a sound
+```javascript
+var sawtoothWave = new Pizzicato.Sound({ 
+    source: 'wave',
+    options {
+        type: 'sawtooth'
+    }
+});
+```
+
+Add effects
+```javascript
+var delay = new Pizzicato.Effects.Delay();
+sawtoothWave.addEffect(delay);
+```
+
+Play it!
+```javascript
+sawtoothWave.play();
+```
 
 <a name="create-a-sound"/>
 ## Create a sound
