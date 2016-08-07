@@ -74,10 +74,62 @@ h3, h4 {
   margin-bottom: 5px;
 }
 
+.menu {
+    float: left;
+    background: #e9e9e9;
+    font-size: 0.8em;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    padding: 20px;
+    width: 140px;
+}
+
+.menu-subtitle {
+    text-transform: uppercase;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #a3a3a3;
+}
+
+.menu-item {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    display: block;
+    text-decoration: none;
+    color: #333;
+}
+
+.menu-item:hover {
+    text-decoration: underline;
+}
+
+.menu-item:first-child {
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+
+#wrapper {
+    display: flex;
+    justify-content: center;
+    min-width: 900px;
+}
+
+#space-blocker-left {
+  width: 200px;
+  flex-shrink: 0;
+}
+
 .container {
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 700px;
+    flex-shrink: 0;
+}
+
+#space-blocker-right {
+  width: 200px;
+  flex-shrink: 1;
 }
 
 .logo {
