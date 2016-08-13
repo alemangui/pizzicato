@@ -421,8 +421,11 @@ div.error {
    Media Queries
    ========================================================================== */
 
-@media only screen and (min-width: 35em) {
+@media only screen and (max-width: 900px) {
 
+  #space-blocker-left, #space-blocker-right, .menu {
+    display: none;
+  }
 }
 
 @media print,
