@@ -15,10 +15,16 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
   - [Sounds from input](#sounds-from-input)
   - [Sounds from a function](#sounds-from-a-function)
 - [Using sounds](#using-sounds)
-  - [Play](#sounds-play)
-  - [Pause](#sounds-pause)
-  - [Stop](#sounds-stop)
-  - [Clone](#sounds-clone)
+  - [play()](#sounds-play)
+  - [pause()](#sounds-pause)
+  - [stop()](#sounds-stop)
+  - [clone()](#sounds-clone)
+  - [addEffect()](#sounds-add-effect)
+  - [removeEffect()](#sounds-remove-effect)
+  - [volume](#sounds-volume)
+  - [attack](#sounds-attack)
+  - [sustain](#sounds-sustain)
+  - [frequency](#sounds-frequency)
 - [Effects](#effects)
   - [Delay](#delay)
   - [Ping Pong Delay](#pingpongdelay)
@@ -119,7 +125,7 @@ For example, this objects describes a sine waveform with a frequency of 440:
 Sounds can be created from a variety of sources.
 
 <a name="sounds-from-a-wave"/>
-### Sounds from a wave
+### Sounds from a wave ([example](https://alemangui.github.io/pizzicato/#sound-from-waveform))
 To create a sound from an oscillator with a certain waveform, use the ```source: wave``` in your description. Additionally, the following optional parameters are possible inside the ```options``` object:
 * ```type``` _(Optional; ```sine```, ```square```, ```triangle``` or ```sawtooth```, defaults to ```sine```)_: Specifies the type of waveform.
 * ```frequency``` _(Optional; defaults to 440)_: Indicates the frequency of the wave (i.e., a 440 value will yield an A note).
@@ -141,7 +147,7 @@ var sound = new Pizzicato.Sound();
 ```
 
 <a name="sounds-from-a-file"/>
-### Sounds from a file
+### Sounds from a file ([example](https://alemangui.github.io/pizzicato/#sound-from-file))
 In order to load a sound from a file, include the ```source: file``` in your description. Additionally, the following  parameters are possible inside the ```options``` object:
 * ```path``` _(Mandatory; string or array of strings)_: Specifies the path of the sound file. It is also possible to have an array of paths to fallback on. Pizzicato will attempt to load the paths in order, passing on to the next one in case of failure.
 * ```loop``` _(Optional; boolean, defaults to false)_: If set, the file will start playing again after the end.
@@ -174,7 +180,7 @@ var sound = new Pizzicato.Sound('./audio/sound.wav', function() {...});
 Check the [supported audio files](#audio-formats) that can be played with Pizzicato.
 
 <a name="sounds-from-input"/>
-### Sounds from the user input
+### Sounds from the user input ([example](https://alemangui.github.io/pizzicato/#sound-from-input))
 It is also possible to use the sound input from the computer. This is usually the microphone, but it could also be a line-in input. To use this, add ```source: input``` in your description. The following optional parameters are possible inside ```options``` object:
 * ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
 * ```sustain``` _(Optional; defaults to 0)_: Value in seconds that indicates the fade-out time once the sound is stopped.
@@ -188,7 +194,7 @@ var voice = new Pizzicato.Sound({
 ```
 
 <a name="sounds-from-a-function"/>
-### Sounds from a function
+### Sounds from a function ([example](https://alemangui.github.io/pizzicato/#sound-from-function))
 For more creative freedom, Pizzicato also allows direct audio processing. Sounds can be created from a Javascript function by including ```source: script``` in the description. The following parameters are possible in the ```options``` object:
 * ```audioFunction``` _(Mandatory; function(<audio processing event>))_: Function that will be called with the audio processing event.
 * ```bufferSize``` _(Optional; number - must be a power of 2.)_: This value controls how many sample frames will be processed at each audio process event. Lower values will result in lower latency, higher values help prevent glitches.
@@ -214,7 +220,7 @@ var whiteNoise = Pizzicato.Sound({
 ## Using sounds
 
 <a name="sounds-play"/>
-### Play
+### Play ([example](https://alemangui.github.io/pizzicato/#sound-from-waveform))
 
 You can play a sound by calling it's ```play``` function. It takes two optional parameters:
 
@@ -252,6 +258,88 @@ You can clone a sound object by calling it's ```clone``` function. The object re
 
 ```javascript
 sound.clone();
+```
+
+<a name="sounds-add-effect"/>
+### Add effects ([example](https://alemangui.github.io/pizzicato/#delay))
+
+You can add effects to a sound object by calling it's ```addEffect(effect)``` function. The function gets as parameter a Pizzicato Effect (see [effects](#effects)).
+
+* ```effect``` _(type: Pizzicato.Effect)_: The effect to add to the sound object.
+
+Example:
+```javascript
+var sound = new Pizzicato.Sound();
+var delay = new Pizzicato.Effects.Delay();
+sound.addEffect(delay);
+```
+
+<a name="sounds-remove-effect"/>
+### Remove effects
+
+You can remove effects that have been added to a sound object by calling it's ```removeEffect(effect)``` function. The function gets as parameter a Pizzicato Effect (see [effects](#effects)) that is already applied to the sound object.
+
+* ```effect``` _(type: Pizzicato.Effect)_: The effect to remove from the sound object.
+
+Example:
+```javascript
+var sound = new Pizzicato.Sound();
+var delay = new Pizzicato.Effects.Delay();
+sound.addEffect(delay);
+...
+sound.removeEffect(delay);
+```
+
+<a name="sounds-volume"/>
+### Volume
+
+Use the sound's ```volume``` property to modify its volume.
+
+* ```volume``` _(min: 0, max: 1, defaults to 1)_: The sound's volume
+
+Example:
+```javascript
+var sound = new Pizzicato.Sound();
+sound.volume = 0.5;
+```
+
+<a name="sounds-attack"/>
+### Attack ([example](https://alemangui.github.io/pizzicato/#attack-sustain))
+
+Use the sound's ```attack``` property to modify its attack (or fade-in) value. This value eases the beginning of the sound, often avoiding unwanted clicks.
+
+* ```attack``` _(min: 0, max: 10, defaults to 0.04)_: The sound's attack.
+
+Example:
+```javascript
+var sound = new Pizzicato.Sound();
+sound.attack = 0.9;
+```
+
+<a name="sounds-sustain"/>
+### Sustain ([example](https://alemangui.github.io/pizzicato/#attack-sustain))
+
+Use the sound's ```sustain``` property to modify its sustain (or fade-out) value. This value eases the end of the sound, often avoiding unwanted clicks.
+
+* ```sustain``` _(min: 0, max: 10, defaults to 0.04)_: The sound's sustain.
+
+Example:
+```javascript
+var sound = new Pizzicato.Sound();
+sound.sustain = 0.9;
+```
+
+<a name="sounds-frequency"/>
+### Frequency
+
+If you started a sound of type [wave](#sounds-from-a-wave), you can modify the frequency of the oscillator by altering the ```frequency``` property.
+
+* ```frequency``` _(defaults to 440)_: The oscillator's frequency of a sound of type wave.
+
+Example:
+```javascript
+var sound = new Pizzicato.Sound();
+sound.sustain = 0.9;
 ```
 
 <a name="effects"/>
