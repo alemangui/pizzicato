@@ -49,6 +49,14 @@
 			return (audioNode && audioNode.toString() === "[object OscillatorNode]");
 		},
 	
+		isEffect: function(effect) {
+			for (var key in Pizzicato.Effects)
+				if (effect instanceof Pizzicato.Effects[key])
+					return true;
+	
+			return false;
+		},
+	
 		// Takes a number from 0 to 1 and normalizes it 
 		// to fit within range floor to ceiling
 		normalize: function(num, floor, ceil) {
@@ -455,6 +463,11 @@
 			enumerable: true,
 	
 			value: function(effect) {
+				if (!effect || !Pz.Util.isEffect(effect)) {
+					console.warn('Invalid effect.');
+					return;
+				}
+	
 				this.effects.push(effect);
 				this.connectEffects();
 				if (!!this.sourceNode) {
@@ -472,8 +485,10 @@
 	
 				var index = this.effects.indexOf(effect);
 	
-				if (index === -1)
+				if (index === -1) {
+					console.warn('Cannot remove effect that is not applied to this sound.');
 					return;
+				}
 	
 				var shouldResumePlaying = this.playing;
 	

@@ -290,6 +290,11 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 		enumerable: true,
 
 		value: function(effect) {
+			if (!effect || !Pz.Util.isEffect(effect)) {
+				console.warn('Invalid effect.');
+				return;
+			}
+
 			this.effects.push(effect);
 			this.connectEffects();
 			if (!!this.sourceNode) {
@@ -307,8 +312,10 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 			var index = this.effects.indexOf(effect);
 
-			if (index === -1)
+			if (index === -1) {
+				console.warn('Cannot remove effect that is not applied to this sound.');
 				return;
+			}
 
 			var shouldResumePlaying = this.playing;
 
