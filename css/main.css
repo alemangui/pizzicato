@@ -115,6 +115,7 @@ h3, h4 {
     display: flex;
     justify-content: center;
     min-width: 900px;
+    padding: 0;
 }
 
 #space-blocker-left {
@@ -407,7 +408,6 @@ input[type=range]:focus::-ms-fill-upper {
   background: #367ebd;
 }
 
-
 div.error {
   display: none;
   background: rgb(240, 195, 195);
@@ -425,6 +425,54 @@ div.error {
 
   #space-blocker-left, #space-blocker-right, .menu {
     display: none;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+
+  #wrapper {
+    display: block;
+    min-width: 0;
+    padding: 15px;
+  }
+
+  .container {
+    width: 100%;
+    font-size: 0.9em;
+  }
+
+  .logo > img {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+
+  #wrapper {
+    padding: 5px;
+  }
+
+  .container {
+    font-size: 0.7em;
+  }
+
+  .slider {
+    width: 95%;
+  }
+
+  .slider>label {
+    width: 30%;
+  }
+
+  input[type=range] {
+    width: 50%;
+  }
+
+  .slider-value {
+    width: 10%;
+  }
+  code[class*="language-"], pre[class*="language-"] {  
+      white-space: pre-wrap;
   }
 }
 
