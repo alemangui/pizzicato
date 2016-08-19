@@ -434,7 +434,15 @@
 	
 				this.stopWithSustain();
 	
-				this.offsetTime = Pz.context.currentTime - this.lastTimePlayed;
+				var elapsedTime = Pz.context.currentTime - this.lastTimePlayed;
+				
+				// If we are using a buffer node - potentially in loop mode - we need to
+				// know where to re-start the sound independently of the loop it is in.
+				if (this.sourceNode.buffer)
+					this.offsetTime = elapsedTime % (this.sourceNode.buffer.length / Pz.context.sampleRate);
+				else
+					this.offsetTime = elapsedTime;
+	
 				this.trigger('pause');
 			}
 		},
