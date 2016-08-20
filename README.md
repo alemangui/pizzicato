@@ -1,6 +1,6 @@
 <img align="center" src="https://alemangui.github.io/pizzicato/img/horizontal-logo.svg" alt="Pizzicato.js">
 
-[![Build Status](https://travis-ci.org/alemangui/pizzicato.svg?branch=master)](https://travis-ci.org/alemangui/pizzicato)
+[![Build Status](https://travis-ci.org/alemangui/pizzicato.svg?branch=master)](https://travis-ci.org/alemangui/pizzicato) [![npm](https://img.shields.io/npm/v/pizzicato.svg?maxAge=2592000)](https://www.npmjs.com/package/pizzicato) [![Bower](https://img.shields.io/bower/v/pizzicato.svg?maxAge=2592000)]()
 
 ##A Web Audio library
 
