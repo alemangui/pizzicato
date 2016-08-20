@@ -1,7 +1,7 @@
 {
 	"name": "pizzicato",
 	"description": "A web-audio library to simplify using and manipulating sounds.",
-	"version": "0.3.1",
+	"version": "0.3.2",
 	"license": "MIT",
 	"homepage": "http://alemangui.github.io/pizzicato/",
 	"author": {
