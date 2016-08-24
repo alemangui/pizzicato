@@ -153,14 +153,14 @@ var voice = new Pizzicato.Sound({ source: 'input' }, function(err) {
 	document.getElementById('microphone-error').style.display = 'block';
 });
 
-var filteredDrums = new Pz.Sound({ 
+var countdown = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
 		path: './audio/countdown.m4a', 
 		loop: true 
 	}
 }, function() { 
-	filteredDrums.addEffect(ringModulator); 
+	countdown.addEffect(ringModulator); 
 });
 
 
@@ -371,7 +371,7 @@ var segments = [
 		]
 	},
 	{
-		audio: filteredDrums,
+		audio: countdown,
 		playButton: document.getElementById('play-recorded-voice'),
 		stopButton: document.getElementById('stop-recorded-voice'),
 		volumeSlider: document.getElementById('volume-recorded-voice'),
@@ -382,8 +382,8 @@ var segments = [
 					speed: document.getElementById('ringmod-speed'),
 					mix: document.getElementById('ringmod-mix'),
 					distortion: document.getElementById('ringmod-distortion')
+					}
 				}
-			}
 		]
 	}
 ]
