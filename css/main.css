@@ -111,6 +111,20 @@ h3, h4 {
     margin-bottom: 25px;
 }
 
+.download-button {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    background: #d6d6d6;
+}
+
+.download-button:hover {
+    background: #c8c8c8;
+}
+
 #wrapper {
     display: flex;
     justify-content: center;
