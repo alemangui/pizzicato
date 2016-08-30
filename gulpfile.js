@@ -37,4 +37,8 @@ gulp.task('test', ['scripts'], function(done) {
 	}, done).start();
 })
 
+gulp.task('watch', ['scripts'], function() {
+	gulp.watch(['./src/**/*.js'], ['scripts']);
+});
+
 gulp.task('default', ['hint', 'scripts', 'test']);

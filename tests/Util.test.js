@@ -91,6 +91,18 @@ describe('Util', function() {
 	});
 
 
+	it('contains a working isEffect function', function() {
+		var isEffect = Pizzicato.Util.isEffect;
+		var delay = new Pizzicato.Effects.Delay();
+		var sound = new Pizzicato.Sound();
+
+		expect(isEffect(delay)).toBe(true);
+		expect(isEffect(true)).toBe(false);
+		expect(isEffect(false)).toBe(false);
+		expect(isEffect(sound)).toBe(false);
+	});
+
+
 	it('returns a normalized version of a number', function() {
 		var normalize = Pizzicato.Util.normalize;
 

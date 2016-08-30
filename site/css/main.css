@@ -74,10 +74,77 @@ h3, h4 {
   margin-bottom: 5px;
 }
 
+.menu {
+    float: left;
+    background: #e9e9e9;
+    font-size: 0.8em;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    padding: 20px;
+    width: 140px;
+}
+
+.menu-subtitle {
+    text-transform: uppercase;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #a3a3a3;
+}
+
+.menu-item {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    display: block;
+    text-decoration: none;
+    color: #333;
+}
+
+.menu-item:hover {
+    text-decoration: underline;
+}
+
+.menu-item:first-child {
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+
+.download-button {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    background: #d6d6d6;
+}
+
+.download-button:hover {
+    background: #c8c8c8;
+}
+
+#wrapper {
+    display: flex;
+    justify-content: center;
+    min-width: 900px;
+    padding: 0;
+}
+
+#space-blocker-left {
+  width: 200px;
+  flex-shrink: 0;
+}
+
 .container {
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 700px;
+    flex-shrink: 0;
+}
+
+#space-blocker-right {
+  width: 200px;
+  flex-shrink: 1;
 }
 
 .logo {
@@ -355,7 +422,6 @@ input[type=range]:focus::-ms-fill-upper {
   background: #367ebd;
 }
 
-
 div.error {
   display: none;
   background: rgb(240, 195, 195);
@@ -369,8 +435,59 @@ div.error {
    Media Queries
    ========================================================================== */
 
-@media only screen and (min-width: 35em) {
+@media only screen and (max-width: 900px) {
 
+  #space-blocker-left, #space-blocker-right, .menu {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+
+  #wrapper {
+    display: block;
+    min-width: 0;
+    padding: 15px;
+  }
+
+  .container {
+    width: 100%;
+    font-size: 0.9em;
+  }
+
+  .logo > img {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+
+  #wrapper {
+    padding: 5px;
+  }
+
+  .container {
+    font-size: 0.7em;
+  }
+
+  .slider {
+    width: 95%;
+  }
+
+  .slider>label {
+    width: 30%;
+  }
+
+  input[type=range] {
+    width: 50%;
+  }
+
+  .slider-value {
+    width: 10%;
+  }
+  code[class*="language-"], pre[class*="language-"] {  
+      white-space: pre-wrap;
+  }
 }
 
 @media print,

@@ -1,10 +1,53 @@
 <img align="center" src="https://alemangui.github.io/pizzicato/img/horizontal-logo.svg" alt="Pizzicato.js">
 
-[![Build Status](https://travis-ci.org/alemangui/pizzicato.svg?branch=master)](https://travis-ci.org/alemangui/pizzicato)
+[![Build Status](https://travis-ci.org/alemangui/pizzicato.svg?branch=master)](https://travis-ci.org/alemangui/pizzicato) [![npm](https://img.shields.io/npm/v/pizzicato.svg?maxAge=2592000)](https://www.npmjs.com/package/pizzicato) [![Bower](https://img.shields.io/bower/v/pizzicato.svg?maxAge=2592000)]()
 
 ##A Web Audio library
 
 Pizzicato aims to simplify the way you create and manipulate sounds via the Web Audio API. Take a look at the [demo site here](https://alemangui.github.io/pizzicato/).
+
+## Table of contents
+- [Get Pizzicato](#get-pizzicato)
+- [TL;DR: How does it work?](#tldr)
+- [Create a sound](#create-a-sound)
+  - [Sounds from a wave](#sounds-from-a-wave)
+  - [Sounds from a file](#sounds-from-a-file)
+  - [Sounds from input](#sounds-from-input)
+  - [Sounds from a function](#sounds-from-a-function)
+- [Using sounds](#using-sounds)
+  - [play()](#sounds-play)
+  - [pause()](#sounds-pause)
+  - [stop()](#sounds-stop)
+  - [clone()](#sounds-clone)
+  - [addEffect()](#sounds-add-effect)
+  - [removeEffect()](#sounds-remove-effect)
+  - [volume](#sounds-volume)
+  - [attack](#sounds-attack)
+  - [sustain](#sounds-sustain)
+  - [frequency](#sounds-frequency)
+- [Effects](#effects)
+  - [Delay](#delay)
+  - [Ping Pong Delay](#pingpongdelay)
+  - [Dub Delay](#dubdelay)
+  - [Distortion](#distortion)
+  - [Flanger](#flanger)
+  - [Compressor](#compressor)
+  - [Low-pass filter](#low-pass-filter)
+  - [High-pass filter](#high-pass-filter)
+  - [Stereo Panner](#stereo-panner)
+  - [Convolver](#convolver)
+  - [Reverb](#reverb)
+  - [Ring Modulator](#ring-modulator)
+- [Advanced](#advanced)
+  - [Accessing the audio context](#accessing-the-context)
+  - [Getting an analyser node for a sound](#analyser-node)
+  - [General volume](#general-volume)
+- [Support](#support)
+  - [Browsers](#browsers)
+  - [Audio formats](#audio-formats)
+
+<a name="get-pizzicato"/>
+## Get Pizzicato
 
 You can use bower to get Pizzicato
 ```
@@ -22,10 +65,9 @@ gulp test
 ```
 
 Or to build without tests:
-```
-gulp scripts
-```
+```gulp scripts``` or ```gulp watch```
 
+<a name="tldr"/>
 ## TL;DR: How does it work?
 Include Pizzicato in your site
 ```html
@@ -52,37 +94,6 @@ Play it!
 ```javascript
 sawtoothWave.play();
 ```
-
-## Table of contents
-- [Create a sound](#create-a-sound)
-  - [Sounds from a wave](#sounds-from-a-wave)
-  - [Sounds from a file](#sounds-from-a-file)
-  - [Sounds from input](#sounds-from-input)
-  - [Sounds from a function](#sounds-from-a-function)
-- [Using sounds](#using-sounds)
-  - [Play](#sounds-play)
-  - [Pause](#sounds-pause)
-  - [Stop](#sounds-stop)
-  - [Clone](#sounds-clone)
-- [Effects](#effects)
-  - [Delay](#delay)
-  - [PingPongDelay](#pingpongdelay)
-  - [Distortion](#distortion)
-  - [Flanger](#flanger)
-  - [Compressor](#compressor)
-  - [Low-pass filter](#low-pass-filter)
-  - [High-pass filter](#high-pass-filter)
-  - [Stereo Panner](#stereo-panner)
-  - [Convolver](#convolver)
-  - [Reverb](#reverb)
-  - [Ring Modulator](#ringmod)
-- [Advanced](#advanced)
-  - [Accessing the audio context](#accessing-the-context)
-  - [Getting an analyser node for a sound](#analyser-node)
-  - [General volume](#general-volume)
-- [Support](#support)
-  - [Browsers](#browsers)
-  - [Audio formats](#audio-formats)
 
 <a name="create-a-sound"/>
 ## Create a sound
@@ -114,7 +125,7 @@ For example, this objects describes a sine waveform with a frequency of 440:
 Sounds can be created from a variety of sources.
 
 <a name="sounds-from-a-wave"/>
-### Sounds from a wave
+### Sounds from a wave ([example](https://alemangui.github.io/pizzicato/#sound-from-waveform))
 To create a sound from an oscillator with a certain waveform, use the ```source: wave``` in your description. Additionally, the following optional parameters are possible inside the ```options``` object:
 * ```type``` _(Optional; ```sine```, ```square```, ```triangle``` or ```sawtooth```, defaults to ```sine```)_: Specifies the type of waveform.
 * ```frequency``` _(Optional; defaults to 440)_: Indicates the frequency of the wave (i.e., a 440 value will yield an A note).
@@ -136,7 +147,7 @@ var sound = new Pizzicato.Sound();
 ```
 
 <a name="sounds-from-a-file"/>
-### Sounds from a file
+### Sounds from a file ([example](https://alemangui.github.io/pizzicato/#sound-from-file))
 In order to load a sound from a file, include the ```source: file``` in your description. Additionally, the following  parameters are possible inside the ```options``` object:
 * ```path``` _(Mandatory; string or array of strings)_: Specifies the path of the sound file. It is also possible to have an array of paths to fallback on. Pizzicato will attempt to load the paths in order, passing on to the next one in case of failure.
 * ```loop``` _(Optional; boolean, defaults to false)_: If set, the file will start playing again after the end.
@@ -169,7 +180,7 @@ var sound = new Pizzicato.Sound('./audio/sound.wav', function() {...});
 Check the [supported audio files](#audio-formats) that can be played with Pizzicato.
 
 <a name="sounds-from-input"/>
-### Sounds from the user input
+### Sounds from the user input ([example](https://alemangui.github.io/pizzicato/#sound-from-input))
 It is also possible to use the sound input from the computer. This is usually the microphone, but it could also be a line-in input. To use this, add ```source: input``` in your description. The following optional parameters are possible inside ```options``` object:
 * ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
 * ```sustain``` _(Optional; defaults to 0)_: Value in seconds that indicates the fade-out time once the sound is stopped.
@@ -183,7 +194,7 @@ var voice = new Pizzicato.Sound({
 ```
 
 <a name="sounds-from-a-function"/>
-### Sounds from a function
+### Sounds from a function ([example](https://alemangui.github.io/pizzicato/#sound-from-function))
 For more creative freedom, Pizzicato also allows direct audio processing. Sounds can be created from a Javascript function by including ```source: script``` in the description. The following parameters are possible in the ```options``` object:
 * ```audioFunction``` _(Mandatory; function(<audio processing event>))_: Function that will be called with the audio processing event.
 * ```bufferSize``` _(Optional; number - must be a power of 2.)_: This value controls how many sample frames will be processed at each audio process event. Lower values will result in lower latency, higher values help prevent glitches.
@@ -209,7 +220,7 @@ var whiteNoise = Pizzicato.Sound({
 ## Using sounds
 
 <a name="sounds-play"/>
-### Play
+### Play ([example](https://alemangui.github.io/pizzicato/#sound-from-waveform))
 
 You can play a sound by calling it's ```play``` function. It takes two optional parameters:
 
@@ -249,6 +260,88 @@ You can clone a sound object by calling it's ```clone``` function. The object re
 sound.clone();
 ```
 
+<a name="sounds-add-effect"/>
+### Add effects ([example](https://alemangui.github.io/pizzicato/#delay))
+
+You can add effects to a sound object by calling it's ```addEffect(effect)``` function. The function gets as parameter a Pizzicato Effect (see [effects](#effects)).
+
+* ```effect``` _(type: Pizzicato.Effect)_: The effect to add to the sound object.
+
+Example:
+```javascript
+var sound = new Pizzicato.Sound();
+var delay = new Pizzicato.Effects.Delay();
+sound.addEffect(delay);
+```
+
+<a name="sounds-remove-effect"/>
+### Remove effects
+
+You can remove effects that have been added to a sound object by calling it's ```removeEffect(effect)``` function. The function gets as parameter a Pizzicato Effect (see [effects](#effects)) that is already applied to the sound object.
+
+* ```effect``` _(type: Pizzicato.Effect)_: The effect to remove from the sound object.
+
+Example:
+```javascript
+var sound = new Pizzicato.Sound();
+var delay = new Pizzicato.Effects.Delay();
+sound.addEffect(delay);
+...
+sound.removeEffect(delay);
+```
+
+<a name="sounds-volume"/>
+### Volume
+
+Use the sound's ```volume``` property to modify its volume.
+
+* ```volume``` _(min: 0, max: 1, defaults to 1)_: The sound's volume
+
+Example:
+```javascript
+var sound = new Pizzicato.Sound();
+sound.volume = 0.5;
+```
+
+<a name="sounds-attack"/>
+### Attack ([example](https://alemangui.github.io/pizzicato/#attack-sustain))
+
+Use the sound's ```attack``` property to modify its attack (or fade-in) value. This value eases the beginning of the sound, often avoiding unwanted clicks.
+
+* ```attack``` _(min: 0, max: 10, defaults to 0.04)_: The sound's attack.
+
+Example:
+```javascript
+var sound = new Pizzicato.Sound();
+sound.attack = 0.9;
+```
+
+<a name="sounds-sustain"/>
+### Sustain ([example](https://alemangui.github.io/pizzicato/#attack-sustain))
+
+Use the sound's ```sustain``` property to modify its sustain (or fade-out) value. This value eases the end of the sound, often avoiding unwanted clicks.
+
+* ```sustain``` _(min: 0, max: 10, defaults to 0.04)_: The sound's sustain.
+
+Example:
+```javascript
+var sound = new Pizzicato.Sound();
+sound.sustain = 0.9;
+```
+
+<a name="sounds-frequency"/>
+### Frequency
+
+If you started a sound of type [wave](#sounds-from-a-wave), you can modify the frequency of the oscillator by altering the ```frequency``` property.
+
+* ```frequency``` _(defaults to 440)_: The oscillator's frequency of a sound of type wave.
+
+Example:
+```javascript
+var sound = new Pizzicato.Sound();
+sound.sustain = 0.9;
+```
+
 <a name="effects"/>
 ## Effects
 Once a sound is created you can add effects to it by using the ```addEffect``` function. To remove an effect, you can use the ```removeEffect``` function.
@@ -276,8 +369,8 @@ sound.addEffect(delay);
 sound.play();
 ```
 
-<a name="pingpongdelay"/>
-### PingPongDelay ([example](https://alemangui.github.io/pizzicato/#ping-pong-delay))
+<a name="ping-pong-delay"/>
+### Ping Pong Delay ([example](https://alemangui.github.io/pizzicato/#ping-pong-delay))
 The ping pong delay effect is similar to a regular [Delay](#delay) effect, however on each feedback loop the output is swapped between left and right channels. The following options are available when creating a delay effect:
 * ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
 * ```time``` _(min: 0, max: 180, defaults to 0.3)_: Interval time in seconds.
@@ -291,6 +384,26 @@ var pingPongDelay = new Pizzicato.Effects.PingPongDelay({
     mix: 0.68
 });
 sound.addEffect(pingPongDelay);
+sound.play();
+```
+
+<a name="dubdelay"/>
+### Dub Delay ([example](https://alemangui.github.io/pizzicato/#dub-delay))
+The dub delay effect is similar to a regular [Delay](#delay) effect, however on each feedback loop the output is routed through a biquad filter. The following options are available when creating a delay effect:
+* ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
+* ```time``` _(min: 0, max: 180, defaults to 0.3)_: Interval time in seconds.
+* ```cutoff``` _(min: 0, max: 4000, defaults to 700)_: Frequency value applied to each successive loop. The lower the value, the more different each repetition will be perceived.
+* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output (the delayed sound).
+
+Example:
+```javascript
+var dubDelay = new Pizzicato.Effects.DubDelay({
+    feedback: 0.6,
+    time: 0.7,
+    mix: 0.5,
+    cutoff: 700
+});
+sound.addEffect(dubDelay);
 sound.play();
 ```
 
@@ -465,9 +578,9 @@ sound.addEffect(reverb);
 sound.play();
 ```
 
-<a name="ringmod"/>
+<a name="ring-modulator"/>
 ### Ring Modulator ([example](https://alemangui.github.io/pizzicato/#ring-modulator))
-The ring modulator effect combines two input signals, where one of the inputs is a sine wave modulating the other. The 'ring' in this effect derives from the layout of diode nodes in the original analogue equipment, and the also refers to the sound being increasingly modulated as it travels through the ring of diodes. 
+The ring modulator effect combines two input signals, where one of the inputs is a sine wave modulating the other. [This article from the BBC](http://webaudio.prototyping.bbc.co.uk/ring-modulator/) goes into deeper detail and explains how to recreate it. The 'ring' in this effect derives from the layout of diode nodes in the original analogue equipment, and also refers to the sound being increasingly modulated as it travels through the ring of diodes. 
 
 * ```distortion``` _(min: 0.2, max: 50, defaults to 1)_: Level of distortion applied to the diode nodes.
 * ```speed``` _(min: 0, max: 2000, defaults to 30)_: The frequency of the modulating signal.

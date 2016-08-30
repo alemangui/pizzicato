@@ -1,44 +1,37 @@
-/**
- * Adapted from https://github.com/mmckegg/web-audio-school/blob/master/lessons/3.%20Effects/18.%20Ping%20Pong%20Delay/answer.js
- */
-
-Pizzicato.Effects.PingPongDelay = function(options) {
+Pizzicato.Effects.DubDelay = function(options) {
 
 	this.options = {};
 	options = options || this.options;
 
 	var defaults = {
-		feedback: 0.5,
-		time: 0.3,
-		mix: 0.5
+		feedback: 0.6,
+		time: 0.7,
+		mix: 0.5,
+		cutoff: 700
 	};
 
 	this.inputNode = Pizzicato.context.createGain();
 	this.outputNode = Pizzicato.context.createGain();
-	this.delayNodeLeft = Pizzicato.context.createDelay();
-	this.delayNodeRight = Pizzicato.context.createDelay();
 	this.dryGainNode = Pizzicato.context.createGain();
 	this.wetGainNode = Pizzicato.context.createGain();
 	this.feedbackGainNode = Pizzicato.context.createGain();
-	this.channelMerger = Pizzicato.context.createChannelMerger(2);
+	this.delayNode = Pizzicato.context.createDelay();
+	this.bqFilterNode = Pizzicato.context.createBiquadFilter(); 
+
 
 	// dry mix
 	this.inputNode.connect(this.dryGainNode);
-	// dry mix out
 	this.dryGainNode.connect(this.outputNode);
 
-	// the feedback loop
-	this.delayNodeLeft.connect(this.channelMerger, 0, 0);
-	this.delayNodeRight.connect(this.channelMerger, 0, 1);
-	this.delayNodeLeft.connect(this.delayNodeRight);
-	this.feedbackGainNode.connect(this.delayNodeLeft);
-	this.delayNodeRight.connect(this.feedbackGainNode);
-
 	// wet mix
+	this.inputNode.connect(this.wetGainNode);
 	this.inputNode.connect(this.feedbackGainNode);
 
-	// wet out
-	this.channelMerger.connect(this.wetGainNode);
+	this.feedbackGainNode.connect(this.bqFilterNode);
+	this.bqFilterNode.connect(this.delayNode);
+	this.delayNode.connect(this.feedbackGainNode);
+	this.delayNode.connect(this.wetGainNode);
+
 	this.wetGainNode.connect(this.outputNode);
 
 	for (var key in defaults) {
@@ -47,7 +40,7 @@ Pizzicato.Effects.PingPongDelay = function(options) {
 	}
 };
 
-Pizzicato.Effects.PingPongDelay.prototype = Object.create(null, {
+Pizzicato.Effects.DubDelay.prototype = Object.create(null, {
 
 	/**
 	 * Gets and sets the dry/wet mix.
@@ -84,8 +77,7 @@ Pizzicato.Effects.PingPongDelay.prototype = Object.create(null, {
 				return;
 
 			this.options.time = time;
-			this.delayNodeLeft.delayTime.value = time;
-			this.delayNodeRight.delayTime.value = time;
+			this.delayNode.delayTime.value = time;
 		}
 	},
 
@@ -106,6 +98,27 @@ Pizzicato.Effects.PingPongDelay.prototype = Object.create(null, {
 			this.options.feedback = parseFloat(feedback, 10);
 			this.feedbackGainNode.gain.value = this.feedback;
 		}
+	},
+
+	/**
+	 * Frequency on delay repeats
+	 */
+	cutoff: {
+		enumerable: true,
+
+		get: function() {
+			return this.options.cutoff;	
+		},
+
+		set: function(cutoff) {
+			if (!Pz.Util.isInRange(cutoff, 0, 4000))
+				return;
+
+			this.options.cutoff = cutoff;
+			this.bqFilterNode.frequency.value = this.cutoff;
+		}
 	}
+
+
 
 });

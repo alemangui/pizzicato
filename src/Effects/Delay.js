@@ -16,12 +16,21 @@ Pizzicato.Effects.Delay = function(options) {
 	this.feedbackGainNode = Pizzicato.context.createGain();
 	this.delayNode = Pizzicato.context.createDelay();
 
+	// line in to dry mix
 	this.inputNode.connect(this.dryGainNode);
-	this.inputNode.connect(this.delayNode);
-	this.delayNode.connect(this.feedbackGainNode);
-	this.delayNode.connect(this.wetGainNode);
-	this.feedbackGainNode.connect(this.delayNode);
+	// dry line out
 	this.dryGainNode.connect(this.outputNode);
+
+	// feedback loop
+	this.delayNode.connect(this.feedbackGainNode);
+	this.feedbackGainNode.connect(this.delayNode);
+
+	// line in to wet mix
+	this.inputNode.connect(this.delayNode);
+	// wet out
+	this.delayNode.connect(this.wetGainNode);
+	
+	// wet line out
 	this.wetGainNode.connect(this.outputNode);
 
 	for (var key in defaults) {

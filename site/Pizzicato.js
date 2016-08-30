@@ -1,150 +1,106 @@
 (function(root) {
 	'use strict';
 
-	var AudioContext = window.AudioContext || window.webkitAudioContext; 
+	var Pizzicato = {};
+	var Pz = Pizzicato;
+	var commonJS = typeof module === "object" && module.exports;
+	var amd = typeof define === "function" && define.amd;
 
-	var Pizzicato = root.Pz = root.Pizzicato = {};
+	if (commonJS)
+		module.exports = Pizzicato;
+	else if (amd)
+		define([], Pizzicato);
+	else
+		root.Pizzicato = root.Pz = Pizzicato;
+
+	var AudioContext = root.AudioContext || root.webkitAudioContext; 
+
+	if (!AudioContext) {
+		console.error('No AudioContext found in this environment. Please ensure your window or global object contains a working AudioContext constructor function.');
+		return;
+	}
+
 	Pizzicato.context = new AudioContext();
 
 	var masterGainNode = Pizzicato.context.createGain();
 	masterGainNode.connect(Pizzicato.context.destination);
 
 	Pizzicato.Util = {
-
 	
-
 		isString: function(arg) {
-
 			return toString.call(arg) === '[object String]';
-
 		},
-
 	
-
 		isObject: function(arg) {
-
 			return toString.call(arg) === '[object Object]';
-
 		},
-
 	
-
 		isFunction: function(arg) {
-
 			return toString.call(arg) === '[object Function]';
-
 		},
-
 	
-
 		isNumber: function(arg) {
-
 			return toString.call(arg) === '[object Number]' && arg === +arg;
-
 		},
-
 	
-
 		isArray: function(arg) {
-
 			return toString.call(arg) === '[object Array]';
-
 		},
-
 	
-
 		isInRange: function(arg, min, max) {
-
 			if (!Pz.Util.isNumber(arg) || !Pz.Util.isNumber(min) || !Pz.Util.isNumber(max))
-
 				return false;
-
 	
-
 			return arg >= min && arg <= max;
-
 		},
-
 	
-
 		isBool: function(arg) {
-
 			if (typeof(arg) !== "boolean")
-
 				return false;
-
 	
-
 			return true;
-
 		},
-
 	
-
 		isOscillator: function(audioNode) {
-
 			return (audioNode && audioNode.toString() === "[object OscillatorNode]");
-
 		},
-
 	
-
+		isEffect: function(effect) {
+			for (var key in Pizzicato.Effects)
+				if (effect instanceof Pizzicato.Effects[key])
+					return true;
+	
+			return false;
+		},
+	
 		// Takes a number from 0 to 1 and normalizes it 
-
 		// to fit within range floor to ceiling
-
 		normalize: function(num, floor, ceil) {
-
 			if (!Pz.Util.isNumber(num) || !Pz.Util.isNumber(floor) || !Pz.Util.isNumber(ceil))
-
 				return;
-
 			
-
 			return ((ceil - floor) * num) / 1 + floor;
-
 		},
-
 	
-
 		getDryLevel: function(mix) {
-
 			if (!Pz.Util.isNumber(mix) || mix > 1 || mix < 0)
-
 				return 0;
-
 	
-
 			if (mix <= 0.5)
-
 				return 1;
-
 	
-
 			return 1 - ((mix - 0.5) * 2);
-
 		},
-
 	
-
 		getWetLevel: function(mix) {
-
 			if (!Pz.Util.isNumber(mix) || mix > 1 || mix < 0)
-
 				return 0;
-
 	
-
 			if (mix >= 0.5)
-
 				return 1;
-
 	
-
 			return 1 - ((0.5 - mix) * 2);
-
 		}
-
 	};
 
 	Object.defineProperty(Pizzicato, 'volume', {
@@ -171,122 +127,66 @@
 			console.error('Can\'t set the master gain node');
 		}
 	});
-	
-	Pizzicato.Events = {
-	
-	
-	
-		/**
-	
-		 * Adds an event handler that will be treated upon
-	
-		 * the triggering of that event.
-	
-		 */
-	
-		on: function(name, callback, context) {
-	
-			if (!name || !callback)
-	
-				return;
-	
-	
-	
-			this._events = this._events || {};
-	
-			var _event = this._events[name] || (this._events[name] = []);
-	
-	
-	
-			_event.push({
-	
-				callback: callback,
-	
-				context: context || this,
-	
-				handler: this
-	
-			});
-	
-		},
-	
-	
-	
-		/**
-	
-		 * Triggers a particular event. If a handler
-	
-		 * is linked to that event, the handler will be
-	
-		 * executed.
-	
-		 */
-	
-		trigger: function(name) {
-	
-			if (!name)
-	
-				return;
-	
-	
-	
-			var _event, length, args, i;
-	
-	
-	
-			this._events = this._events || {};
-	
-			_event = this._events[name] || (this._events[name] = []);
-	
-	
-	
-			if (!_event)
-	
-				return;
-	
-	
-	
-			length = Math.max(0, arguments.length - 1);
-	
-	    args = [];
-	
-	    for (i = 0; i < length; i++) args[i] = arguments[i + 1];
-	
-	
-	
-	    for (i = 0; i < _event.length; i++)
-	
-				_event[i].callback.apply(_event[i].context, args);	
-	
-		},
-	
-	
-	
-		/**
-	
-		 * Removes an event handler. If no name is provided,
-	
-		 * all handlers for this object will be removed.
-	
-		 */
-	
-		off: function(name) {
-	
-			if (name)
-	
-				this._events[name] = undefined;
-	
-	
-	
-			else
-	
-				this._events = {};
-	
-		}
-	
-	
-	
-	};
+		Pizzicato.Events = {
+		
+			/**
+			 * Adds an event handler that will be treated upon
+			 * the triggering of that event.
+			 */
+			on: function(name, callback, context) {
+				if (!name || !callback)
+					return;
+		
+				this._events = this._events || {};
+				var _event = this._events[name] || (this._events[name] = []);
+		
+				_event.push({
+					callback: callback,
+					context: context || this,
+					handler: this
+				});
+			},
+		
+			/**
+			 * Triggers a particular event. If a handler
+			 * is linked to that event, the handler will be
+			 * executed.
+			 */
+			trigger: function(name) {
+				if (!name)
+					return;
+		
+				var _event, length, args, i;
+		
+				this._events = this._events || {};
+				_event = this._events[name] || (this._events[name] = []);
+		
+				if (!_event)
+					return;
+		
+				length = Math.max(0, arguments.length - 1);
+				args = [];
+		
+				for (i = 0; i < length; i++) 
+					args[i] = arguments[i + 1];
+		
+				for (i = 0; i < _event.length; i++)
+					_event[i].callback.apply(_event[i].context, args);	
+			},
+		
+			/**
+			 * Removes an event handler. If no name is provided,
+			 * all handlers for this object will be removed.
+			 */
+			off: function(name) {
+				if (name)
+					this._events[name] = undefined;
+		
+				else
+					this._events = {};
+			}
+		
+		};
 	Pizzicato.Sound = function(description, callback) {
 		var self = this;
 		var util = Pizzicato.Util;
@@ -534,7 +434,15 @@
 	
 				this.stopWithSustain();
 	
-				this.offsetTime = Pz.context.currentTime - this.lastTimePlayed;
+				var elapsedTime = Pz.context.currentTime - this.lastTimePlayed;
+				
+				// If we are using a buffer node - potentially in loop mode - we need to
+				// know where to re-start the sound independently of the loop it is in.
+				if (this.sourceNode.buffer)
+					this.offsetTime = elapsedTime % (this.sourceNode.buffer.length / Pz.context.sampleRate);
+				else
+					this.offsetTime = elapsedTime;
+	
 				this.trigger('pause');
 			}
 		},
@@ -579,6 +487,11 @@
 			enumerable: true,
 	
 			value: function(effect) {
+				if (!effect || !Pz.Util.isEffect(effect)) {
+					console.warn('Invalid effect.');
+					return;
+				}
+	
 				this.effects.push(effect);
 				this.connectEffects();
 				if (!!this.sourceNode) {
@@ -596,8 +509,10 @@
 	
 				var index = this.effects.indexOf(effect);
 	
-				if (index === -1)
+				if (index === -1) {
+					console.warn('Cannot remove effect that is not applied to this sound.');
 					return;
+				}
 	
 				var shouldResumePlaying = this.playing;
 	
@@ -787,12 +702,21 @@
 		this.feedbackGainNode = Pizzicato.context.createGain();
 		this.delayNode = Pizzicato.context.createDelay();
 	
+		// line in to dry mix
 		this.inputNode.connect(this.dryGainNode);
-		this.inputNode.connect(this.delayNode);
-		this.delayNode.connect(this.feedbackGainNode);
-		this.delayNode.connect(this.wetGainNode);
-		this.feedbackGainNode.connect(this.delayNode);
+		// dry line out
 		this.dryGainNode.connect(this.outputNode);
+	
+		// feedback loop
+		this.delayNode.connect(this.feedbackGainNode);
+		this.feedbackGainNode.connect(this.delayNode);
+	
+		// line in to wet mix
+		this.inputNode.connect(this.delayNode);
+		// wet out
+		this.delayNode.connect(this.wetGainNode);
+		
+		// wet line out
 		this.wetGainNode.connect(this.outputNode);
 	
 		for (var key in defaults) {
@@ -1434,24 +1358,28 @@
 		this.outputNode = Pizzicato.context.createGain();
 		this.delayNodeLeft = Pizzicato.context.createDelay();
 		this.delayNodeRight = Pizzicato.context.createDelay();
-	
-		this.delayNodeLeft.connect(this.delayNodeRight);
-	
 		this.dryGainNode = Pizzicato.context.createGain();
 		this.wetGainNode = Pizzicato.context.createGain();
 		this.feedbackGainNode = Pizzicato.context.createGain();
+		this.channelMerger = Pizzicato.context.createChannelMerger(2);
+	
+		// dry mix
+		this.inputNode.connect(this.dryGainNode);
+		// dry mix out
+		this.dryGainNode.connect(this.outputNode);
+	
+		// the feedback loop
+		this.delayNodeLeft.connect(this.channelMerger, 0, 0);
+		this.delayNodeRight.connect(this.channelMerger, 0, 1);
+		this.delayNodeLeft.connect(this.delayNodeRight);
 		this.feedbackGainNode.connect(this.delayNodeLeft);
 		this.delayNodeRight.connect(this.feedbackGainNode);
 	
-		this.inputNode.connect(this.dryGainNode);
+		// wet mix
 		this.inputNode.connect(this.feedbackGainNode);
 	
-		this.channelMerger = Pizzicato.context.createChannelMerger(2);
-		this.delayNodeLeft.connect(this.channelMerger, 0, 0);
-		this.delayNodeRight.connect(this.channelMerger, 0, 1);
+		// wet out
 		this.channelMerger.connect(this.wetGainNode);
-	
-		this.dryGainNode.connect(this.outputNode);
 		this.wetGainNode.connect(this.outputNode);
 	
 		for (var key in defaults) {
@@ -1645,6 +1573,133 @@
 	
 		this.reverbNode.buffer = impulse;
 	}
+	Pizzicato.Effects.DubDelay = function(options) {
+	
+		this.options = {};
+		options = options || this.options;
+	
+		var defaults = {
+			feedback: 0.6,
+			time: 0.7,
+			mix: 0.5,
+			cutoff: 700
+		};
+	
+		this.inputNode = Pizzicato.context.createGain();
+		this.outputNode = Pizzicato.context.createGain();
+		this.dryGainNode = Pizzicato.context.createGain();
+		this.wetGainNode = Pizzicato.context.createGain();
+		this.feedbackGainNode = Pizzicato.context.createGain();
+		this.delayNode = Pizzicato.context.createDelay();
+		this.bqFilterNode = Pizzicato.context.createBiquadFilter(); 
+	
+	
+		// dry mix
+		this.inputNode.connect(this.dryGainNode);
+		this.dryGainNode.connect(this.outputNode);
+	
+		// wet mix
+		this.inputNode.connect(this.wetGainNode);
+		this.inputNode.connect(this.feedbackGainNode);
+	
+		this.feedbackGainNode.connect(this.bqFilterNode);
+		this.bqFilterNode.connect(this.delayNode);
+		this.delayNode.connect(this.feedbackGainNode);
+		this.delayNode.connect(this.wetGainNode);
+	
+		this.wetGainNode.connect(this.outputNode);
+	
+		for (var key in defaults) {
+			this[key] = options[key];
+			this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
+		}
+	};
+	
+	Pizzicato.Effects.DubDelay.prototype = Object.create(null, {
+	
+		/**
+		 * Gets and sets the dry/wet mix.
+		 */
+		mix: {
+			enumerable: true,
+	
+			get: function() {
+				return this.options.mix	;	
+			},
+	
+			set: function(mix) {
+				if (!Pz.Util.isInRange(mix, 0, 1))
+					return;
+	
+				this.options.mix = mix;
+				this.dryGainNode.gain.value = Pizzicato.Util.getDryLevel(this.mix);
+				this.wetGainNode.gain.value = Pizzicato.Util.getWetLevel(this.mix);
+			}
+		},
+	
+		/**
+		 * Time between each delayed sound
+		 */
+		time: {
+			enumerable: true,
+	
+			get: function() {
+				return this.options.time;	
+			},
+	
+			set: function(time) {
+				if (!Pz.Util.isInRange(time, 0, 180))
+					return;
+	
+				this.options.time = time;
+				this.delayNode.delayTime.value = time;
+			}
+		},
+	
+		/**
+		 * Strength of each of the echoed delayed sounds.
+		 */
+		feedback: {
+			enumerable: true,
+	
+			get: function() {
+				return this.options.feedback;	
+			},
+	
+			set: function(feedback) {
+				if (!Pz.Util.isInRange(feedback, 0, 1))
+					return;
+	
+				this.options.feedback = parseFloat(feedback, 10);
+				this.feedbackGainNode.gain.value = this.feedback;
+			}
+		},
+	
+		/**
+		 * Frequency on delay repeats
+		 */
+		cutoff: {
+			enumerable: true,
+	
+			get: function() {
+				return this.options.cutoff;	
+			},
+	
+			set: function(cutoff) {
+				if (!Pz.Util.isInRange(cutoff, 0, 4000))
+					return;
+	
+				this.options.cutoff = cutoff;
+				this.bqFilterNode.frequency.value = this.cutoff;
+			}
+		}
+	
+	
+	
+	});
+	/**
+	 * See http://webaudio.prototyping.bbc.co.uk/ring-modulator/
+	 */
 	Pizzicato.Effects.RingModulator = function(options) {
 	
 		this.options = {};
@@ -1656,8 +1711,6 @@
 			mix: 0.5
 		};
 	
-		// create nodes
-	
 		this.inputNode = Pizzicato.context.createGain();
 		this.outputNode = Pizzicato.context.createGain();
 		this.dryGainNode = Pizzicato.context.createGain();
@@ -1666,9 +1719,8 @@
 	
 		/**
 		 * `vIn` is the modulation oscillator input 
-		 * `vc` is the voice input.
+		 * `vc` is the audio input.
 		 */
-	
 		this.vIn = Pizzicato.context.createOscillator();
 		this.vIn.start(0);
 		this.vInGain = Pizzicato.context.createGain();
@@ -1685,11 +1737,13 @@
 		this.vcInverter1.gain.value = -1;
 		this.vcDiode3 = new DiodeNode(Pizzicato.context);
 		this.vcDiode4 = new DiodeNode(Pizzicato.context);
-		this.outGain = Pizzicato.context.createGain();
-		this.outGain.gain.value = 4;
-		this.compressor = Pizzicato.context.createDynamicsCompressor();
-		this.compressor.threshold.value = -12;
 	
+		this.outGain = Pizzicato.context.createGain();
+		this.outGain.gain.value = 3;
+	
+		this.compressor = Pizzicato.context.createDynamicsCompressor();
+		this.compressor.threshold.value = -24;
+		this.compressor.ratio.value = 16;
 	
 		// dry mix
 		this.inputNode.connect(this.dryGainNode);
@@ -1840,4 +1894,4 @@
 	});
 	
 	return Pizzicato;
-})(this);
+})(typeof window !== "undefined" ? window : global);
