@@ -160,19 +160,28 @@ h3, h4 {
     width: 550px;
 }
 
-#download-bower {
-    width: 330px;
-    margin-top: 10px
+#downloads > div {
+    width: 50%;
 }
 
-.bower-logo {
+#downloads {
+  display: flex;
+  margin-bottom: 30px;
+}
+
+.bower-logo, .npm-logo {
     float: left;
     margin-right: 10px;
 }
 
 .bower-logo > img {
+    width: 45px;
+    margin-top: 7px;
+}
+
+.npm-logo > img {
     width: 55px;
-    margin-top: 5px;
+    margin-top: 22px;
 }
 
 .controls {
@@ -457,6 +466,12 @@ div.error {
 
   .logo > img {
     width: 80%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #downloads {
+    display: block;
   }
 }
 
