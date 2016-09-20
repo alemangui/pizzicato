@@ -39,19 +39,16 @@ var flanger = new Pizzicato.Effects.Flanger();
 var stereoPanner = new Pizzicato.Effects.StereoPanner();
 var reverb = new Pizzicato.Effects.Reverb();
 var convolver = new Pizzicato.Effects.Convolver({ impulse: './audio/scala-milan.wav' });
-<<<<<<< HEAD
 var tremolo = new Pizzicato.Effects.Tremolo({
 	speed: 4,
 	mix: 0.8
 });
-
-=======
 var ringModulator = new Pizzicato.Effects.RingModulator({
 	speed: 30,
 	distortion: 1,
 	mix: 0.5
 });
->>>>>>> a6f76af3bce442cac09a147e7f88880b64e44278
+
 // Sounds
 var sineWave = new Pz.Sound();
 var sineWaveSustain = new Pz.Sound({ source: 'wave', options: { frequency: 220, sustain: 1, attack:0.5 } });
