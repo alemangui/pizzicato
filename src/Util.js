@@ -38,6 +38,14 @@ Pizzicato.Util = {
 		return (audioNode && audioNode.toString() === "[object OscillatorNode]");
 	},
 
+	isEffect: function(effect) {
+		for (var key in Pizzicato.Effects)
+			if (effect instanceof Pizzicato.Effects[key])
+				return true;
+
+		return false;
+	},
+
 	// Takes a number from 0 to 1 and normalizes it 
 	// to fit within range floor to ceiling
 	normalize: function(num, floor, ceil) {

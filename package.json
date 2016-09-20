@@ -1,13 +1,13 @@
 {
-	"name": "Pizzicato",
+	"name": "pizzicato",
 	"description": "A web-audio library to simplify using and manipulating sounds.",
-	"version": "0.0.1",
+	"version": "0.3.2",
 	"license": "MIT",
 	"homepage": "http://alemangui.github.io/pizzicato/",
 	"author": {
 		"name": "Alejandro Mantecon Guillen",
 		"email": "alemangui@gmail.com",
-		"url": "http://www.alemangui.com/"
+		"url": "http://alemangui.com/"
 	},
 	"repository": {
 		"type": "git",
@@ -30,6 +30,7 @@
 	},
 	"scripts": {
 		"build": "gulp scripts",
+		"watch": "gulp watch",
 		"test": "gulp test"
 	},
 	"keywords": [
@@ -37,5 +38,6 @@
 		"sound",
 		"web audio",
 		"sound effects"
-	]
+	],
+	"main": "./distr/Pizzicato.min.js"
 }

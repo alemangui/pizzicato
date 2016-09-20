@@ -1,9 +1,25 @@
 (function(root) {
 	'use strict';
 
-	var AudioContext = window.AudioContext || window.webkitAudioContext; 
+	var Pizzicato = {};
+	var Pz = Pizzicato;
+	var commonJS = typeof module === "object" && module.exports;
+	var amd = typeof define === "function" && define.amd;
 
-	var Pizzicato = root.Pz = root.Pizzicato = {};
+	if (commonJS)
+		module.exports = Pizzicato;
+	else if (amd)
+		define([], Pizzicato);
+	else
+		root.Pizzicato = root.Pz = Pizzicato;
+
+	var AudioContext = root.AudioContext || root.webkitAudioContext; 
+
+	if (!AudioContext) {
+		console.error('No AudioContext found in this environment. Please ensure your window or global object contains a working AudioContext constructor function.');
+		return;
+	}
+
 	Pizzicato.context = new AudioContext();
 
 	var masterGainNode = Pizzicato.context.createGain();
@@ -49,6 +65,8 @@
 	//= require ./Effects/PingPongDelay.js
 	//= require ./Effects/Reverb.js
 	//= require ./Effects/Tremolo.js
+	//= require ./Effects/DubDelay.js
+	//= require ./Effects/RingModulator.js
 	
 	return Pizzicato;
-})(this);
+})(typeof window !== "undefined" ? window : global);

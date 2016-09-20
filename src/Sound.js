@@ -245,7 +245,15 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 			this.stopWithSustain();
 
-			this.offsetTime = Pz.context.currentTime - this.lastTimePlayed;
+			var elapsedTime = Pz.context.currentTime - this.lastTimePlayed;
+			
+			// If we are using a buffer node - potentially in loop mode - we need to
+			// know where to re-start the sound independently of the loop it is in.
+			if (this.sourceNode.buffer)
+				this.offsetTime = elapsedTime % (this.sourceNode.buffer.length / Pz.context.sampleRate);
+			else
+				this.offsetTime = elapsedTime;
+
 			this.trigger('pause');
 		}
 	},
@@ -290,6 +298,11 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 		enumerable: true,
 
 		value: function(effect) {
+			if (!effect || !Pz.Util.isEffect(effect)) {
+				console.warn('Invalid effect.');
+				return;
+			}
+
 			this.effects.push(effect);
 			this.connectEffects();
 			if (!!this.sourceNode) {
@@ -307,8 +320,10 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 			var index = this.effects.indexOf(effect);
 
-			if (index === -1)
+			if (index === -1) {
+				console.warn('Cannot remove effect that is not applied to this sound.');
 				return;
+			}
 
 			var shouldResumePlaying = this.playing;
 
