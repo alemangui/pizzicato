@@ -5,7 +5,9 @@ Pizzicato.Effects.Tremolo = function(options) {
 
 	var defaults = {
 		speed: 4,
-		mix: 0.8
+		mix: 0.8,
+		depth: 0.8,
+		shape: 'sine'
 	};
 
 	// create nodes
@@ -14,8 +16,13 @@ Pizzicato.Effects.Tremolo = function(options) {
 	this.dryGainNode = Pizzicato.context.createGain();
 	this.wetGainNode = Pizzicato.context.createGain();
 
-	this.lfoGainNode = Pizzicato.context.createGain();
-	this.oscillator = Pizzicato.context.createOscillator();
+	this.tremoloGainNode = Pizzicato.context.createGain();
+	this.tremoloGainNode.gain.value = 0;
+	this.lfoNode = Pizzicato.context.createOscillator();
+
+	this.shaperNode = Pizzicato.context.createWaveShaper();
+	this.shaperNode.curve = new Float32Array([0, 1]);
+	this.shaperNode.connect(this.tremoloGainNode.gain);
 
 	// dry mix
 	this.inputNode.connect(this.dryGainNode);
@@ -24,13 +31,14 @@ Pizzicato.Effects.Tremolo = function(options) {
 
 	// connections
 	// we connect the oscillator to the gain running between in and wet out
-	this.oscillator.connect(this.lfoGainNode.gain);
+	this.lfoNode.connect(this.shaperNode);
 	// kick off the oscillator
-	this.oscillator.start(0);
+	this.lfoNode.type = 'sine';
+	this.lfoNode.start(0);
 
 	// wet mix
-	this.inputNode.connect(this.lfoGainNode);
-	this.lfoGainNode.connect(this.wetGainNode);
+	this.inputNode.connect(this.tremoloGainNode);
+	this.tremoloGainNode.connect(this.wetGainNode);
 	this.wetGainNode.connect(this.outputNode);
 
 	for (var key in defaults) {
@@ -52,7 +60,7 @@ Pizzicato.Effects.Tremolo.prototype = Object.create(null, {
 		},
 
 		set: function(mix) {
-			if (!Pz.Util.isInRange(mix, 0, 1))
+			if (!Pz.Util.isInRange(mix, 0, 1)) 
 				return;
 
 			this.options.mix = mix;
@@ -62,7 +70,7 @@ Pizzicato.Effects.Tremolo.prototype = Object.create(null, {
 	},
 
 	/**
-	 * Speed of the vibrato
+	 * Speed of the tremolo
 	 */
 	speed: {
 		enumerable: true,
@@ -74,10 +82,46 @@ Pizzicato.Effects.Tremolo.prototype = Object.create(null, {
 		set: function(speed) {
 			if (!Pz.Util.isInRange(speed, 0, 20))
 				return;
-
+		
 			this.options.speed = speed;
-			this.oscillator.frequency.value = speed;
+			this.lfoNode.frequency.value = speed;
+		}
+	},
+
+	/**
+	 * Depth of the tremolo
+	 */
+	depth: {
+		enumerable: true,
+
+		get: function() {
+			return this.options.depth;	
+		},
+
+		set: function(depth) {
+			if (!Pz.Util.isInRange(depth, 0, 1))
+				return;
+
+			this.options.depth = depth;
+			this.shaperNode.curve = new Float32Array([1-depth, 1]);
+		}
+	},
+
+	shape: {
+		enumerable: true,
+
+		get: function() {
+			return this.options.shape;	
+		},
+
+		set: function(shape) {
+			if (!Pz.Util.isValidShape(shape))
+				return;
+
+			this.options.shape = shape;
+			this.lfoNode.type = shape;
 		}
 	}
+
 
 });
