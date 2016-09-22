@@ -30,11 +30,12 @@ Pizzicato.Util = {
 	isValidShape: function (shape) {
 		var validShapes = ['sine', 'square', 'triangle'];
 
-		if (validShapes.indexOf(shape.toLowerCase()) < 0 ) {
+		if (!Pz.Util.isString(shape) || 
+				validShapes.indexOf(shape.toLowerCase()) < 0 ) {
 			return false;
 		}
 
-		return shape;
+		return true;
 	},
 
 	isBool: function(arg) {
