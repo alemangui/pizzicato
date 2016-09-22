@@ -26,157 +26,91 @@
 	masterGainNode.connect(Pizzicato.context.destination);
 
 	Pizzicato.Util = {
-
 	
-
 		isString: function(arg) {
-
 			return toString.call(arg) === '[object String]';
-
 		},
-
 	
-
 		isObject: function(arg) {
-
 			return toString.call(arg) === '[object Object]';
-
 		},
-
 	
-
 		isFunction: function(arg) {
-
 			return toString.call(arg) === '[object Function]';
-
 		},
-
 	
-
 		isNumber: function(arg) {
-
 			return toString.call(arg) === '[object Number]' && arg === +arg;
-
 		},
-
 	
-
 		isArray: function(arg) {
-
 			return toString.call(arg) === '[object Array]';
-
 		},
-
 	
-
 		isInRange: function(arg, min, max) {
-
 			if (!Pz.Util.isNumber(arg) || !Pz.Util.isNumber(min) || !Pz.Util.isNumber(max))
-
 				return false;
-
 	
-
 			return arg >= min && arg <= max;
-
 		},
-
 	
-
-		isBool: function(arg) {
-
-			if (typeof(arg) !== "boolean")
-
+		isValidShape: function (shape) {
+			var validShapes = ['sine', 'square', 'triangle'];
+	
+			if (validShapes.indexOf(shape.toLowerCase()) < 0 ) {
 				return false;
-
+			}
 	
-
+			return shape;
+		},
+	
+		isBool: function(arg) {
+			if (typeof(arg) !== "boolean")
+				return false;
+	
 			return true;
-
 		},
-
 	
-
 		isOscillator: function(audioNode) {
-
 			return (audioNode && audioNode.toString() === "[object OscillatorNode]");
-
 		},
-
 	
-
 		isEffect: function(effect) {
-
 			for (var key in Pizzicato.Effects)
-
 				if (effect instanceof Pizzicato.Effects[key])
-
 					return true;
-
 	
-
 			return false;
-
 		},
-
 	
-
 		// Takes a number from 0 to 1 and normalizes it 
-
 		// to fit within range floor to ceiling
-
 		normalize: function(num, floor, ceil) {
-
 			if (!Pz.Util.isNumber(num) || !Pz.Util.isNumber(floor) || !Pz.Util.isNumber(ceil))
-
 				return;
-
 			
-
 			return ((ceil - floor) * num) / 1 + floor;
-
 		},
-
 	
-
 		getDryLevel: function(mix) {
-
 			if (!Pz.Util.isNumber(mix) || mix > 1 || mix < 0)
-
 				return 0;
-
 	
-
 			if (mix <= 0.5)
-
 				return 1;
-
 	
-
 			return 1 - ((mix - 0.5) * 2);
-
 		},
-
 	
-
 		getWetLevel: function(mix) {
-
 			if (!Pz.Util.isNumber(mix) || mix > 1 || mix < 0)
-
 				return 0;
-
 	
-
 			if (mix >= 0.5)
-
 				return 1;
-
 	
-
 			return 1 - ((0.5 - mix) * 2);
-
 		}
-
 	};
 
 	Object.defineProperty(Pizzicato, 'volume', {
@@ -203,126 +137,66 @@
 			console.error('Can\'t set the master gain node');
 		}
 	});
-	
-	Pizzicato.Events = {
-	
-	
-	
-		/**
-	
-		 * Adds an event handler that will be treated upon
-	
-		 * the triggering of that event.
-	
-		 */
-	
-		on: function(name, callback, context) {
-	
-			if (!name || !callback)
-	
-				return;
-	
-	
-	
-			this._events = this._events || {};
-	
-			var _event = this._events[name] || (this._events[name] = []);
-	
-	
-	
-			_event.push({
-	
-				callback: callback,
-	
-				context: context || this,
-	
-				handler: this
-	
-			});
-	
-		},
-	
-	
-	
-		/**
-	
-		 * Triggers a particular event. If a handler
-	
-		 * is linked to that event, the handler will be
-	
-		 * executed.
-	
-		 */
-	
-		trigger: function(name) {
-	
-			if (!name)
-	
-				return;
-	
-	
-	
-			var _event, length, args, i;
-	
-	
-	
-			this._events = this._events || {};
-	
-			_event = this._events[name] || (this._events[name] = []);
-	
-	
-	
-			if (!_event)
-	
-				return;
-	
-	
-	
-			length = Math.max(0, arguments.length - 1);
-	
-			args = [];
-	
-	
-	
-			for (i = 0; i < length; i++) 
-	
-				args[i] = arguments[i + 1];
-	
-	
-	
-			for (i = 0; i < _event.length; i++)
-	
-				_event[i].callback.apply(_event[i].context, args);	
-	
-		},
-	
-	
-	
-		/**
-	
-		 * Removes an event handler. If no name is provided,
-	
-		 * all handlers for this object will be removed.
-	
-		 */
-	
-		off: function(name) {
-	
-			if (name)
-	
-				this._events[name] = undefined;
-	
-	
-	
-			else
-	
-				this._events = {};
-	
-		}
-	
-	
-	
-	};
+		Pizzicato.Events = {
+		
+			/**
+			 * Adds an event handler that will be treated upon
+			 * the triggering of that event.
+			 */
+			on: function(name, callback, context) {
+				if (!name || !callback)
+					return;
+		
+				this._events = this._events || {};
+				var _event = this._events[name] || (this._events[name] = []);
+		
+				_event.push({
+					callback: callback,
+					context: context || this,
+					handler: this
+				});
+			},
+		
+			/**
+			 * Triggers a particular event. If a handler
+			 * is linked to that event, the handler will be
+			 * executed.
+			 */
+			trigger: function(name) {
+				if (!name)
+					return;
+		
+				var _event, length, args, i;
+		
+				this._events = this._events || {};
+				_event = this._events[name] || (this._events[name] = []);
+		
+				if (!_event)
+					return;
+		
+				length = Math.max(0, arguments.length - 1);
+				args = [];
+		
+				for (i = 0; i < length; i++) 
+					args[i] = arguments[i + 1];
+		
+				for (i = 0; i < _event.length; i++)
+					_event[i].callback.apply(_event[i].context, args);	
+			},
+		
+			/**
+			 * Removes an event handler. If no name is provided,
+			 * all handlers for this object will be removed.
+			 */
+			off: function(name) {
+				if (name)
+					this._events[name] = undefined;
+		
+				else
+					this._events = {};
+			}
+		
+		};
 	Pizzicato.Sound = function(description, callback) {
 		var self = this;
 		var util = Pizzicato.Util;
@@ -1716,7 +1590,9 @@
 	
 		var defaults = {
 			speed: 4,
-			mix: 0.8
+			mix: 0.8,
+			depth: 0.8,
+			shape: 'sine'
 		};
 	
 		// create nodes
@@ -1725,8 +1601,13 @@
 		this.dryGainNode = Pizzicato.context.createGain();
 		this.wetGainNode = Pizzicato.context.createGain();
 	
-		this.lfoGainNode = Pizzicato.context.createGain();
-		this.oscillator = Pizzicato.context.createOscillator();
+		this.tremoloGainNode = Pizzicato.context.createGain();
+		this.tremoloGainNode.gain.value = 0;
+		this.lfoNode = Pizzicato.context.createOscillator();
+	
+		this.shaperNode = Pizzicato.context.createWaveShaper();
+		this.shaperNode.curve = new Float32Array([0, 1]);
+		this.shaperNode.connect(this.tremoloGainNode.gain);
 	
 		// dry mix
 		this.inputNode.connect(this.dryGainNode);
@@ -1735,13 +1616,14 @@
 	
 		// connections
 		// we connect the oscillator to the gain running between in and wet out
-		this.oscillator.connect(this.lfoGainNode.gain);
+		this.lfoNode.connect(this.shaperNode);
 		// kick off the oscillator
-		this.oscillator.start(0);
+		this.lfoNode.type = 'sine';
+		this.lfoNode.start(0);
 	
 		// wet mix
-		this.inputNode.connect(this.lfoGainNode);
-		this.lfoGainNode.connect(this.wetGainNode);
+		this.inputNode.connect(this.tremoloGainNode);
+		this.tremoloGainNode.connect(this.wetGainNode);
 		this.wetGainNode.connect(this.outputNode);
 	
 		for (var key in defaults) {
@@ -1763,7 +1645,7 @@
 			},
 	
 			set: function(mix) {
-				if (!Pz.Util.isInRange(mix, 0, 1))
+				if (!Pz.Util.isInRange(mix, 0, 1)) 
 					return;
 	
 				this.options.mix = mix;
@@ -1773,7 +1655,7 @@
 		},
 	
 		/**
-		 * Speed of the vibrato
+		 * Speed of the tremolo
 		 */
 		speed: {
 			enumerable: true,
@@ -1785,11 +1667,47 @@
 			set: function(speed) {
 				if (!Pz.Util.isInRange(speed, 0, 20))
 					return;
-	
+			
 				this.options.speed = speed;
-				this.oscillator.frequency.value = speed;
+				this.lfoNode.frequency.value = speed;
+			}
+		},
+	
+		/**
+		 * Depth of the tremolo
+		 */
+		depth: {
+			enumerable: true,
+	
+			get: function() {
+				return this.options.depth;	
+			},
+	
+			set: function(depth) {
+				if (!Pz.Util.isInRange(depth, 0, 1))
+					return;
+	
+				this.options.depth = depth;
+				this.shaperNode.curve = new Float32Array([1-depth, 1]);
+			}
+		},
+	
+		shape: {
+			enumerable: true,
+	
+			get: function() {
+				return this.options.shape;	
+			},
+	
+			set: function(shape) {
+				if (!Pz.Util.isValidShape(shape))
+					return;
+	
+				this.options.shape = shape;
+				this.lfoNode.type = shape;
 			}
 		}
+	
 	
 	});
 	Pizzicato.Effects.DubDelay = function(options) {

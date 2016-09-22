@@ -41,7 +41,9 @@ var reverb = new Pizzicato.Effects.Reverb();
 var convolver = new Pizzicato.Effects.Convolver({ impulse: './audio/scala-milan.wav' });
 var tremolo = new Pizzicato.Effects.Tremolo({
 	speed: 4,
-	mix: 0.8
+	mix: 0.8,
+	depth: 0.2,
+	shape: 'square'
 });
 var ringModulator = new Pizzicato.Effects.RingModulator({
 	speed: 30,
@@ -144,14 +146,17 @@ var drums = new Pz.Sound({
 	drums.addEffect(convolver); 
 });
 
-var tremoloDrums = new Pz.Sound({ 
+var tremoloGuitar = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: './audio/drums.m4a', 
+		// audio taken from
+		// http://free-loops.com/3972-guitar-power-chord.html
+		// free for personal use
+		path: './audio/74272912df554e8fb6c224fbb365-orig.wav', 
 		loop: true 
 	}
 }, function() { 
-	tremoloDrums.addEffect(tremolo); 
+	tremoloGuitar.addEffect(tremolo); 
 });
 
 
@@ -310,7 +315,7 @@ var segments = [
 	},
 
 	{
-		audio: tremoloDrums,
+		audio: tremoloGuitar,
 		playButton: document.getElementById('play-tremolo-drums'),
 		stopButton: document.getElementById('stop-tremolo-drums'),
 		volumeSlider: document.getElementById('volume-tremolo-drums'),
@@ -319,7 +324,9 @@ var segments = [
 				instance: tremolo,
 				parameters: {
 					speed: document.getElementById('tremolo-speed'),
-					mix: document.getElementById('tremolo-mix')
+					mix: document.getElementById('tremolo-mix'),
+					depth: document.getElementById('tremolo-depth'),
+					shape: document.getElementById('tremolo-shape')
 				}
 			}
 		]
@@ -480,7 +487,12 @@ for (var i = 0; i < segments.length; i++) {
 					var display = slider.parentNode.getElementsByClassName('slider-value')[0];
 
 					slider.addEventListener('input', function(e) {
-						display.innerHTML = instance[key] = e.target.valueAsNumber;
+						if (e.target.nodeName === 'SELECT') {
+							display.innerHTML = instance[key] = e.target.value;
+						} else {
+							display.innerHTML = instance[key] = e.target.valueAsNumber;
+						}
+						
 					});
 
 				})(key, effect.parameters[key], effect.instance);	
