@@ -311,9 +311,9 @@ var segments = [
 
 	{
 		audio: tremoloDrums,
-		playButton: document.getElementById('play-tremolodrums'),
-		stopButton: document.getElementById('stop-tremolodrums'),
-		volumeSlider: document.getElementById('volume-tremolodrums'),
+		playButton: document.getElementById('play-tremolo-drums'),
+		stopButton: document.getElementById('stop-tremolo-drums'),
+		volumeSlider: document.getElementById('volume-tremolo-drums'),
 		effects: [
 			{
 				instance: tremolo,

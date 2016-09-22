@@ -1725,7 +1725,7 @@
 		this.dryGainNode = Pizzicato.context.createGain();
 		this.wetGainNode = Pizzicato.context.createGain();
 	
-		this.LFOGainNode = Pizzicato.context.createGain();
+		this.lfoGainNode = Pizzicato.context.createGain();
 		this.oscillator = Pizzicato.context.createOscillator();
 	
 		// dry mix
@@ -1735,13 +1735,13 @@
 	
 		// connections
 		// we connect the oscillator to the gain running between in and wet out
-		this.oscillator.connect(this.LFOGainNode.gain);
+		this.oscillator.connect(this.lfoGainNode.gain);
 		// kick off the oscillator
 		this.oscillator.start(0);
 	
 		// wet mix
-		this.inputNode.connect(this.LFOGainNode);
-		this.LFOGainNode.connect(this.wetGainNode);
+		this.inputNode.connect(this.lfoGainNode);
+		this.lfoGainNode.connect(this.wetGainNode);
 		this.wetGainNode.connect(this.outputNode);
 	
 		for (var key in defaults) {
