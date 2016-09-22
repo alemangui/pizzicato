@@ -55,7 +55,7 @@
 		},
 	
 		isValidShape: function (shape) {
-			var validShapes = ['sine', 'square', 'triangle'];
+			var validShapes = ['sine', 'square', 'triangle', 'sawtooth'];
 	
 			if (!Pz.Util.isString(shape) || 
 					validShapes.indexOf(shape.toLowerCase()) < 0 ) {
