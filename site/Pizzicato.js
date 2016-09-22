@@ -57,11 +57,12 @@
 		isValidShape: function (shape) {
 			var validShapes = ['sine', 'square', 'triangle'];
 	
-			if (validShapes.indexOf(shape.toLowerCase()) < 0 ) {
+			if (!Pz.Util.isString(shape) || 
+					validShapes.indexOf(shape.toLowerCase()) < 0 ) {
 				return false;
 			}
 	
-			return shape;
+			return true;
 		},
 	
 		isBool: function(arg) {
@@ -1585,6 +1586,9 @@
 	}
 	Pizzicato.Effects.Tremolo = function(options) {
 	
+		// adapted from
+		// https://github.com/mmckegg/web-audio-school/blob/master/lessons/3.%20Effects/13.%20Tremolo/answer.js
+	
 		this.options = {};
 		options = options || this.options;
 	
@@ -1665,9 +1669,9 @@
 			},
 	
 			set: function(speed) {
-				if (!Pz.Util.isInRange(speed, 0, 20))
+				if (!Pz.Util.isInRange(speed, 0, 20)) 
 					return;
-			
+				
 				this.options.speed = speed;
 				this.lfoNode.frequency.value = speed;
 			}
@@ -1684,9 +1688,9 @@
 			},
 	
 			set: function(depth) {
-				if (!Pz.Util.isInRange(depth, 0, 1))
+				if (!Pz.Util.isInRange(depth, 0, 1)) 
 					return;
-	
+				
 				this.options.depth = depth;
 				this.shaperNode.curve = new Float32Array([1-depth, 1]);
 			}
@@ -1700,14 +1704,13 @@
 			},
 	
 			set: function(shape) {
-				if (!Pz.Util.isValidShape(shape))
+				if (!Pz.Util.isValidShape(shape)) 
 					return;
-	
+				
 				this.options.shape = shape;
 				this.lfoNode.type = shape;
 			}
 		}
-	
 	
 	});
 	Pizzicato.Effects.DubDelay = function(options) {

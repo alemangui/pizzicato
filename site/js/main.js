@@ -42,8 +42,8 @@ var convolver = new Pizzicato.Effects.Convolver({ impulse: './audio/scala-milan.
 var tremolo = new Pizzicato.Effects.Tremolo({
 	speed: 4,
 	mix: 0.8,
-	depth: 0.2,
-	shape: 'square'
+	depth: 0.8,
+	shape: 'sine'
 });
 var ringModulator = new Pizzicato.Effects.RingModulator({
 	speed: 30,
