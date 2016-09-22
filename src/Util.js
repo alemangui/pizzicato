@@ -27,6 +27,16 @@ Pizzicato.Util = {
 		return arg >= min && arg <= max;
 	},
 
+	isValidShape: function (shape) {
+		var validShapes = ['sine', 'square', 'triangle'];
+
+		if (validShapes.indexOf(shape.toLowerCase()) < 0 ) {
+			return false;
+		}
+
+		return shape;
+	},
+
 	isBool: function(arg) {
 		if (typeof(arg) !== "boolean")
 			return false;
