@@ -506,11 +506,14 @@ var convolver = new Pizzicato.Effects.Convolver({
 
             <pre><code class="language-javascript">
 var tremolo = new Pizzicato.Effects.Tremolo({
-    speed: 4
-    mix: 0.8,
-    depth: 0.2,
+    speed: 7
+    mix: 1,
+    depth: 0.95,
     shape: 'sine'
 });
+
+sound.addEffect(tremolo);
+sound.play();
             </code></pre>
 
             <div class="slider-group">
@@ -521,18 +524,18 @@ var tremolo = new Pizzicato.Effects.Tremolo({
                 </div>
                 <div class="slider">
                     <label for="tremolo-speed">Speed</label>
-                    <input type="range" min="0" max="20" step="0.01" value="4" id="tremolo-speed" />
-                    <div class="slider-value">4</div>
+                    <input type="range" min="0" max="20" step="0.01" value="7" id="tremolo-speed" />
+                    <div class="slider-value">7</div>
                 </div>
                 <div class="slider">
                     <label for="tremolo-depth">Depth</label>
-                    <input type="range" min="0" max="1" step="0.01" value="0.8" id="tremolo-depth" />
-                    <div class="slider-value">0.8</div>
+                    <input type="range" min="0" max="1" step="0.01" value="0.95" id="tremolo-depth" />
+                    <div class="slider-value">0.95</div>
                 </div>
                 <div class="slider">
                     <label for="tremolo-mix">Mix</label>
-                    <input type="range" min="0" max="1" step="0.01" value="0.8" id="tremolo-mix" />
-                    <div class="slider-value">0.8</div>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="tremolo-mix" />
+                    <div class="slider-value">1</div>
                 </div>
                 <div class="slider">
                     <label for="tremolo-shape">Shape</label>
