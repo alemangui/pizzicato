@@ -1,5 +1,8 @@
 Pizzicato.Effects.Tremolo = function(options) {
 
+	// adapted from
+	// https://github.com/mmckegg/web-audio-school/blob/master/lessons/3.%20Effects/13.%20Tremolo/answer.js
+
 	this.options = {};
 	options = options || this.options;
 
@@ -80,9 +83,9 @@ Pizzicato.Effects.Tremolo.prototype = Object.create(null, {
 		},
 
 		set: function(speed) {
-			if (!Pz.Util.isInRange(speed, 0, 20))
+			if (!Pz.Util.isInRange(speed, 0, 20)) 
 				return;
-		
+			
 			this.options.speed = speed;
 			this.lfoNode.frequency.value = speed;
 		}
@@ -99,9 +102,9 @@ Pizzicato.Effects.Tremolo.prototype = Object.create(null, {
 		},
 
 		set: function(depth) {
-			if (!Pz.Util.isInRange(depth, 0, 1))
+			if (!Pz.Util.isInRange(depth, 0, 1)) 
 				return;
-
+			
 			this.options.depth = depth;
 			this.shaperNode.curve = new Float32Array([1-depth, 1]);
 		}
@@ -115,13 +118,12 @@ Pizzicato.Effects.Tremolo.prototype = Object.create(null, {
 		},
 
 		set: function(shape) {
-			if (!Pz.Util.isValidShape(shape))
+			if (!Pz.Util.isValidShape(shape)) 
 				return;
-
+			
 			this.options.shape = shape;
 			this.lfoNode.type = shape;
 		}
 	}
-
 
 });
