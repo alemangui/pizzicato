@@ -339,17 +339,11 @@ If you started a sound of type [wave](#sounds-from-a-wave), you can modify the f
 Example:
 ```javascript
 var sound = new Pizzicato.Sound();
-// get note frequency in semitone increments
-var getNoteFrequency = function (startingFrequency, numberOfSemitones) {
-  return startingFrequency * Math.pow(Math.pow(2, 1/12), numberOfSemitones);
-}
 
-var 'a4' = 440;
-// go down an octave
-sound.frequency = getNoteFrequency('a4', -12);
+sound.play();
 
-// go up an tone
-sound.frequency = getNoteFrequency('a4', 2);
+// go up an octave
+sound.frequency = 880; // a5
 ```
 
 <a name="effects"/>
