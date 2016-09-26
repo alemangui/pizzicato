@@ -40,10 +40,9 @@ var stereoPanner = new Pizzicato.Effects.StereoPanner();
 var reverb = new Pizzicato.Effects.Reverb();
 var convolver = new Pizzicato.Effects.Convolver({ impulse: './audio/scala-milan.wav' });
 var tremolo = new Pizzicato.Effects.Tremolo({
-	speed: 4,
+	speed: 7,
 	mix: 0.8,
-	depth: 0.8,
-	shape: 'sine'
+	depth: 0.8
 });
 var ringModulator = new Pizzicato.Effects.RingModulator({
 	speed: 30,
@@ -149,11 +148,8 @@ var drums = new Pz.Sound({
 var tremoloGuitar = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		// audio taken from
-		// http://free-loops.com/3972-guitar-power-chord.html
-		// free for personal use
-		path: './audio/74272912df554e8fb6c224fbb365-orig.wav', 
-		loop: true 
+		path: './audio/tremolo-guitar.m4a', 
+		loop: true
 	}
 }, function() { 
 	tremoloGuitar.addEffect(tremolo); 
@@ -316,17 +312,16 @@ var segments = [
 
 	{
 		audio: tremoloGuitar,
-		playButton: document.getElementById('play-tremolo-drums'),
-		stopButton: document.getElementById('stop-tremolo-drums'),
-		volumeSlider: document.getElementById('volume-tremolo-drums'),
+		playButton: document.getElementById('play-tremolo-guitar'),
+		stopButton: document.getElementById('stop-tremolo-guitar'),
+		volumeSlider: document.getElementById('volume-tremolo-guitar'),
 		effects: [
 			{
 				instance: tremolo,
 				parameters: {
 					speed: document.getElementById('tremolo-speed'),
 					mix: document.getElementById('tremolo-mix'),
-					depth: document.getElementById('tremolo-depth'),
-					shape: document.getElementById('tremolo-shape')
+					depth: document.getElementById('tremolo-depth')
 				}
 			}
 		]
@@ -487,12 +482,7 @@ for (var i = 0; i < segments.length; i++) {
 					var display = slider.parentNode.getElementsByClassName('slider-value')[0];
 
 					slider.addEventListener('input', function(e) {
-						if (e.target.nodeName === 'SELECT') {
-							display.innerHTML = instance[key] = e.target.value;
-						} else {
-							display.innerHTML = instance[key] = e.target.valueAsNumber;
-						}
-						
+						display.innerHTML = instance[key] = e.target.valueAsNumber;
 					});
 
 				})(key, effect.parameters[key], effect.instance);	
