@@ -54,17 +54,6 @@
 			return arg >= min && arg <= max;
 		},
 	
-		isValidShape: function (shape) {
-			var validShapes = ['sine', 'square', 'triangle', 'sawtooth'];
-	
-			if (!Pz.Util.isString(shape) || 
-					validShapes.indexOf(shape.toLowerCase()) < 0 ) {
-				return false;
-			}
-	
-			return true;
-		},
-	
 		isBool: function(arg) {
 			if (typeof(arg) !== "boolean")
 				return false;
@@ -1594,8 +1583,8 @@
 	
 		var defaults = {
 			speed: 4,
-			mix: 0.8,
-			depth: 0.8
+			depth: 1,
+			mix: 0.8
 		};
 	
 		// create nodes
@@ -1615,16 +1604,12 @@
 		// dry mix
 		this.inputNode.connect(this.dryGainNode);
 		this.dryGainNode.connect(this.outputNode);
-	
-	
-		// connections
-		// we connect the oscillator to the gain running between in and wet out
+		
+		// wet mix
 		this.lfoNode.connect(this.shaperNode);
-		// kick off the oscillator
 		this.lfoNode.type = 'sine';
 		this.lfoNode.start(0);
 	
-		// wet mix
 		this.inputNode.connect(this.tremoloGainNode);
 		this.tremoloGainNode.connect(this.wetGainNode);
 		this.wetGainNode.connect(this.outputNode);

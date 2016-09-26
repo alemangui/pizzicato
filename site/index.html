@@ -507,9 +507,8 @@ var convolver = new Pizzicato.Effects.Convolver({
             <pre><code class="language-javascript">
 var tremolo = new Pizzicato.Effects.Tremolo({
     speed: 7
-    mix: 1,
-    depth: 0.95,
-    shape: 'sine'
+    depth: 0.8,
+    mix: 0.8
 });
 
 sound.addEffect(tremolo);
@@ -518,8 +517,8 @@ sound.play();
 
             <div class="slider-group">
                 <div class="slider">
-                    <label for="volume-tremolo-drums">Volume</label>
-                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-tremolo-drums" />
+                    <label for="volume-tremolo-guitar">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-tremolo-guitar" />
                     <div class="slider-value">1</div>
                 </div>
                 <div class="slider">
@@ -529,30 +528,20 @@ sound.play();
                 </div>
                 <div class="slider">
                     <label for="tremolo-depth">Depth</label>
-                    <input type="range" min="0" max="1" step="0.01" value="0.95" id="tremolo-depth" />
-                    <div class="slider-value">0.95</div>
+                    <input type="range" min="0" max="1" step="0.01" value="0.8" id="tremolo-depth" />
+                    <div class="slider-value">0.8</div>
                 </div>
                 <div class="slider">
                     <label for="tremolo-mix">Mix</label>
-                    <input type="range" min="0" max="1" step="0.01" value="1" id="tremolo-mix" />
-                    <div class="slider-value">1</div>
-                </div>
-                <div class="slider">
-                    <label for="tremolo-shape">Shape</label>
-                    <select id="tremolo-shape">
-                        <option value='square'>Square</option>
-                        <option value='sine' selected>Sine</option>
-                        <option value='triangle'>Triangle</option>
-                        <option value='sawtooth'>Sawtooth</option>
-                    </select>
-                    <div class="slider-value">Sine</div>
+                    <input type="range" min="0" max="1" step="0.01" value="0.8" id="tremolo-mix" />
+                    <div class="slider-value">0.8</div>
                 </div>
 
             </div>
 
             <div class="controls">
-                <button id="stop-tremolo-drums" class="stop action"></button>
-                <button id="play-tremolo-drums" class="play action"></button>
+                <button id="stop-tremolo-guitar" class="stop action"></button>
+                <button id="play-tremolo-guitar" class="play action"></button>
             </div>
 
                 <h4 id="stereo-panner">Stereo panner</h4>

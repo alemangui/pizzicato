@@ -79,20 +79,6 @@ describe('Util', function() {
 		expect(isInRange(-42, -43, 0)).toBe(true);
 	});
 
-	it('contains a working isValidShape function', function() {
-		var isValidShape = Pizzicato.Util.isValidShape;
-
-		expect(typeof isValidShape).toBe('function');
-		expect(isValidShape(123)).toBe(false);
-		expect(isValidShape('rhombus')).toBe(false);
-		expect(isValidShape({type: 'pyramid'})).toBe(false);
-		expect(isValidShape('sine')).toBe(true);
-		expect(isValidShape('square')).toBe(true);
-		expect(isValidShape('triangle')).toBe(true);
-	});
-
-
-
 	it('contains a working isOscillator function', function() {
 		var context = new window.AudioContext();
 		var oscillatorNode = context.createOscillator();

@@ -24,8 +24,8 @@ describe('Effects.Tremolo', function() {
 		var tremolo = new Pizzicato.Effects.Tremolo(options);
 
 		expect(tremolo.speed).toBe(4);
+		expect(tremolo.depth).toBe(1);
 		expect(tremolo.mix).toBe(0.8);
-		expect(tremolo.depth).toBe(0.8);
 	});
 
 

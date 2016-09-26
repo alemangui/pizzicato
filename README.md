@@ -38,6 +38,7 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
   - [Convolver](#convolver)
   - [Reverb](#reverb)
   - [Ring Modulator](#ring-modulator)
+  - [Tremolo](#tremolo)
 - [Advanced](#advanced)
   - [Accessing the audio context](#accessing-the-context)
   - [Getting an analyser node for a sound](#analyser-node)
@@ -584,7 +585,7 @@ sound.play();
 
 <a name="ring-modulator"/>
 ### Ring Modulator ([example](https://alemangui.github.io/pizzicato/#ring-modulator))
-The ring modulator effect combines two input signals, where one of the inputs is a sine wave modulating the other. [This article from the BBC](http://webaudio.prototyping.bbc.co.uk/ring-modulator/) goes into deeper detail and explains how to recreate it. The 'ring' in this effect derives from the layout of diode nodes in the original analogue equipment, and also refers to the sound being increasingly modulated as it travels through the ring of diodes. 
+The ring modulator effect combines two input signals, where one of the inputs is a sine wave modulating the other. [This article from the BBC](http://webaudio.prototyping.bbc.co.uk/ring-modulator/) - from where this effect was inspired from - goes into deeper detail and explains how to recreate it. The 'ring' in this effect derives from the layout of diode nodes in the original analogue equipment, and also refers to the sound being increasingly modulated as it travels through the ring of diodes. 
 
 * ```distortion``` _(min: 0.2, max: 50, defaults to 1)_: Level of distortion applied to the diode nodes.
 * ```speed``` _(min: 0, max: 2000, defaults to 30)_: The frequency of the modulating signal.
@@ -599,6 +600,26 @@ var ringModulator = new Pizzicato.Effects.RingModulator({
 });
 
 sound.addEffect(ringModulator);
+sound.play();
+```
+
+<a name="tremolo"/>
+### Tremolo ([example](https://alemangui.github.io/pizzicato/#tremolo))
+The tremolo effect changes the volume of the sound over time. The outcome would be similar as if you turned the volume node up and down periodically.
+
+* ```speed``` _(min: 0, max: 20, defaults to 4)_: The speed at which the volume will change.
+* ```depth``` _(min: 0, max: 1, defaults to 1)_: The intensity of the volume change.
+* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output.
+
+Example:
+```javascript
+var tremolo = new Pizzicato.Effects.Tremolo({
+    speed: 5,
+    depth: 1,
+    mix: 0.5
+});
+
+sound.addEffect(tremolo);
 sound.play();
 ```
 
