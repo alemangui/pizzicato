@@ -9,8 +9,7 @@ Pizzicato.Effects.Tremolo = function(options) {
 	var defaults = {
 		speed: 4,
 		mix: 0.8,
-		depth: 0.8,
-		shape: 'sine'
+		depth: 0.8
 	};
 
 	// create nodes
@@ -107,22 +106,6 @@ Pizzicato.Effects.Tremolo.prototype = Object.create(null, {
 			
 			this.options.depth = depth;
 			this.shaperNode.curve = new Float32Array([1-depth, 1]);
-		}
-	},
-
-	shape: {
-		enumerable: true,
-
-		get: function() {
-			return this.options.shape;	
-		},
-
-		set: function(shape) {
-			if (!Pz.Util.isValidShape(shape)) 
-				return;
-			
-			this.options.shape = shape;
-			this.lfoNode.type = shape;
 		}
 	}
 

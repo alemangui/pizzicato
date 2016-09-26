@@ -4,15 +4,13 @@ describe('Effects.Tremolo', function() {
 		var options = {
 			speed: 2,
 			mix: 0,
-			depth: 0.4,
-			shape: 'square',
+			depth: 0.4
 		};
 		var tremolo = new Pizzicato.Effects.Tremolo(options);
 
 		expect(tremolo.speed).toBe(options.speed);
 		expect(tremolo.mix).toBe(options.mix);
 		expect(tremolo.depth).toBe(options.depth);
-		expect(tremolo.shape).toBe(options.shape);
 	});
 
 
@@ -21,7 +19,6 @@ describe('Effects.Tremolo', function() {
 			speed: 'Keanu Reeves',
 			mix: -100000,
 			depth: 'charge',
-			shape: {type: 'rhombus'},
 		};
 
 		var tremolo = new Pizzicato.Effects.Tremolo(options);
@@ -29,7 +26,6 @@ describe('Effects.Tremolo', function() {
 		expect(tremolo.speed).toBe(4);
 		expect(tremolo.mix).toBe(0.8);
 		expect(tremolo.depth).toBe(0.8);
-		expect(tremolo.shape).toEqual('sine');
 	});
 
 
@@ -71,18 +67,5 @@ describe('Effects.Tremolo', function() {
 
 		expect(tremolo.shaperNode.curve[0]).toBeCloseTo(1- newDepth);
 	});
-
-	it('Should change the wave shape when changing the shape', function() {
-		var initialShape = 'sine';
-		var newShape = 'square';
-		var tremolo = new Pizzicato.Effects.Tremolo({ shape: initialShape });
-
-		expect(tremolo.lfoNode.type).toBe(initialShape);
-
-		tremolo.shape = newShape;
-
-		expect(tremolo.lfoNode.type).toBe(newShape);
-	});
-
 
 });
