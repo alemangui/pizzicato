@@ -64,6 +64,7 @@
 	//= require ./Effects/Convolver.js
 	//= require ./Effects/PingPongDelay.js
 	//= require ./Effects/Reverb.js
+	//= require ./Effects/Tremolo.js
 	//= require ./Effects/DubDelay.js
 	//= require ./Effects/RingModulator.js
 	

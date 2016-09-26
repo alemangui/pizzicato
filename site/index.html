@@ -42,6 +42,7 @@
             <a href="#low-pass-filter" class="menu-item">Low-pass filter</a>
             <a href="#high-pass-filter" class="menu-item">High-pass filter</a>
             <a href="#ring-modulator" class="menu-item">Ring modulator</a>
+            <a href="#tremolo" class="menu-item">Tremolo</a>
         </div>
 
         <div id="wrapper">
@@ -501,6 +502,58 @@ var convolver = new Pizzicato.Effects.Convolver({
                     <button id="play-drums" class="play action"></button>
                 </div>
 
+            <h4 id="tremolo">Tremolo</h4>
+
+            <pre><code class="language-javascript">
+var tremolo = new Pizzicato.Effects.Tremolo({
+    speed: 7
+    mix: 1,
+    depth: 0.95,
+    shape: 'sine'
+});
+
+sound.addEffect(tremolo);
+sound.play();
+            </code></pre>
+
+            <div class="slider-group">
+                <div class="slider">
+                    <label for="volume-tremolo-drums">Volume</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volume-tremolo-drums" />
+                    <div class="slider-value">1</div>
+                </div>
+                <div class="slider">
+                    <label for="tremolo-speed">Speed</label>
+                    <input type="range" min="0" max="20" step="0.01" value="7" id="tremolo-speed" />
+                    <div class="slider-value">7</div>
+                </div>
+                <div class="slider">
+                    <label for="tremolo-depth">Depth</label>
+                    <input type="range" min="0" max="1" step="0.01" value="0.95" id="tremolo-depth" />
+                    <div class="slider-value">0.95</div>
+                </div>
+                <div class="slider">
+                    <label for="tremolo-mix">Mix</label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="tremolo-mix" />
+                    <div class="slider-value">1</div>
+                </div>
+                <div class="slider">
+                    <label for="tremolo-shape">Shape</label>
+                    <select id="tremolo-shape">
+                        <option value='square'>Square</option>
+                        <option value='sine' selected>Sine</option>
+                        <option value='triangle'>Triangle</option>
+                        <option value='sawtooth'>Sawtooth</option>
+                    </select>
+                    <div class="slider-value">Sine</div>
+                </div>
+
+            </div>
+
+            <div class="controls">
+                <button id="stop-tremolo-drums" class="stop action"></button>
+                <button id="play-tremolo-drums" class="play action"></button>
+            </div>
 
                 <h4 id="stereo-panner">Stereo panner</h4>
 

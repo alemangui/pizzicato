@@ -39,11 +39,18 @@ var flanger = new Pizzicato.Effects.Flanger();
 var stereoPanner = new Pizzicato.Effects.StereoPanner();
 var reverb = new Pizzicato.Effects.Reverb();
 var convolver = new Pizzicato.Effects.Convolver({ impulse: './audio/scala-milan.wav' });
+var tremolo = new Pizzicato.Effects.Tremolo({
+	speed: 4,
+	mix: 0.8,
+	depth: 0.8,
+	shape: 'sine'
+});
 var ringModulator = new Pizzicato.Effects.RingModulator({
 	speed: 30,
 	distortion: 1,
 	mix: 0.5
 });
+
 // Sounds
 var sineWave = new Pz.Sound();
 var sineWaveSustain = new Pz.Sound({ source: 'wave', options: { frequency: 220, sustain: 1, attack:0.5 } });
@@ -138,6 +145,22 @@ var drums = new Pz.Sound({
 }, function() { 
 	drums.addEffect(convolver); 
 });
+
+var tremoloGuitar = new Pz.Sound({ 
+	source: 'file', 
+	options: { 
+		// audio taken from
+		// http://free-loops.com/3972-guitar-power-chord.html
+		// free for personal use
+		path: './audio/74272912df554e8fb6c224fbb365-orig.wav', 
+		loop: true 
+	}
+}, function() { 
+	tremoloGuitar.addEffect(tremolo); 
+});
+
+
+
 
 var whiteNoise = new Pz.Sound(function(e) {
   var output = e.outputBuffer.getChannelData(0);
@@ -290,6 +313,25 @@ var segments = [
 			}
 		]
 	},
+
+	{
+		audio: tremoloGuitar,
+		playButton: document.getElementById('play-tremolo-drums'),
+		stopButton: document.getElementById('stop-tremolo-drums'),
+		volumeSlider: document.getElementById('volume-tremolo-drums'),
+		effects: [
+			{
+				instance: tremolo,
+				parameters: {
+					speed: document.getElementById('tremolo-speed'),
+					mix: document.getElementById('tremolo-mix'),
+					depth: document.getElementById('tremolo-depth'),
+					shape: document.getElementById('tremolo-shape')
+				}
+			}
+		]
+	},
+
 	{
 		audio: electro,
 		playButton: document.getElementById('play-electro'),
@@ -445,7 +487,12 @@ for (var i = 0; i < segments.length; i++) {
 					var display = slider.parentNode.getElementsByClassName('slider-value')[0];
 
 					slider.addEventListener('input', function(e) {
-						display.innerHTML = instance[key] = e.target.valueAsNumber;
+						if (e.target.nodeName === 'SELECT') {
+							display.innerHTML = instance[key] = e.target.value;
+						} else {
+							display.innerHTML = instance[key] = e.target.valueAsNumber;
+						}
+						
 					});
 
 				})(key, effect.parameters[key], effect.instance);	
