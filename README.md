@@ -339,7 +339,11 @@ If you started a sound of type [wave](#sounds-from-a-wave), you can modify the f
 Example:
 ```javascript
 var sound = new Pizzicato.Sound();
-sound.sustain = 0.9;
+
+sound.play();
+
+// go up an octave
+sound.frequency = 880; // a5
 ```
 
 <a name="effects"/>
