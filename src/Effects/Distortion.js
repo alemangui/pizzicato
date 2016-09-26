@@ -16,7 +16,7 @@ Pizzicato.Effects.Distortion = function(options) {
 	}
 };
 
-Pizzicato.Effects.Distortion.prototype = Object.create(null, {
+Pizzicato.Effects.Distortion.prototype = Object.create(baseEffect, {
 
 	/**
 	 * Gets and sets the gain (amount of distortion).

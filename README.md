@@ -25,6 +25,7 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
   - [attack](#sounds-attack)
   - [sustain](#sounds-sustain)
   - [frequency](#sounds-frequency)
+  - [Connecting sounds to AudioNodes](#sounds-connect)
 - [Effects](#effects)
   - [Delay](#delay)
   - [Ping Pong Delay](#pingpongdelay)
@@ -39,9 +40,10 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
   - [Reverb](#reverb)
   - [Ring Modulator](#ring-modulator)
   - [Tremolo](#tremolo)
+  - [Connecting effects to and from AudioNodes](#effects-connect)
 - [Advanced](#advanced)
   - [Accessing the audio context](#accessing-the-context)
-  - [Getting an analyser node for a sound](#analyser-node)
+  - [Using Pizzicato objects in a web audio graph](#using-graph)
   - [General volume](#general-volume)
 - [Support](#support)
   - [Browsers](#browsers)
@@ -110,7 +112,7 @@ var click = new Pizzicato.Sound({ source: 'wave' }, function(error) {
 });
 ```
 
-Typically, the ```description``` object contains a string ```source``` and an object ```options```.
+Typically, the ```description``` object contains a string ```source``` and an object ```options```. The ```options``` object varies depending on the source of the sound being created.
 
 For example, this objects describes a sine waveform with a frequency of 440:
 ```javascript
@@ -133,6 +135,7 @@ To create a sound from an oscillator with a certain waveform, use the ```source:
 * ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
 * ```sustain``` _(Optional; defaults to 0.4)_: Value in seconds that indicates the fade-out time when the sound is stopped.
 * ```attack``` _(Optional; defaults to 0.4)_: Value in seconds that indicates the fade-in time when the sound is played.
+* ```detached``` _(Optional; defaults to false)_: If true, the sound will not be connected to the context's destination, and thus, will not be audible.
 
 ```javascript
 var sound = new Pizzicato.Sound({ 
@@ -155,6 +158,7 @@ In order to load a sound from a file, include the ```source: file``` in your des
 * ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
 * ```sustain``` _(Optional; defaults to 0)_: Value in seconds that indicates the fade-out time once the sound is stopped.
 * ```attack``` _(Optional; defaults to 0.4)_: Value in seconds that indicates the fade-in time when the sound is played.
+* ```detached``` _(Optional; defaults to false)_: If true, the sound will not be connected to the context's destination, and thus, will not be audible.
 
 ```javascript
 var sound = new Pizzicato.Sound({ 
@@ -186,6 +190,7 @@ It is also possible to use the sound input from the computer. This is usually th
 * ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
 * ```sustain``` _(Optional; defaults to 0)_: Value in seconds that indicates the fade-out time once the sound is stopped.
 * ```attack``` _(Optional; defaults to 0.4)_: Value in seconds that indicates the fade-in time when the sound is played.
+* ```detached``` _(Optional; defaults to false)_: If true, the sound will not be connected to the context's destination, and thus, will not be audible.
 
 ```javascript
 var voice = new Pizzicato.Sound({
@@ -202,6 +207,7 @@ For more creative freedom, Pizzicato also allows direct audio processing. Sounds
 * ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
 * ```sustain``` _(Optional; defaults to 0)_: Value in seconds that indicates the fade-out time once the sound is stopped.
 * ```attack``` _(Optional; defaults to 0.4)_: Value in seconds that indicates the fade-in time when the sound is played.
+* ```detached``` _(Optional; defaults to false)_: If true, the sound will not be connected to the context's destination, and thus, will not be audible.
 
 For example:
 ```javascript
@@ -346,6 +352,10 @@ sound.play();
 // go up an octave
 sound.frequency = 880; // a5
 ```
+
+<a name="sounds-connect">
+###Connecting sounds to AudioNodes
+It is possible to connect AudioNodes to sound objects by using the ```connect``` method. More details in the [advanced section of this file](#using-graph-sound).
 
 <a name="effects"/>
 ## Effects
@@ -623,6 +633,10 @@ sound.addEffect(tremolo);
 sound.play();
 ```
 
+<a name="effects-connect">
+### Connecting effects to and from AudioNodes
+It is possible to connect AudioNodes to effects (and viceversa) by using the ```connect``` method. More details in the [advanced section of this file](#using-graph-effect).
+
 <a name="advanced">
 ## Advanced
 
@@ -633,12 +647,51 @@ If needed, the audio context used by Pizzicato is always accessible:
 var context = Pizzicato.context;
 ```
 
-<a name="analyser-node">
-### Getting an analyser node for a sound object
-You can obtain an analyser node for a particular Pizzicato Sound object by using the function ```getAnalyser```:
+<a name="using-graph">
+### Using Pizzicato objects in a web audio graph
+You can use effects and sounds as part of an existing web audio graph.
+
+<a name="using-graph-sound">
+#### Connecting nodes to a Pizzicato.Sound object
+Using the ```connect``` method, you can connect audio nodes to a Pizzicato.Sound object. For example:
 ```javascript
+var analyser = Pizzicato.context.createAnaliser();
 var sound = new Pizzicato.Sound();
-var analyser = sound.getAnalyser();
+
+sound.connect(analyser);
+```
+
+<a name="using-graph-sound-detached">
+#### Creating a detached Pizzicato.Sound object
+All Pizzicato.Sound objects are connected to the context's destination by default. In the example above, the ```sound``` object will be connected to an analyser node and it will also remain connected to the context's destination node.
+
+To have a Pizzicato.Sound object that is not connected to the context's destination, use the ```detached``` option as follows:
+
+```javascript
+var analyser = Pizzicato.context.createAnaliser();
+var sound = new Pizzicato.Sound({ 
+    source: wave, 
+    options: { 
+        detached: true 
+    } 
+});
+
+sound.connect(analyser);
+```
+
+<a name="using-graph-effect">
+#### Connecting nodes to effects
+Pizzicato effects can also be used in a web audio graph without the need to create Pizzicato.Sound objects by using the ```connect``` method.
+
+Additionally, the ```connect``` method in an AudioNode can receive a Pizzicato effect as a parameter.
+
+```javascript
+var oscillator = Pizzicato.context.createOscillator();
+var distortion = new Pizzicato.Effects.Distortion();
+var analyser = Pizzicato.context.createAnalyser();
+
+oscillator.connect(distortion);
+distortion.connect(analyser);
 ```
 
 <a name="general-volume">
@@ -653,7 +706,7 @@ Pizzicato.volume = 0.3;
 
 <a name="browsers"/>
 ### Browsers
-Pizzicato can only work in [browsers with Web Audio support](http://caniuse.com/#feat=audio-api), no shims have been added yet. This means:
+Pizzicato can only work in [browsers with Web Audio support](http://caniuse.com/#feat=audio-api). This means:
 * Firefox 31+
 * Chrome 31+
 * Safari 7+ (input source not available in Safari)

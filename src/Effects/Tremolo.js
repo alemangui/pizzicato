@@ -45,7 +45,7 @@ Pizzicato.Effects.Tremolo = function(options) {
 	}
 };
 
-Pizzicato.Effects.Tremolo.prototype = Object.create(null, {
+Pizzicato.Effects.Tremolo.prototype = Object.create(baseEffect, {
 
 	/**
 	 * Gets and sets the dry/wet mix.

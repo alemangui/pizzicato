@@ -39,7 +39,7 @@ Pizzicato.Effects.Delay = function(options) {
 	}
 };
 
-Pizzicato.Effects.Delay.prototype = Object.create(null, {
+Pizzicato.Effects.Delay.prototype = Object.create(baseEffect, {
 
 	/**
 	 * Gets and sets the dry/wet mix.

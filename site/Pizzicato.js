@@ -55,10 +55,7 @@
 		},
 	
 		isBool: function(arg) {
-			if (typeof(arg) !== "boolean")
-				return false;
-	
-			return true;
+			return typeof(arg) === "boolean";
 		},
 	
 		isOscillator: function(audioNode) {
@@ -73,8 +70,7 @@
 			return false;
 		},
 	
-		// Takes a number from 0 to 1 and normalizes it 
-		// to fit within range floor to ceiling
+		// Takes a number from 0 to 1 and normalizes it to fit within range floor to ceiling
 		normalize: function(num, floor, ceil) {
 			if (!Pz.Util.isNumber(num) || !Pz.Util.isNumber(floor) || !Pz.Util.isNumber(ceil))
 				return;
@@ -101,6 +97,17 @@
 	
 			return 1 - ((0.5 - mix) * 2);
 		}
+	};
+	/* In order to allow an AudioNode to connect to a Pizzicato 
+	Effect object, we must shim its connect method */
+	var gainNode = Pizzicato.context.createGain();
+	var audioNode = Object.getPrototypeOf(Object.getPrototypeOf(gainNode));
+	var connect = audioNode.connect;
+	
+	audioNode.connect = function(node) {
+		var endpoint = Pz.Util.isEffect(node) ? node.inputNode : node;
+		connect.call(this, endpoint);
+		return node;
 	};
 
 	Object.defineProperty(Pizzicato, 'volume', {
@@ -201,9 +208,10 @@
 		}
 	
 		this.masterVolume = Pizzicato.context.createGain();
-		this.masterVolume.connect(Pizzicato.masterGainNode);
-	
 		this.fadeNode = Pizzicato.context.createGain();
+		
+		if (!hasOptions || !description.options.detached)
+			this.masterVolume.connect(Pizzicato.masterGainNode);
 	
 		this.lastTimePlayed = 0;
 		this.effects = [];
@@ -533,6 +541,24 @@
 		},
 	
 	
+		connect: {
+			enumerable: true,
+	
+			value: function(audioNode) {
+				this.masterVolume.connect(audioNode);
+			}
+		},
+	
+	
+		disconnect: {
+			enumerable: true,
+	
+			value: function(audioNode) {
+				this.masterVolume.disconnect(audioNode);
+			}
+		},
+	
+	
 		connectEffects: {
 			enumerable: true,
 	
@@ -621,6 +647,8 @@
 		},
 	
 		/**
+	 	 * @deprecated - Use "connect"
+	 	 *
 		 * Returns an analyser node located right after the master volume.
 		 * This node is created lazily.
 		 */
@@ -628,6 +656,8 @@
 			enumerable: true,
 	
 			value: function() {
+	
+				console.warn('This method is deprecated. You should manually create an AnalyserNode and use connect() on the Pizzicato Sound.');
 	
 				if (this.analyser)
 					return this.analyser;
@@ -684,6 +714,25 @@
 		}
 	});
 	Pizzicato.Effects = {};
+	
+	var baseEffect = Object.create(null, {
+	
+		connect: {
+			enumerable: true,
+	
+			value: function(audioNode) {
+				this.outputNode.connect(audioNode);
+			}
+		},
+	
+		disconnect: {
+			enumerable: true,
+	
+			value: function(audioNode) {
+				this.outputNode.disconnect(audioNode);
+			}
+		}
+	});
 	Pizzicato.Effects.Delay = function(options) {
 	
 		this.options = {};
@@ -725,7 +774,7 @@
 		}
 	};
 	
-	Pizzicato.Effects.Delay.prototype = Object.create(null, {
+	Pizzicato.Effects.Delay.prototype = Object.create(baseEffect, {
 	
 		/**
 		 * Gets and sets the dry/wet mix.
@@ -810,7 +859,7 @@
 		}
 	};
 	
-	Pizzicato.Effects.Compressor.prototype = Object.create(null, {
+	Pizzicato.Effects.Compressor.prototype = Object.create(baseEffect, {
 	
 		/**
 		 * The level above which compression is applied to the audio.
@@ -957,7 +1006,7 @@
 		}
 	}
 	
-	var filterPrototype = Object.create(null, {
+	var filterPrototype = Object.create(baseEffect, {
 		
 		/**
 		 * The cutoff frequency of the filter.
@@ -1016,7 +1065,7 @@
 		}
 	};
 	
-	Pizzicato.Effects.Distortion.prototype = Object.create(null, {
+	Pizzicato.Effects.Distortion.prototype = Object.create(baseEffect, {
 	
 		/**
 		 * Gets and sets the gain (amount of distortion).
@@ -1111,7 +1160,7 @@
 		}
 	};
 	
-	Pizzicato.Effects.Flanger.prototype = Object.create(null, {
+	Pizzicato.Effects.Flanger.prototype = Object.create(baseEffect, {
 		
 		time: {
 			enumberable: true,
@@ -1228,7 +1277,7 @@
 		}
 	};
 	
-	Pizzicato.Effects.StereoPanner.prototype = Object.create(null, {
+	Pizzicato.Effects.StereoPanner.prototype = Object.create(baseEffect, {
 	
 		/**
 		 * Pan position
@@ -1320,7 +1369,7 @@
 		request.send();
 	};
 	
-	Pizzicato.Effects.Convolver.prototype = Object.create(null, {
+	Pizzicato.Effects.Convolver.prototype = Object.create(baseEffect, {
 	
 		mix: {
 			enumerable: true,
@@ -1388,7 +1437,7 @@
 		}
 	};
 	
-	Pizzicato.Effects.PingPongDelay.prototype = Object.create(null, {
+	Pizzicato.Effects.PingPongDelay.prototype = Object.create(baseEffect, {
 	
 		/**
 		 * Gets and sets the dry/wet mix.
@@ -1487,7 +1536,7 @@
 		(buildImpulse.bind(this))();
 	};
 	
-	Pizzicato.Effects.Reverb.prototype = Object.create(null, {
+	Pizzicato.Effects.Reverb.prototype = Object.create(baseEffect, {
 	
 		mix: {
 			enumerable: true,
@@ -1620,7 +1669,7 @@
 		}
 	};
 	
-	Pizzicato.Effects.Tremolo.prototype = Object.create(null, {
+	Pizzicato.Effects.Tremolo.prototype = Object.create(baseEffect, {
 	
 		/**
 		 * Gets and sets the dry/wet mix.
@@ -1723,7 +1772,7 @@
 		}
 	};
 	
-	Pizzicato.Effects.DubDelay.prototype = Object.create(null, {
+	Pizzicato.Effects.DubDelay.prototype = Object.create(baseEffect, {
 	
 		/**
 		 * Gets and sets the dry/wet mix.
@@ -1934,7 +1983,7 @@
 	};
 	
 	
-	Pizzicato.Effects.RingModulator.prototype = Object.create(null, {
+	Pizzicato.Effects.RingModulator.prototype = Object.create(baseEffect, {
 	
 		/**
 		 * Gets and sets the dry/wet mix.

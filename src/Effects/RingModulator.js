@@ -127,7 +127,7 @@ DiodeNode.prototype.connect = function(destination) {
 };
 
 
-Pizzicato.Effects.RingModulator.prototype = Object.create(null, {
+Pizzicato.Effects.RingModulator.prototype = Object.create(baseEffect, {
 
 	/**
 	 * Gets and sets the dry/wet mix.

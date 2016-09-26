@@ -12,9 +12,10 @@ Pizzicato.Sound = function(description, callback) {
 	}
 
 	this.masterVolume = Pizzicato.context.createGain();
-	this.masterVolume.connect(Pizzicato.masterGainNode);
-
 	this.fadeNode = Pizzicato.context.createGain();
+	
+	if (!hasOptions || !description.options.detached)
+		this.masterVolume.connect(Pizzicato.masterGainNode);
 
 	this.lastTimePlayed = 0;
 	this.effects = [];
@@ -344,6 +345,24 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 	},
 
 
+	connect: {
+		enumerable: true,
+
+		value: function(audioNode) {
+			this.masterVolume.connect(audioNode);
+		}
+	},
+
+
+	disconnect: {
+		enumerable: true,
+
+		value: function(audioNode) {
+			this.masterVolume.disconnect(audioNode);
+		}
+	},
+
+
 	connectEffects: {
 		enumerable: true,
 
@@ -432,6 +451,8 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 	},
 
 	/**
+ 	 * @deprecated - Use "connect"
+ 	 *
 	 * Returns an analyser node located right after the master volume.
 	 * This node is created lazily.
 	 */
@@ -439,6 +460,8 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 		enumerable: true,
 
 		value: function() {
+
+			console.warn('This method is deprecated. You should manually create an AnalyserNode and use connect() on the Pizzicato Sound.');
 
 			if (this.analyser)
 				return this.analyser;

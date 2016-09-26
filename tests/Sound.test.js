@@ -23,6 +23,48 @@ describe('Sound', function() {
 			expect(sound.initializeWithFunction).toBe(undefined);
 		});
 
+		describe('context\'s destination', function() {
+
+			var gainNode = Pizzicato.context.createGain();
+			var audioNode = Object.getPrototypeOf(Object.getPrototypeOf(gainNode));
+
+			beforeAll(function() {
+				spyOn(audioNode, 'connect');
+			});
+
+			beforeEach(function() {
+				audioNode.connect.calls.reset();
+			});
+
+			it('should be attached by default', function() {
+				var sound = new Pizzicato.Sound();
+				var spyArguments = audioNode.connect.calls.allArgs();
+				var containsMasterGainNode = false;
+
+				for (var i = 0; i < spyArguments.length; i++)
+					if (spyArguments[0].includes(Pizzicato.masterGainNode))
+						containsMasterGainNode = true;
+
+				expect(containsMasterGainNode).toBe(true);
+				
+			});
+
+			it('should be detached if the detached option is specified', function() {
+				var sound = new Pizzicato.Sound({ 
+					source: 'wave',
+					options: { detached: true } 
+				});
+				var spyArguments = audioNode.connect.calls.allArgs();
+				var containsMasterGainNode = false;
+
+				for (var i = 0; i < spyArguments.length; i++)
+					if (spyArguments[0].includes(Pizzicato.masterGainNode))
+						containsMasterGainNode = true;
+
+				expect(containsMasterGainNode).toBe(false);
+			});
+		});
+
 		describe('wave source', function() {
 
 			it('should create an oscillator node', function() {
@@ -35,7 +77,6 @@ describe('Sound', function() {
 					done();
 				});
 			}, 5000);
-
 		});
 
 		describe('script source', function() {
@@ -58,7 +99,6 @@ describe('Sound', function() {
 				expect(sound.sourceNode.toString()).toContain('ScriptProcessorNode');
 				sound.stop();
 			});
-
 		});
 
 		describe('file source', function() {
@@ -104,8 +144,7 @@ describe('Sound', function() {
 				spyOn(navigator, 'mozGetUserMedia');
 				var sound = new Pizzicato.Sound({ source: 'input' });
 				expect(navigator.mozGetUserMedia).toHaveBeenCalled();
-			});
-			
+			});	
 		});
 	});
 
@@ -149,6 +188,15 @@ describe('Sound', function() {
 			
 			expect(sound.analyser).toBe(analyser);
 			expect(analyser.toString()).toContain('object AnalyserNode');
+		});
+
+		it('should raise deprecation warning', function() {
+			spyOn(console, 'warn');
+
+			var sound = new Pizzicato.Sound();
+			var analyser = sound.getAnalyser();
+			
+			expect(console.warn).toHaveBeenCalled();
 		});
 	});
 
@@ -383,5 +431,29 @@ describe('Sound', function() {
 			sound.addEffect(delay);
 
 		}, 5500);
+	});
+
+	describe('connectivity', function() {
+		it('should connect audio nodes when using connect', function(done) {
+			var analyser = Pz.context.createAnalyser();
+			var dataArray = new Float32Array(analyser.frequencyBinCount);
+
+			var sound = new Pz.Sound();
+			sound.attack = 0;
+			sound.connect(analyser);
+
+			analyser.getFloatFrequencyData(dataArray);
+			expect(dataArray[0]).toBe(analyser.minDecibels);
+
+			sound.play();
+
+			setTimeout(function() {
+				analyser.getFloatFrequencyData(dataArray);
+				expect(dataArray[0]).not.toBe(-100);
+				sound.stop();
+				done();
+			}, 1500);
+			
+		}, 5000);
 	});
 });

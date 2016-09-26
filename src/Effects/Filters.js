@@ -41,7 +41,7 @@ function Filter(options, type) {
 	}
 }
 
-var filterPrototype = Object.create(null, {
+var filterPrototype = Object.create(baseEffect, {
 	
 	/**
 	 * The cutoff frequency of the filter.

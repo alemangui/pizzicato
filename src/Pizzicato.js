@@ -26,6 +26,7 @@
 	masterGainNode.connect(Pizzicato.context.destination);
 
 	//= require ./Util.js
+	//= require ./Shims.js
 
 	Object.defineProperty(Pizzicato, 'volume', {
 		enumerable: true,

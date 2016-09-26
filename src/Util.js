@@ -28,10 +28,7 @@ Pizzicato.Util = {
 	},
 
 	isBool: function(arg) {
-		if (typeof(arg) !== "boolean")
-			return false;
-
-		return true;
+		return typeof(arg) === "boolean";
 	},
 
 	isOscillator: function(audioNode) {
@@ -46,8 +43,7 @@ Pizzicato.Util = {
 		return false;
 	},
 
-	// Takes a number from 0 to 1 and normalizes it 
-	// to fit within range floor to ceiling
+	// Takes a number from 0 to 1 and normalizes it to fit within range floor to ceiling
 	normalize: function(num, floor, ceil) {
 		if (!Pz.Util.isNumber(num) || !Pz.Util.isNumber(floor) || !Pz.Util.isNumber(ceil))
 			return;

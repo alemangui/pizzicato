@@ -47,7 +47,7 @@ Pizzicato.Effects.Flanger = function(options) {
 	}
 };
 
-Pizzicato.Effects.Flanger.prototype = Object.create(null, {
+Pizzicato.Effects.Flanger.prototype = Object.create(baseEffect, {
 	
 	time: {
 		enumberable: true,

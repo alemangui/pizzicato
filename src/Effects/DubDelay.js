@@ -40,7 +40,7 @@ Pizzicato.Effects.DubDelay = function(options) {
 	}
 };
 
-Pizzicato.Effects.DubDelay.prototype = Object.create(null, {
+Pizzicato.Effects.DubDelay.prototype = Object.create(baseEffect, {
 
 	/**
 	 * Gets and sets the dry/wet mix.

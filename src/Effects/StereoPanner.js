@@ -26,7 +26,7 @@ Pizzicato.Effects.StereoPanner = function(options) {
 	}
 };
 
-Pizzicato.Effects.StereoPanner.prototype = Object.create(null, {
+Pizzicato.Effects.StereoPanner.prototype = Object.create(baseEffect, {
 
 	/**
 	 * Pan position

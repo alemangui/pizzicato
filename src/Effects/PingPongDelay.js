@@ -47,7 +47,7 @@ Pizzicato.Effects.PingPongDelay = function(options) {
 	}
 };
 
-Pizzicato.Effects.PingPongDelay.prototype = Object.create(null, {
+Pizzicato.Effects.PingPongDelay.prototype = Object.create(baseEffect, {
 
 	/**
 	 * Gets and sets the dry/wet mix.

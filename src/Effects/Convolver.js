@@ -66,7 +66,7 @@ Pizzicato.Effects.Convolver = function(options, callback) {
 	request.send();
 };
 
-Pizzicato.Effects.Convolver.prototype = Object.create(null, {
+Pizzicato.Effects.Convolver.prototype = Object.create(baseEffect, {
 
 	mix: {
 		enumerable: true,

@@ -22,7 +22,7 @@ Pizzicato.Effects.Compressor = function(options) {
 	}
 };
 
-Pizzicato.Effects.Compressor.prototype = Object.create(null, {
+Pizzicato.Effects.Compressor.prototype = Object.create(baseEffect, {
 
 	/**
 	 * The level above which compression is applied to the audio.

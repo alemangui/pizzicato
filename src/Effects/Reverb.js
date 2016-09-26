@@ -35,7 +35,7 @@ Pizzicato.Effects.Reverb = function(options) {
 	(buildImpulse.bind(this))();
 };
 
-Pizzicato.Effects.Reverb.prototype = Object.create(null, {
+Pizzicato.Effects.Reverb.prototype = Object.create(baseEffect, {
 
 	mix: {
 		enumerable: true,
