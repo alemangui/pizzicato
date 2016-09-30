@@ -23,6 +23,16 @@ describe('Sound', function() {
 			expect(sound.initializeWithFunction).toBe(undefined);
 		});
 
+		it('should raise a deprecation warning if \'sustain\' is used instead of \'release\'', function() {
+			spyOn(console, 'warn');
+			var sound = new Pizzicato.Sound({
+				source: 'wave',
+				options: { sustain: 0.4 }
+			});
+
+			expect(console.warn).toHaveBeenCalled();
+		});
+
 		describe('context\'s destination', function() {
 
 			var gainNode = Pizzicato.context.createGain();

@@ -23,7 +23,7 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
   - [removeEffect()](#sounds-remove-effect)
   - [volume](#sounds-volume)
   - [attack](#sounds-attack)
-  - [sustain](#sounds-sustain)
+  - [release](#sounds-release)
   - [frequency](#sounds-frequency)
   - [Connecting sounds to AudioNodes](#sounds-connect)
 - [Effects](#effects)
@@ -133,7 +133,7 @@ To create a sound from an oscillator with a certain waveform, use the ```source:
 * ```type``` _(Optional; ```sine```, ```square```, ```triangle``` or ```sawtooth```, defaults to ```sine```)_: Specifies the type of waveform.
 * ```frequency``` _(Optional; defaults to 440)_: Indicates the frequency of the wave (i.e., a 440 value will yield an A note).
 * ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
-* ```sustain``` _(Optional; defaults to 0.4)_: Value in seconds that indicates the fade-out time when the sound is stopped.
+* ```release``` _(Optional; defaults to 0.4)_: Value in seconds that indicates the fade-out time when the sound is stopped.
 * ```attack``` _(Optional; defaults to 0.4)_: Value in seconds that indicates the fade-in time when the sound is played.
 * ```detached``` _(Optional; defaults to false)_: If true, the sound will not be connected to the context's destination, and thus, will not be audible.
 
@@ -156,7 +156,7 @@ In order to load a sound from a file, include the ```source: file``` in your des
 * ```path``` _(Mandatory; string or array of strings)_: Specifies the path of the sound file. It is also possible to have an array of paths to fallback on. Pizzicato will attempt to load the paths in order, passing on to the next one in case of failure.
 * ```loop``` _(Optional; boolean, defaults to false)_: If set, the file will start playing again after the end.
 * ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
-* ```sustain``` _(Optional; defaults to 0)_: Value in seconds that indicates the fade-out time once the sound is stopped.
+* ```release``` _(Optional; defaults to 0)_: Value in seconds that indicates the fade-out time once the sound is stopped.
 * ```attack``` _(Optional; defaults to 0.4)_: Value in seconds that indicates the fade-in time when the sound is played.
 * ```detached``` _(Optional; defaults to false)_: If true, the sound will not be connected to the context's destination, and thus, will not be audible.
 
@@ -188,7 +188,7 @@ Check the [supported audio files](#audio-formats) that can be played with Pizzic
 ### Sounds from the user input ([example](https://alemangui.github.io/pizzicato/#sound-from-input))
 It is also possible to use the sound input from the computer. This is usually the microphone, but it could also be a line-in input. To use this, add ```source: input``` in your description. The following optional parameters are possible inside ```options``` object:
 * ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
-* ```sustain``` _(Optional; defaults to 0)_: Value in seconds that indicates the fade-out time once the sound is stopped.
+* ```release``` _(Optional; defaults to 0)_: Value in seconds that indicates the fade-out time once the sound is stopped.
 * ```attack``` _(Optional; defaults to 0.4)_: Value in seconds that indicates the fade-in time when the sound is played.
 * ```detached``` _(Optional; defaults to false)_: If true, the sound will not be connected to the context's destination, and thus, will not be audible.
 
@@ -205,7 +205,7 @@ For more creative freedom, Pizzicato also allows direct audio processing. Sounds
 * ```audioFunction``` _(Mandatory; function(<audio processing event>))_: Function that will be called with the audio processing event.
 * ```bufferSize``` _(Optional; number - must be a power of 2.)_: This value controls how many sample frames will be processed at each audio process event. Lower values will result in lower latency, higher values help prevent glitches.
 * ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
-* ```sustain``` _(Optional; defaults to 0)_: Value in seconds that indicates the fade-out time once the sound is stopped.
+* ```release``` _(Optional; defaults to 0)_: Value in seconds that indicates the fade-out time once the sound is stopped.
 * ```attack``` _(Optional; defaults to 0.4)_: Value in seconds that indicates the fade-in time when the sound is played.
 * ```detached``` _(Optional; defaults to false)_: If true, the sound will not be connected to the context's destination, and thus, will not be audible.
 
@@ -311,7 +311,7 @@ sound.volume = 0.5;
 ```
 
 <a name="sounds-attack"/>
-### Attack ([example](https://alemangui.github.io/pizzicato/#attack-sustain))
+### Attack ([example](https://alemangui.github.io/pizzicato/#attack-release))
 
 Use the sound's ```attack``` property to modify its attack (or fade-in) value. This value eases the beginning of the sound, often avoiding unwanted clicks.
 
@@ -323,17 +323,17 @@ var sound = new Pizzicato.Sound();
 sound.attack = 0.9;
 ```
 
-<a name="sounds-sustain"/>
-### Sustain ([example](https://alemangui.github.io/pizzicato/#attack-sustain))
+<a name="sounds-release"/>
+### Release ([example](https://alemangui.github.io/pizzicato/#attack-release))
 
-Use the sound's ```sustain``` property to modify its sustain (or fade-out) value. This value eases the end of the sound, often avoiding unwanted clicks.
+Use the sound's ```release``` property to modify its release (or fade-out) value. This value eases the end of the sound, often avoiding unwanted clicks.
 
-* ```sustain``` _(min: 0, max: 10, defaults to 0.04)_: The sound's sustain.
+* ```release``` _(min: 0, max: 10, defaults to 0.04)_: The sound's release.
 
 Example:
 ```javascript
 var sound = new Pizzicato.Sound();
-sound.sustain = 0.9;
+sound.release = 0.9;
 ```
 
 <a name="sounds-frequency"/>

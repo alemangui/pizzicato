@@ -52,7 +52,7 @@ var ringModulator = new Pizzicato.Effects.RingModulator({
 
 // Sounds
 var sineWave = new Pz.Sound();
-var sineWaveSustain = new Pz.Sound({ source: 'wave', options: { frequency: 220, sustain: 1, attack:0.5 } });
+var sineWaveRelease = new Pz.Sound({ source: 'wave', options: { frequency: 220, release: 1, attack:0.5 } });
 var acoustic = new Pz.Sound(dolbySupported ? './audio/acoustic_Dolby.mp4' : './audio/acoustic.m4a');
 
 var timba = new Pz.Sound({ 
@@ -209,11 +209,11 @@ var segments = [
 		volumeSlider: document.getElementById('volume-white')
 	},
 	{
-		audio: sineWaveSustain,
-		playButton: document.getElementById('play-sustain'),
-		stopButton: document.getElementById('stop-sustain'),
-		volumeSlider: document.getElementById('volume-sustain'),
-		sustainSlider: document.getElementById('value-sustain'),
+		audio: sineWaveRelease,
+		playButton: document.getElementById('play-release'),
+		stopButton: document.getElementById('stop-release'),
+		volumeSlider: document.getElementById('volume-release'),
+		releaseSlider: document.getElementById('value-release'),
 		attackSlider: document.getElementById('value-attack')
 	},
 	{
@@ -456,10 +456,10 @@ for (var i = 0; i < segments.length; i++) {
 			volumeDisplay.innerHTML = segment.audio.volume = e.target.valueAsNumber;
 		});
 
-		if (segment.sustainSlider) {
-			segment.sustainSlider.addEventListener('input', function(e) {
-				var sustainDisplay = segment.sustainSlider.parentNode.getElementsByClassName('slider-value')[0];
-				sustainDisplay.innerHTML = segment.audio.sustain = e.target.valueAsNumber;
+		if (segment.releaseSlider) {
+			segment.releaseSlider.addEventListener('input', function(e) {
+				var releaseDisplay = segment.releaseSlider.parentNode.getElementsByClassName('slider-value')[0];
+				releaseDisplay.innerHTML = segment.audio.release = e.target.valueAsNumber;
 			});
 		}
 

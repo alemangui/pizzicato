@@ -4,7 +4,7 @@ Pizzicato.Sound = function(description, callback) {
 	var descriptionError = getDescriptionError(description);
 	var hasOptions = util.isObject(description) && util.isObject(description.options);
 	var defaultAttack = 0.04;
-	var defaultSustain = 0.04;
+	var defaultRelease = 0.04;
 
 	if (descriptionError) {
 		console.error(descriptionError);
@@ -22,8 +22,16 @@ Pizzicato.Sound = function(description, callback) {
 	this.playing = this.paused = false;
 	this.loop = hasOptions && description.options.loop;
 	this.attack = hasOptions && util.isNumber(description.options.attack) ? description.options.attack : defaultAttack;
-	this.sustain = hasOptions && util.isNumber(description.options.sustain) ? description.options.sustain : defaultSustain;
 	this.volume = hasOptions && util.isNumber(description.options.volume) ? description.options.volume : 1;
+
+	if (hasOptions && util.isNumber(description.options.release)) {
+		this.release = description.options.release;
+	} else if (hasOptions && util.isNumber(description.options.sustain)) {
+		console.warn('\'sustain\' is deprecated. Use \'release\' instead.');
+		this.release = description.options.sustain;
+	} else {
+		this.release = defaultRelease;
+	}
 
 	if (!description)
 		(initializeWithWave.bind(this))({}, callback);
@@ -226,7 +234,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 				return;
 
 			this.paused = this.playing = false;
-			this.stopWithSustain();
+			this.stopWithRelease();
 
 			this.offsetTime = 0;
 			this.trigger('stop');
@@ -244,7 +252,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			this.paused = true;
 			this.playing = false;
 
-			this.stopWithSustain();
+			this.stopWithRelease();
 
 			var elapsedTime = Pz.context.currentTime - this.lastTimePlayed;
 			
@@ -269,7 +277,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 				options: {
 					loop: this.loop,
 					attack: this.attack,
-					sustain: this.sustain,
+					release: this.release,
 					volume: this.volume,
 					sound: this
 				}
@@ -412,6 +420,25 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 		}
 	},
 
+	/**
+ 	 * @deprecated - Use "release"
+	 */
+	sustain: {
+		enumerable: true,
+
+		get: function() {
+			console.warn('\'sustain\' is deprecated. Use \'release\' instead.');
+			return this.release;
+		},
+
+		set: function(sustain){
+			console.warn('\'sustain\' is deprecated. Use \'release\' instead.');
+
+			if (Pz.Util.isInRange(sustain, 0, 10))
+				this.release = sustain;
+		}
+	},
+
 
 	/**
 	 * Returns the node that produces the sound. For example, an oscillator
@@ -493,10 +520,10 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 	/**
 	 * Will take the current source node and work down the volume
-	 * gradually in as much time as specified in the sustain property
+	 * gradually in as much time as specified in the release property
 	 * of the sound before stopping the source node.
 	 */
-	stopWithSustain: {
+	stopWithRelease: {
 		enumerable: false,
 
 		value: function(callback) {
@@ -506,14 +533,14 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 				return Pz.Util.isFunction(node.stop) ? node.stop(0) : node.disconnect();
 			};
 
-			if (!this.sustain)
+			if (!this.release)
 				stopSound();
 
 			this.fadeNode.gain.setValueAtTime(this.fadeNode.gain.value, Pizzicato.context.currentTime);
-			this.fadeNode.gain.linearRampToValueAtTime(0.00001, Pizzicato.context.currentTime + this.sustain);
+			this.fadeNode.gain.linearRampToValueAtTime(0.00001, Pizzicato.context.currentTime + this.release);
 			window.setTimeout(function() {
 				stopSound();
-			}, this.sustain * 1000);
+			}, this.release * 1000);
 		}
 	}
 });
