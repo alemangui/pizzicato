@@ -42,7 +42,7 @@ describe('Sound', function() {
 				var containsMasterGainNode = false;
 
 				for (var i = 0; i < spyArguments.length; i++)
-					if (spyArguments[0].includes(Pizzicato.masterGainNode))
+					if (spyArguments[0].indexOf(Pizzicato.masterGainNode) >= 0)
 						containsMasterGainNode = true;
 
 				expect(containsMasterGainNode).toBe(true);
@@ -58,7 +58,7 @@ describe('Sound', function() {
 				var containsMasterGainNode = false;
 
 				for (var i = 0; i < spyArguments.length; i++)
-					if (spyArguments[0].includes(Pizzicato.masterGainNode))
+					if (spyArguments[0].indexOf(Pizzicato.masterGainNode) >= 0)
 						containsMasterGainNode = true;
 
 				expect(containsMasterGainNode).toBe(false);
