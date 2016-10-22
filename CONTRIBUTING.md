@@ -1,4 +1,4 @@
-Thank you for taking the time to read this. Pizzicato is on its very early stages and all help is welcome! 
+Thank you for taking the time to read this, all help is welcome! 
 
 Make sure that all tests are passing and that you create new tests if necessary. You can execute the tests with the command `npm run test`. Also please make sure the documentation is updated.
 

@@ -35,6 +35,7 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
   - [Ping Pong Delay](#pingpongdelay)
   - [Dub Delay](#dubdelay)
   - [Distortion](#distortion)
+  - [Quadrafuzz](#quadrafuzz)
   - [Flanger](#flanger)
   - [Compressor](#compressor)
   - [Low-pass filter](#low-pass-filter)
@@ -469,6 +470,31 @@ sound.addEffect(delay);
 sound.play();
 ```
 
+<a name="quadrafuzz">
+### Quadrafuzz ([example](https://alemangui.github.io/pizzicato/#quadrafuzz))
+The quadrafuzz effect divides the sound into separate bands and then distorts each band independently, allowing you to control which frequencies you distort and how much.
+
+The quadrafuzz code in Pizzicato is based on [Michel Buffa's](https://twitter.com/micbuffa) implementation of the quadrafuzz effect.
+
+The effect takes the following parameters:
+* ```lowGain``` _(min: 0, max: 1, defaults to 0.6)_: 
+* ```midLowGain``` _(min: 0, max: 1, defaults to 0.8)_: 
+* ```midHighGain``` _(min: 0, max: 1, defaults to 0.5)_: 
+* ```highGain``` _(min: 0, max: 1, defaults to 0.6)_: 
+
+Example:
+```javascript
+var quadrafuzz = new Pizzicato.Effects.Quadrafuzz({
+    lowGain: 0.6,
+    midLowGain: 0.8,
+    midHighGain: 0.5,
+    highGain: 0.6,
+});
+
+sound.addEffect(quadrafuzz);
+sound.play();
+```
+
 <a name="flanger"/>
 ### Flanger ([example](https://alemangui.github.io/pizzicato/#flanger))
 The flanger produces a swirling effect by delaying a "copy" of the sound by a small, gradually changing period. The flanger effect takes the folloeing parameters:
@@ -702,9 +728,9 @@ All Pizzicato.Sound objects are connected to the context's destination by defaul
 To have a Pizzicato.Sound object that is not connected to the context's destination, use the ```detached``` option as follows:
 
 ```javascript
-var analyser = Pizzicato.context.createAnaliser();
+var analyser = Pizzicato.context.createAnalyser();
 var sound = new Pizzicato.Sound({ 
-    source: wave, 
+    source: 'wave', 
     options: { 
         detached: true 
     } 

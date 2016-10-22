@@ -35,6 +35,7 @@
             <a href="#ping-pong-delay" class="menu-item">Ping-pong delay</a>
             <a href="#dub-delay" class="menu-item">Dub delay</a>
             <a href="#distortion" class="menu-item">Distortion</a>
+            <a href="#quadrafuzz" class="menu-item">Quadrafuzz</a>
             <a href="#flanger" class="menu-item">Flanger</a>
             <a href="#reverb" class="menu-item">Reverb</a>
             <a href="#convolver" class="menu-item">Convolver</a>
@@ -380,6 +381,54 @@ sound.play();
                 <div class="controls">
                     <button id="stop-guitar" class="stop action"></button>
                     <button id="play-guitar" class="play action"></button>
+                </div>
+
+                <h4 id="quadrafuzz">Quadrafuzz</h4>
+
+                <pre><code class="language-javascript">
+var quadrafuzz = new Pizzicato.Effects.Quadrafuzz({
+    lowGain: 0.6,
+    midLowGain: 0.8,
+    midHighGain: 0.5,
+    highGain: 0.6,
+    mix: 1.0
+});
+
+sound.addEffect(quadrafuzz);
+sound.play();
+                </code></pre>
+
+                <div class="slider-group">
+                    <div class="slider">
+                        <label for="volume-drum-fill">Volume</label>
+                        <input type="range" min="0" max="1" step="0.01" value="1" id="volume-drum-fill" />
+                        <div class="slider-value">1</div>
+                    </div>
+                     <div class="slider">
+                        <label for="quadrafuzz-low">Low gain</label>
+                        <input type="range" min="0" max="1" step="0.01" value="0.6" id="quadrafuzz-low" />
+                        <div class="slider-value">0.6</div>
+                    </div>
+                     <div class="slider">
+                        <label for="quadrafuzz-mid-low">Mid low gain</label>
+                        <input type="range" min="0" max="1" step="0.01" value="0.8" id="quadrafuzz-mid-low" />
+                        <div class="slider-value">0.8</div>
+                    </div>
+                     <div class="slider">
+                        <label for="quadrafuzz-mid-high">Mid high gain</label>
+                        <input type="range" min="0" max="1" step="0.01" value="0.5" id="quadrafuzz-mid-high" />
+                        <div class="slider-value">0.5</div>
+                    </div>
+                     <div class="slider">
+                        <label for="quadrafuzz-high">High gain</label>
+                        <input type="range" min="0" max="1" step="0.01" value="0.6" id="quadrafuzz-high" />
+                        <div class="slider-value">0.6</div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button id="stop-drum-fill" class="stop action"></button>
+                    <button id="play-drum-fill" class="play action"></button>
                 </div>
 
 

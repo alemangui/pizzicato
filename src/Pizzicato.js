@@ -68,6 +68,7 @@
 	//= require ./Effects/Tremolo.js
 	//= require ./Effects/DubDelay.js
 	//= require ./Effects/RingModulator.js
+	//= require ./Effects/Quadrafuzz.js
 	
 	return Pizzicato;
 })(typeof window !== "undefined" ? window : global);
