@@ -35,6 +35,7 @@ var highPassFilter = new Pizzicato.Effects.HighPassFilter({
 var distortion = new Pizzicato.Effects.Distortion({
 	gain: 0.4
 });
+var quadrafuzz = new Pizzicato.Effects.Quadrafuzz();
 var flanger = new Pizzicato.Effects.Flanger();
 var stereoPanner = new Pizzicato.Effects.StereoPanner();
 var reverb = new Pizzicato.Effects.Reverb();
@@ -94,6 +95,14 @@ var guitar = new Pz.Sound({
 		loop: true 
 	}
 }, function() { guitar.addEffect(distortion); });
+
+var drumFill = new Pz.Sound({
+	source: 'file',
+	options: {
+		path: './audio/drum-fill.m4a',
+		loop: true
+	}
+}, function() { drumFill.addEffect(quadrafuzz); });
 
 var electricGuitar = new Pz.Sound({ 
 	source: 'file', 
@@ -385,6 +394,23 @@ var segments = [
 				instance: distortion,
 				parameters: {
 					gain: document.getElementById('distortion-gain')
+				}
+			}
+		]
+	},
+	{
+		audio: drumFill,
+		playButton: document.getElementById('play-drum-fill'),
+		stopButton: document.getElementById('stop-drum-fill'),
+		volumeSlider: document.getElementById('volume-drum-fill'),
+		effects: [
+			{
+				instance: quadrafuzz,
+				parameters: {
+					lowGain: document.getElementById('quadrafuzz-low'),
+					midLowGain: document.getElementById('quadrafuzz-mid-low'),
+					midHighGain: document.getElementById('quadrafuzz-mid-high'),
+					highGain: document.getElementById('quadrafuzz-high'),
 				}
 			}
 		]
