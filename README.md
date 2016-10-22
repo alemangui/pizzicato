@@ -404,7 +404,11 @@ sound.play();
 
 <a name="dubdelay"/>
 ### Dub Delay ([example](https://alemangui.github.io/pizzicato/#dub-delay))
-The dub delay effect is similar to a regular [Delay](#delay) effect, however on each feedback loop the output is routed through a biquad filter. The following options are available when creating a delay effect:
+The dub delay effect is similar to a regular [Delay](#delay) effect, however on each feedback loop the output is routed through a biquad filter. 
+
+This effect is based on Chris Lowis' article [Creating dub delay effects with the Web Audio API](http://blog.chrislowis.co.uk/2014/07/23/dub-delay-web-audio-api.html).
+
+The following options are available when creating a delay effect:
 * ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
 * ```time``` _(min: 0, max: 180, defaults to 0.3)_: Interval time in seconds.
 * ```cutoff``` _(min: 0, max: 4000, defaults to 700)_: Frequency value applied to each successive loop. The lower the value, the more different each repetition will be perceived.
@@ -426,7 +430,6 @@ sound.play();
 ### Distortion ([example](https://alemangui.github.io/pizzicato/#distortion))
 The distortion effect adds an "override" to the sound, similar to the ones found in guitar amps. The distortion effect only takes one parameter:
 * ```gain``` _(min: 0, max: 1, defaults to 0.5)_: Amount of distortion applied.
-* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output.
 
 Example:
 ```javascript
@@ -595,7 +598,9 @@ sound.play();
 
 <a name="ring-modulator"/>
 ### Ring Modulator ([example](https://alemangui.github.io/pizzicato/#ring-modulator))
-The ring modulator effect combines two input signals, where one of the inputs is a sine wave modulating the other. [This article from the BBC](http://webaudio.prototyping.bbc.co.uk/ring-modulator/) - from where this effect was inspired from - goes into deeper detail and explains how to recreate it. The 'ring' in this effect derives from the layout of diode nodes in the original analogue equipment, and also refers to the sound being increasingly modulated as it travels through the ring of diodes. 
+The ring modulator effect combines two input signals, where one of the inputs is a sine wave modulating the other. 
+
+[This article from the BBC](http://webaudio.prototyping.bbc.co.uk/ring-modulator/) - from where this effect was based from - goes into deeper detail and explains how to recreate it. The 'ring' in this effect derives from the layout of diode nodes in the original analogue equipment, and also refers to the sound being increasingly modulated as it travels through the ring of diodes. 
 
 * ```distortion``` _(min: 0.2, max: 50, defaults to 1)_: Level of distortion applied to the diode nodes.
 * ```speed``` _(min: 0, max: 2000, defaults to 30)_: The frequency of the modulating signal.
