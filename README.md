@@ -19,6 +19,7 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
   - [pause()](#sounds-pause)
   - [stop()](#sounds-stop)
   - [clone()](#sounds-clone)
+  - [currentTime()](#sounds-currentTime)
   - [addEffect()](#sounds-add-effect)
   - [removeEffect()](#sounds-remove-effect)
   - [volume](#sounds-volume)
@@ -265,6 +266,15 @@ You can clone a sound object by calling it's ```clone``` function. The object re
 
 ```javascript
 sound.clone();
+```
+
+<a name="sounds-currentTime"/>
+### Clone
+
+Get current time of a sound object
+
+```javascript
+sound.currentTime();
 ```
 
 <a name="sounds-add-effect"/>
