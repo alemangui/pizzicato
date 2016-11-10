@@ -421,7 +421,6 @@
 			}
 		},
 	
-	
 		stop: {
 			enumerable: true,
 	
@@ -498,6 +497,17 @@
 			}
 		},
 	
+		currentTime: {
+			enumerable: true,
+	
+			value: function() {
+				if (!this.paused) {
+					return Pizzicato.context.currentTime - this.lastTimePlayed;
+				} else {
+					return this.offsetTime;
+				}
+			}
+		},
 	
 		addEffect: {
 			enumerable: true,
