@@ -305,7 +305,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 		enumerable: true,
 
 		value: function() {
-			if (!this.paused) {
+			if (this.playing) {
 				return Pizzicato.context.currentTime - this.lastTimePlayed;
 			} else {
 				return this.offsetTime;

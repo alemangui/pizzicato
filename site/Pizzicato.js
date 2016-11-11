@@ -501,7 +501,7 @@
 			enumerable: true,
 	
 			value: function() {
-				if (!this.paused) {
+				if (this.playing) {
 					return Pizzicato.context.currentTime - this.lastTimePlayed;
 				} else {
 					return this.offsetTime;
