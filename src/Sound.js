@@ -13,7 +13,7 @@ Pizzicato.Sound = function(description, callback) {
 
 	this.masterVolume = Pizzicato.context.createGain();
 	this.fadeNode = Pizzicato.context.createGain();
-	
+
 	if (!hasOptions || !description.options.detached)
 		this.masterVolume.connect(Pizzicato.masterGainNode);
 
@@ -135,8 +135,9 @@ Pizzicato.Sound = function(description, callback) {
 		};
 		request.onreadystatechange = function(event) {
 
-			if (request.readyState === 4 && request.status !== 200)
+			if (request.readyState === 4 && request.status !== 200) {
 				console.error('Error while fetching ' + paths[0] + '. ' + request.statusText);
+			}
 		};
 		request.send();
 	}
@@ -255,7 +256,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			this.stopWithRelease();
 
 			var elapsedTime = Pz.context.currentTime - this.lastTimePlayed;
-			
+
 			// If we are using a buffer node - potentially in loop mode - we need to
 			// know where to re-start the sound independently of the loop it is in.
 			if (this.sourceNode.buffer)
@@ -442,7 +443,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 	/**
 	 * Returns the node that produces the sound. For example, an oscillator
-	 * if the Sound object was initialized with a wave option. 
+	 * if the Sound object was initialized with a wave option.
 	 */
 	getSourceNode: {
 		enumerable: true,

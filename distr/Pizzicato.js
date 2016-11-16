@@ -209,7 +209,7 @@
 	
 		this.masterVolume = Pizzicato.context.createGain();
 		this.fadeNode = Pizzicato.context.createGain();
-		
+	
 		if (!hasOptions || !description.options.detached)
 			this.masterVolume.connect(Pizzicato.masterGainNode);
 	
@@ -331,8 +331,9 @@
 			};
 			request.onreadystatechange = function(event) {
 	
-				if (request.readyState === 4 && request.status !== 200)
+				if (request.readyState === 4 && request.status !== 200) {
 					console.error('Error while fetching ' + paths[0] + '. ' + request.statusText);
+				}
 			};
 			request.send();
 		}
@@ -451,7 +452,7 @@
 				this.stopWithRelease();
 	
 				var elapsedTime = Pz.context.currentTime - this.lastTimePlayed;
-				
+	
 				// If we are using a buffer node - potentially in loop mode - we need to
 				// know where to re-start the sound independently of the loop it is in.
 				if (this.sourceNode.buffer)
@@ -638,7 +639,7 @@
 	
 		/**
 		 * Returns the node that produces the sound. For example, an oscillator
-		 * if the Sound object was initialized with a wave option. 
+		 * if the Sound object was initialized with a wave option.
 		 */
 		getSourceNode: {
 			enumerable: true,
@@ -1356,7 +1357,7 @@
 		this.dryGainNode.connect(this.outputNode);
 		this.wetGainNode.connect(this.outputNode);
 	
-		
+	
 		for (var key in defaults) {
 			this[key] = options[key];
 			this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
@@ -1366,7 +1367,7 @@
 			console.error('No impulse file specified.');
 			return;
 		}
-		
+	
 		request.open('GET', options.impulse, true);
 		request.responseType = 'arraybuffer';
 		request.onload = function (e) {
@@ -1376,7 +1377,7 @@
 	
 				self.convolverNode.buffer = buffer;
 	
-				if (self.callback && Pz.Util.isFunction(self.callback)) 
+				if (self.callback && Pz.Util.isFunction(self.callback))
 					self.callback();
 	
 			}, function(error) {
@@ -1389,8 +1390,9 @@
 		};
 	
 		request.onreadystatechange = function(event) {
-			if (request.readyState === 4 && request.status !== 200)
+			if (request.readyState === 4 && request.status !== 200) {
 				console.error('Error while fetching ' + options.impulse + '. ' + request.statusText);
+			}
 		};
 	
 		request.send();
@@ -1400,7 +1402,7 @@
 	
 		mix: {
 			enumerable: true,
-			
+	
 			get: function() {
 				return this.options.mix;
 			},
