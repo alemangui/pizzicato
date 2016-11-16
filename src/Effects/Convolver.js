@@ -26,7 +26,7 @@ Pizzicato.Effects.Convolver = function(options, callback) {
 	this.dryGainNode.connect(this.outputNode);
 	this.wetGainNode.connect(this.outputNode);
 
-	
+
 	for (var key in defaults) {
 		this[key] = options[key];
 		this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
@@ -36,7 +36,7 @@ Pizzicato.Effects.Convolver = function(options, callback) {
 		console.error('No impulse file specified.');
 		return;
 	}
-	
+
 	request.open('GET', options.impulse, true);
 	request.responseType = 'arraybuffer';
 	request.onload = function (e) {
@@ -46,7 +46,7 @@ Pizzicato.Effects.Convolver = function(options, callback) {
 
 			self.convolverNode.buffer = buffer;
 
-			if (self.callback && Pz.Util.isFunction(self.callback)) 
+			if (self.callback && Pz.Util.isFunction(self.callback))
 				self.callback();
 
 		}, function(error) {
@@ -59,8 +59,9 @@ Pizzicato.Effects.Convolver = function(options, callback) {
 	};
 
 	request.onreadystatechange = function(event) {
-		if (request.readyState === 4 && request.status !== 200)
+		if (request.readyState === 4 && request.status !== 200) {
 			console.error('Error while fetching ' + options.impulse + '. ' + request.statusText);
+		}
 	};
 
 	request.send();
@@ -70,7 +71,7 @@ Pizzicato.Effects.Convolver.prototype = Object.create(baseEffect, {
 
 	mix: {
 		enumerable: true,
-		
+
 		get: function() {
 			return this.options.mix;
 		},
