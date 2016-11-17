@@ -18,11 +18,14 @@ Pizzicato.Sound = function(description, callback) {
 		this.masterVolume.connect(Pizzicato.masterGainNode);
 
 	this.lastTimePlayed = 0;
+	this.time = 0;
 	this.effects = [];
 	this.playing = this.paused = false;
 	this.loop = hasOptions && description.options.loop;
 	this.attack = hasOptions && util.isNumber(description.options.attack) ? description.options.attack : defaultAttack;
 	this.volume = hasOptions && util.isNumber(description.options.volume) ? description.options.volume : 1;
+	this.currentPlaybackRate = 1.0;
+	this.lastPBR = this.currentPlaybackRate;
 
 	if (hasOptions && util.isNumber(description.options.release)) {
 		this.release = description.options.release;
@@ -102,6 +105,10 @@ Pizzicato.Sound = function(description, callback) {
 		request.open('GET', paths[0], true);
 		request.responseType = 'arraybuffer';
 
+		if(this.counter) {
+			clearInterval(this.counter);
+		}
+
 		request.onload = function(progressEvent) {
 
 			Pizzicato.context.decodeAudioData(progressEvent.target.response, (function(buffer) {
@@ -133,6 +140,11 @@ Pizzicato.Sound = function(description, callback) {
 			}).bind(self));
 
 		};
+
+		this.counter = setInterval(function(){
+			calculateFileTime();
+        }.bind(this), 10);
+
 		request.onreadystatechange = function(event) {
 
 			if (request.readyState === 4 && request.status !== 200)
@@ -191,6 +203,21 @@ Pizzicato.Sound = function(description, callback) {
 			this.frequency = options.sound.frequency;
 		}
 	}
+
+	function calculateFileTime(options, callback) {
+		if(self.playing) {
+			var rate = self.sourceNode.playbackRate.value;
+	        var now = Pizzicato.context.currentTime;
+
+	        if (self.lastTimePlayed > now){
+	            return; 
+	        }
+
+	        self.time += (now - self.lastTimePlayed) * self.lastPBR;
+	        self.lastPBR = rate;
+	        self.lastTimePlayed = now;
+	    }
+	}
 };
 
 
@@ -213,6 +240,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 			this.playing = true;
 			this.paused = false;
 			this.sourceNode = this.getSourceNode();
+			this.time = offset;
 
 			this.applyAttack();
 
@@ -298,18 +326,6 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 				this.stop();
 			if (!this.paused)
 				this.trigger('end');
-		}
-	},
-
-	currentTime: {
-		enumerable: true,
-
-		value: function() {
-			if (this.playing) {
-				return Pizzicato.context.currentTime - this.lastTimePlayed;
-			} else {
-				return this.offsetTime;
-			}
 		}
 	},
 
