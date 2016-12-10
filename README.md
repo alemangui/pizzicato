@@ -1,6 +1,6 @@
 <img align="center" src="https://alemangui.github.io/pizzicato/img/horizontal-logo.svg" alt="Pizzicato.js">
 
-[![Build Status](https://travis-ci.org/alemangui/pizzicato.svg?branch=master)](https://travis-ci.org/alemangui/pizzicato) [![npm](https://img.shields.io/npm/v/pizzicato.svg?maxAge=2592000)](https://www.npmjs.com/package/pizzicato) [![Bower](https://img.shields.io/bower/v/pizzicato.svg?maxAge=2592000)]()
+[![Build Status](https://travis-ci.org/alemangui/pizzicato.svg?branch=master)](https://travis-ci.org/alemangui/pizzicato) [![npm](https://img.shields.io/npm/v/pizzicato.svg?maxAge=2592000)](https://www.npmjs.com/package/pizzicato) [![Bower](https://img.shields.io/bower/v/pizzicato.svg?maxAge=2592000)]() [![CDNJS](https://img.shields.io/cdnjs/v/pizzicato.svg)]()
 
 ##A Web Audio library
 
@@ -8,6 +8,10 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
 
 ## Table of contents
 - [Get Pizzicato](#get-pizzicato)
+  - [npm](#npm)
+  - [bower](#bower)
+  - [cdnjs](#cdnjs)
+  - [Installing and testing](#installing-and-testing)
 - [TL;DR: How does it work?](#tldr)
 - [Create a sound](#create-a-sound)
   - [Sounds from a wave](#sounds-from-a-wave)
@@ -52,10 +56,35 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
 <a name="get-pizzicato"/>
 ## Get Pizzicato
 
-You can use bower to get Pizzicato
+<a name="npm"/>
+### npm
+
+```
+npm install pizzicato
+```
+
+<a name="bower"/>
+### bower
+
 ```
 bower install pizzicato
 ```
+
+<a name="cdnjs"/>
+### cdnjs
+
+Full source code:
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pizzicato/0.4.0/Pizzicato.js"></script>
+```
+
+Minified:
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pizzicato/0.4.0/Pizzicato.min.js"></script>
+```
+
+<a name="installing-and-testing"/>
+### Installing and testing
 
 Or checkout the project, install dependencies with 
 ```
@@ -406,7 +435,7 @@ sound.play();
 ### Dub Delay ([example](https://alemangui.github.io/pizzicato/#dub-delay))
 The dub delay effect is similar to a regular [Delay](#delay) effect, however on each feedback loop the output is routed through a biquad filter. 
 
-This effect is based on Chris Lowis' article [Creating dub delay effects with the Web Audio API](http://blog.chrislowis.co.uk/2014/07/23/dub-delay-web-audio-api.html).
+This effect is based on [Chris Lowis'](https://twitter.com/chrislowis) article [Creating dub delay effects with the Web Audio API](http://blog.chrislowis.co.uk/2014/07/23/dub-delay-web-audio-api.html).
 
 The following options are available when creating a delay effect:
 * ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
@@ -428,7 +457,7 @@ sound.play();
 
 <a name="distortion"/>
 ### Distortion ([example](https://alemangui.github.io/pizzicato/#distortion))
-The distortion effect adds an "override" to the sound, similar to the ones found in guitar amps. The distortion effect only takes one parameter:
+The distortion effect adds a basic "override" to the sound. The distortion effect only takes one parameter:
 * ```gain``` _(min: 0, max: 1, defaults to 0.5)_: Amount of distortion applied.
 
 Example:
