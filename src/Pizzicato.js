@@ -57,6 +57,7 @@
 	//= require ./Sound.js
 	//= require ./Effects.js
 	//= require ./Effects/Delay.js
+	//= require ./Effects/Volume.js
 	//= require ./Effects/Compressor.js
 	//= require ./Effects/Filters.js
 	//= require ./Effects/Distortion.js

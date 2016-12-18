@@ -214,11 +214,14 @@
 			this.masterVolume.connect(Pizzicato.masterGainNode);
 	
 		this.lastTimePlayed = 0;
+		this.time = 0;
 		this.effects = [];
 		this.playing = this.paused = false;
 		this.loop = hasOptions && description.options.loop;
 		this.attack = hasOptions && util.isNumber(description.options.attack) ? description.options.attack : defaultAttack;
 		this.volume = hasOptions && util.isNumber(description.options.volume) ? description.options.volume : 1;
+		this.currentPlaybackRate = 1.0;
+		this.lastPBR = this.currentPlaybackRate;
 	
 		if (hasOptions && util.isNumber(description.options.release)) {
 			this.release = description.options.release;
@@ -298,6 +301,10 @@
 			request.open('GET', paths[0], true);
 			request.responseType = 'arraybuffer';
 	
+			if(this.counter) {
+				clearInterval(this.counter);
+			}
+	
 			request.onload = function(progressEvent) {
 	
 				Pizzicato.context.decodeAudioData(progressEvent.target.response, (function(buffer) {
@@ -329,6 +336,11 @@
 				}).bind(self));
 	
 			};
+	
+			this.counter = setInterval(function(){
+				calculateFileTime();
+	        }.bind(this), 10);
+	
 			request.onreadystatechange = function(event) {
 	
 				if (request.readyState === 4 && request.status !== 200) {
@@ -388,6 +400,21 @@
 				this.frequency = options.sound.frequency;
 			}
 		}
+	
+		function calculateFileTime(options, callback) {
+			if(self.playing) {
+				var rate = self.sourceNode.playbackRate.value;
+		        var now = Pizzicato.context.currentTime;
+	
+		        if (self.lastTimePlayed > now){
+		            return; 
+		        }
+	
+		        self.time += (now - self.lastTimePlayed) * self.lastPBR;
+		        self.lastPBR = rate;
+		        self.lastTimePlayed = now;
+		    }
+		}
 	};
 	
 	
@@ -410,6 +437,7 @@
 				this.playing = true;
 				this.paused = false;
 				this.sourceNode = this.getSourceNode();
+				this.time = offset;
 	
 				this.applyAttack();
 	
@@ -421,7 +449,6 @@
 				this.trigger('play');
 			}
 		},
-	
 	
 		stop: {
 			enumerable: true,
@@ -498,7 +525,6 @@
 					this.trigger('end');
 			}
 		},
-	
 	
 		addEffect: {
 			enumerable: true,
@@ -859,6 +885,48 @@
 	
 				this.options.feedback = parseFloat(feedback, 10);
 				this.feedbackGainNode.gain.value = this.feedback;
+			}
+		}
+	
+	});
+	Pizzicato.Effects.Volume = function(options) {
+	
+		this.options = {};
+		options = options || this.options;
+	
+		var defaults = {
+			value: 1
+		};
+	
+		this.inputNode = Pizzicato.context.createGain();
+		this.outputNode = Pizzicato.context.createGain();
+	
+		this.inputNode.connect(this.outputNode);
+	
+		for (var key in defaults) {
+			this[key] = options[key];
+			this[key] = (this[key] === undefined || this[key] === null) ? defaults[key] : this[key];
+		}
+	};
+	
+	Pizzicato.Effects.Volume.prototype = Object.create(baseEffect, {
+	
+		/**
+		 * Gets and sets the volume.
+		 */
+		value: {
+			enumerable: true,
+	
+			get: function() {
+				return this.options.value;	
+			},
+	
+			set: function(volume) {
+				if (!Pz.Util.isInRange(volume, 0, 1))
+					return;
+	
+				this.options.value = volume;
+				this.inputNode.gain.value = volume;
 			}
 		}
 	
