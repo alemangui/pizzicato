@@ -281,7 +281,7 @@ describe('Sound', function() {
 			expect(stopCallback).toHaveBeenCalled();
 		});
 
-		it('should trigger \'end\' when ended', function(done) {
+		it('should trigger \'end\' when buffer ended', function(done) {
 			var endCallback = jasmine.createSpy('endCallback');
 
 			var sound = new Pizzicato.Sound('base/tests/click.wav', function() {

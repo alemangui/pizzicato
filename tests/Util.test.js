@@ -90,6 +90,17 @@ describe('Util', function() {
 	});
 
 
+	it('contains a working isAudioBufferSourceNode function', function() {
+		var context = new window.AudioContext();
+		var bufferNode = context.createBufferSource();
+		var pannerNode = context.createPanner();
+		var isAudioBufferSourceNode = Pizzicato.Util.isAudioBufferSourceNode;
+
+		expect(isAudioBufferSourceNode(bufferNode)).toBe(true);
+		expect(isAudioBufferSourceNode(pannerNode)).toBe(false);
+	});
+
+
 	it('contains a working isEffect function', function() {
 		var isEffect = Pizzicato.Util.isEffect;
 		var delay = new Pizzicato.Effects.Delay();

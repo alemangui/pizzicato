@@ -62,6 +62,10 @@
 			return (audioNode && audioNode.toString() === "[object OscillatorNode]");
 		},
 	
+		isAudioBufferSourceNode: function(audioNode) {
+			return (audioNode && audioNode.toString() === "[object AudioBufferSourceNode]");
+		},
+	
 		isEffect: function(effect) {
 			for (var key in Pizzicato.Effects)
 				if (effect instanceof Pizzicato.Effects[key])
@@ -209,6 +213,7 @@
 	
 		this.masterVolume = Pizzicato.context.createGain();
 		this.fadeNode = Pizzicato.context.createGain();
+		this.fadeNode.gain.value = 0;
 	
 		if (!hasOptions || !description.options.detached)
 			this.masterVolume.connect(Pizzicato.masterGainNode);
@@ -285,6 +290,8 @@
 				return node;
 			};
 			this.sourceNode = this.getRawSourceNode();
+			this.sourceNode.gainSuccessor = Pz.context.createGain();
+			this.sourceNode.connect(this.sourceNode.gainSuccessor);
 	
 			if (util.isFunction(callback))
 				callback();
@@ -491,11 +498,19 @@
 		onEnded: {
 			enumerable: true,
 	
-			value: function() {
-				if (this.playing)
-					this.stop();
-				if (!this.paused)
-					this.trigger('end');
+			value: function(node) {
+				return function() {
+					// This function may've been called from the release
+					// end. If in that time the Sound has been played again,
+					// no action should be taken.
+					if (!!this.sourceNode && this.sourceNode !== node)
+						return;
+	
+					if (this.playing)
+						this.stop();
+					if (!this.paused)
+						this.trigger('end');
+				};
 			}
 		},
 	
@@ -645,14 +660,33 @@
 			enumerable: true,
 	
 			value: function() {
-				if (!!this.sourceNode)
-					this.sourceNode.disconnect();
+				if (!!this.sourceNode) {
+	
+					// Directly disconnecting the previous source node causes a 
+					// 'click' noise, especially noticeable if the sound is played 
+					// while the release is ongoing. To address this, we fadeout the 
+					// old source node before disonnecting it.
+	
+					var previousSourceNode = this.sourceNode;
+					previousSourceNode.gainSuccessor.gain.setValueAtTime(previousSourceNode.gainSuccessor.gain.value, Pz.context.currentTime);
+					previousSourceNode.gainSuccessor.gain.linearRampToValueAtTime(0.0001, Pz.context.currentTime + 0.2);
+					setTimeout(function() {
+						previousSourceNode.disconnect();
+						previousSourceNode.gainSuccessor.disconnect();
+					}, 200);
+				}
 	
 				var sourceNode = this.getRawSourceNode();
 	
-				sourceNode.connect(this.fadeNode);
-				sourceNode.onended = this.onEnded.bind(this);
+				// A gain node will be placed after the source node to avoid
+				// clicking noises (by fading out the sound)
+				sourceNode.gainSuccessor = Pz.context.createGain();
+				sourceNode.connect(sourceNode.gainSuccessor);
+				sourceNode.gainSuccessor.connect(this.fadeNode);
 				this.fadeNode.connect(this.getInputNode());
+	
+				if (Pz.Util.isAudioBufferSourceNode(sourceNode))
+					sourceNode.onended = this.onEnded(sourceNode).bind(this);
 	
 				return sourceNode;
 			}
@@ -707,11 +741,18 @@
 			enumerable: false,
 	
 			value: function() {
-				if (!this.attack)
-					return;
+				var currentValue = this.fadeNode.gain.value;
+				this.fadeNode.gain.cancelScheduledValues(Pz.context.currentTime);
+				this.fadeNode.gain.setValueAtTime(currentValue, Pz.context.currentTime);
 	
-				this.fadeNode.gain.setValueAtTime(0.00001, Pizzicato.context.currentTime);
-				this.fadeNode.gain.linearRampToValueAtTime(1, Pizzicato.context.currentTime + this.attack);
+				if (!this.attack) {
+					this.fadeNode.gain.setValueAtTime(1.0, Pizzicato.context.currentTime);
+					return;
+				}
+	
+				var remainingAttackTime = (1 - this.fadeNode.gain.value) * this.attack;
+				this.fadeNode.gain.setValueAtTime(this.fadeNode.gain.value, Pizzicato.context.currentTime);
+				this.fadeNode.gain.linearRampToValueAtTime(1, Pizzicato.context.currentTime + remainingAttackTime);
 			}
 		},
 	
@@ -730,14 +771,22 @@
 					return Pz.Util.isFunction(node.stop) ? node.stop(0) : node.disconnect();
 				};
 	
-				if (!this.release)
-					stopSound();
+				var currentValue = this.fadeNode.gain.value;
+				this.fadeNode.gain.cancelScheduledValues(Pz.context.currentTime);
+				this.fadeNode.gain.setValueAtTime(currentValue, Pz.context.currentTime);
 	
+				if (!this.release) {
+					stopSound();
+					return;
+				}
+	
+				var remainingReleaseTime = this.fadeNode.gain.value * this.release;
 				this.fadeNode.gain.setValueAtTime(this.fadeNode.gain.value, Pizzicato.context.currentTime);
-				this.fadeNode.gain.linearRampToValueAtTime(0.00001, Pizzicato.context.currentTime + this.release);
+				this.fadeNode.gain.linearRampToValueAtTime(0.00001, Pizzicato.context.currentTime + remainingReleaseTime);
+	
 				window.setTimeout(function() {
 					stopSound();
-				}, this.release * 1000);
+				}, remainingReleaseTime * 1000);
 			}
 		}
 	});
