@@ -15,4 +15,15 @@ describe('Effects', function() {
 		}
 	});
 
+	it('should be able to chain connect functions', function() {
+		var analyser = Pz.context.createAnalyser();
+		var gain = Pz.context.createGain();
+		var delay = new Pz.Effects.Delay();
+
+		var result = delay.connect(analyser).connect(gain);
+		expect(result).toBe(delay);
+
+		result = delay.disconnect(analyser).disconnect(gain);			
+		expect(result).toBe(delay);
+	});
 });

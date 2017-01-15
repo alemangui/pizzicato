@@ -521,7 +521,7 @@
 			value: function(effect) {
 				if (!effect || !Pz.Util.isEffect(effect)) {
 					console.warn('Invalid effect.');
-					return;
+					return this;
 				}
 	
 				this.effects.push(effect);
@@ -530,6 +530,8 @@
 					this.fadeNode.disconnect();
 					this.fadeNode.connect(this.getInputNode());
 				}
+	
+				return this;
 			}
 		},
 	
@@ -543,7 +545,7 @@
 	
 				if (index === -1) {
 					console.warn('Cannot remove effect that is not applied to this sound.');
-					return;
+					return this;
 				}
 	
 				var shouldResumePlaying = this.playing;
@@ -561,6 +563,8 @@
 	
 				if (shouldResumePlaying)
 					this.play();
+	
+				return this;
 			}
 		},
 	
@@ -570,6 +574,7 @@
 	
 			value: function(audioNode) {
 				this.masterVolume.connect(audioNode);
+				return this;
 			}
 		},
 	
@@ -579,6 +584,7 @@
 	
 			value: function(audioNode) {
 				this.masterVolume.disconnect(audioNode);
+				return this;
 			}
 		},
 	
@@ -799,6 +805,7 @@
 	
 			value: function(audioNode) {
 				this.outputNode.connect(audioNode);
+				return this;
 			}
 		},
 	
@@ -807,6 +814,7 @@
 	
 			value: function(audioNode) {
 				this.outputNode.disconnect(audioNode);
+				return this;
 			}
 		}
 	});

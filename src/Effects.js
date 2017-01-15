@@ -7,6 +7,7 @@ var baseEffect = Object.create(null, {
 
 		value: function(audioNode) {
 			this.outputNode.connect(audioNode);
+			return this;
 		}
 	},
 
@@ -15,6 +16,7 @@ var baseEffect = Object.create(null, {
 
 		value: function(audioNode) {
 			this.outputNode.disconnect(audioNode);
+			return this;
 		}
 	}
 });

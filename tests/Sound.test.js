@@ -441,6 +441,25 @@ describe('Sound', function() {
 			sound.addEffect(delay);
 
 		}, 5500);
+
+		it('should have chainable functions to add and remove effects', function() {
+			var sound = new Pizzicato.Sound();
+			var delay = new Pizzicato.Effects.Delay();
+			var distortion = new Pizzicato.Effects.Distortion();
+			
+			sound.addEffect(delay).addEffect(distortion);
+			expect(sound.effects.indexOf(delay)).not.toBe(-1);
+			expect(sound.effects.indexOf(distortion)).not.toBe(-1);
+
+			sound.removeEffect(delay).removeEffect(distortion);
+			expect(sound.effects.indexOf(delay)).toBe(-1);
+			expect(sound.effects.indexOf(distortion)).toBe(-1);
+
+			sound.addEffect(distortion);
+			sound.removeEffect(distortion).addEffect(delay);
+			expect(sound.effects.indexOf(delay)).not.toBe(-1);
+			expect(sound.effects.indexOf(distortion)).toBe(-1);
+		});
 	});
 
 	describe('connectivity', function() {
@@ -465,5 +484,17 @@ describe('Sound', function() {
 			}, 1500);
 			
 		}, 5000);
+
+		it('should be able to chain connect functions', function() {
+			var analyser = Pz.context.createAnalyser();
+			var gain = Pz.context.createGain();
+			var sound = new Pz.Sound();
+
+			var result = sound.connect(analyser).connect(gain);
+			expect(result).toBe(sound);
+
+			result = sound.disconnect(analyser).disconnect(gain);			
+			expect(result).toBe(sound);
+		});
 	});
 });

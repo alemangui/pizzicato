@@ -321,7 +321,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 		value: function(effect) {
 			if (!effect || !Pz.Util.isEffect(effect)) {
 				console.warn('Invalid effect.');
-				return;
+				return this;
 			}
 
 			this.effects.push(effect);
@@ -330,6 +330,8 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 				this.fadeNode.disconnect();
 				this.fadeNode.connect(this.getInputNode());
 			}
+
+			return this;
 		}
 	},
 
@@ -343,7 +345,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 			if (index === -1) {
 				console.warn('Cannot remove effect that is not applied to this sound.');
-				return;
+				return this;
 			}
 
 			var shouldResumePlaying = this.playing;
@@ -361,6 +363,8 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 			if (shouldResumePlaying)
 				this.play();
+
+			return this;
 		}
 	},
 
@@ -370,6 +374,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 		value: function(audioNode) {
 			this.masterVolume.connect(audioNode);
+			return this;
 		}
 	},
 
@@ -379,6 +384,7 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 		value: function(audioNode) {
 			this.masterVolume.disconnect(audioNode);
+			return this;
 		}
 	},
 
