@@ -76,12 +76,12 @@ bower install pizzicato
 
 Full source code:
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pizzicato/0.5.0/Pizzicato.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pizzicato/0.5.1/Pizzicato.js"></script>
 ```
 
 Minified:
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pizzicato/0.5.0/Pizzicato.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pizzicato/0.5.1/Pizzicato.min.js"></script>
 ```
 
 <a name="installing-and-testing"/>
