@@ -96,13 +96,13 @@ var guitar = new Pz.Sound({
 	}
 }, function() { guitar.addEffect(distortion); });
 
-var drumFill = new Pz.Sound({
+var walkGuitar = new Pz.Sound({
 	source: 'file',
 	options: {
-		path: './audio/drum-fill.m4a',
+		path: './audio/uttl.m4a',
 		loop: true
 	}
-}, function() { drumFill.addEffect(quadrafuzz); });
+}, function() { walkGuitar.addEffect(quadrafuzz); });
 
 var electricGuitar = new Pz.Sound({ 
 	source: 'file', 
@@ -399,7 +399,7 @@ var segments = [
 		]
 	},
 	{
-		audio: drumFill,
+		audio: walkGuitar,
 		playButton: document.getElementById('play-drum-fill'),
 		stopButton: document.getElementById('stop-drum-fill'),
 		volumeSlider: document.getElementById('volume-drum-fill'),
