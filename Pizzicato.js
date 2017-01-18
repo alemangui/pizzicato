@@ -220,6 +220,7 @@
 	
 		this.lastTimePlayed = 0;
 		this.effects = [];
+		this.effectConnectors = [];
 		this.playing = this.paused = false;
 		this.loop = hasOptions && description.options.loop;
 		this.attack = hasOptions && util.isNumber(description.options.attack) ? description.options.attack : defaultAttack;
@@ -514,7 +515,14 @@
 			}
 		},
 	
-	
+		/**
+		 * Adding effects will create a graph in which there will be a
+		 * gain node (effectConnector) in between every effect added. For example:
+		 * [fadeNode]--->[effect 1]->[connector 1]--->[effect 2]->[connector 2]--->[masterGain]
+		 * 
+		 * Connectors are used to know what nodes to disconnect and not disrupt the
+		 * connections of another Pz.Sound object using the same effect.
+		 */
 		addEffect: {
 			enumerable: true,
 	
@@ -525,17 +533,31 @@
 				}
 	
 				this.effects.push(effect);
-				this.connectEffects();
-				if (!!this.sourceNode) {
-					this.fadeNode.disconnect();
-					this.fadeNode.connect(this.getInputNode());
-				}
+	
+				// Connects effect in the last position
+				var previousNode = this.effectConnectors.length > 0 ? this.effectConnectors[this.effectConnectors.length - 1] : this.fadeNode;
+				previousNode.disconnect();
+				previousNode.connect(effect);
+	
+				// Creates connector for the newly added effect
+				var gain = Pz.context.createGain();
+				this.effectConnectors.push(gain);
+				effect.connect(gain);
+				gain.connect(this.masterVolume);
 	
 				return this;
 			}
 		},
 	
-	
+		/**
+		 * When removing effects, the graph in which there will be a
+		 * gain node (effectConnector) in between every effect should be 
+		 * conserved. For example:
+		 * [fadeNode]--->[effect 1]->[connector 1]--->[effect 2]->[connector 2]--->[masterGain]
+		 * 
+		 * Connectors are used to know what nodes to disconnect and not disrupt the
+		 * connections of another Pz.Sound object using the same effect.
+		 */
 		removeEffect: {
 			enumerable: true,
 	
@@ -553,13 +575,25 @@
 				if (shouldResumePlaying)
 					this.pause();
 	
-				this.fadeNode.disconnect();
+				var previousNode = (index === 0) ? this.fadeNode : this.effectConnectors(index - 1);
+				previousNode.disconnect();
 	
-				for (var i = 0; i < this.effects.length; i++)
-					this.effects[i].outputNode.disconnect();
+				// Disconnect connector and effect
+				var effectConnector = this.effectConnectors[index];
+				effectConnector.disconnect();
+				effect.disconnect(effectConnector);
 	
+				// Remove connector and effect from our arrays
+				this.effectConnectors.splice(index, 1);
 				this.effects.splice(index, 1);
-				this.connectEffects();
+	
+				var targetNode; 
+				if (index > this.effects.length - 1 || this.effects.length === 0)
+					targetNode = this.masterVolume;
+				else
+					targetNode = this.effects[index];
+	
+				previousNode.connect(targetNode);
 	
 				if (shouldResumePlaying)
 					this.play();
@@ -593,12 +627,18 @@
 			enumerable: true,
 	
 			value: function() {
+	
+				var connectors = [];
+	
 				for (var i = 0; i < this.effects.length; i++) {
 	
 					var isLastEffect = i === this.effects.length - 1;
 					var destinationNode = isLastEffect ? this.masterVolume : this.effects[i + 1].inputNode;
 	
-					this.effects[i].outputNode.disconnect();
+					connectors[i] = Pz.context.createGain();
+	
+					this.effects[i].outputNode.disconnect(this.effectConnectors[i]);
+	
 					this.effects[i].outputNode.connect(destinationNode);
 				}
 			}
