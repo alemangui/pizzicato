@@ -150,7 +150,10 @@ Pizzicato.Sound = function(description, callback) {
 	function initializeWithInput(options, callback) {
 		navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 
-		if (!navigator.getUserMedia) return;
+		if (!navigator.getUserMedia) {
+			console.error('Your browser does not support getUserMedia');
+			return;
+		}
 
 		navigator.getUserMedia({
 			audio: true
