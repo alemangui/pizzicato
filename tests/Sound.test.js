@@ -114,14 +114,14 @@ describe('Sound', function() {
 		describe('file source', function() {
 
 			it('should create an audio buffer node when initialized with a file source', function(done) {
-				var sound = new Pizzicato.Sound('base/tests/bird.wav', function(error) {
+				var sound = new Pizzicato.Sound('base/tests/audio/bird.wav', function(error) {
 					expect(error).toBe(undefined);
 					done();
 				});
 			}, 5000);
 
 			it('should execute callback function when initializing file sound', function(done) {
-				var sound = new Pizzicato.Sound('base/tests/bird.wav', function(error) {
+				var sound = new Pizzicato.Sound('base/tests/audio/bird.wav', function(error) {
 					expect(error).toBe(undefined);
 					done();
 				});
@@ -130,7 +130,7 @@ describe('Sound', function() {
 			it('should take a fallback path in case a file is not found', function(done) {
 				var sound = new Pizzicato.Sound({ 
 					source: 'file',
-					options: { path: ['base/tests/non-existent.wav', 'base/tests/bird.wav'] }
+					options: { path: ['base/tests/audio/non-existent.wav', 'base/tests/audio/bird.wav'] }
 				}, function(error) {
 					expect(error).toBe(undefined);
 					done();
@@ -140,7 +140,7 @@ describe('Sound', function() {
 			it('should take a fallback path in case a file is not supported', function(done) {
 				var sound = new Pizzicato.Sound({ 
 					source: 'file',
-					options: { path: ['base/tests/ddplus-format.mp4', 'base/tests/bird.wav'] }
+					options: { path: ['base/tests/audio/ddplus-format.mp4', 'base/tests/audio/bird.wav'] }
 				}, function(error) {
 					expect(error).toBe(undefined);
 					done();
@@ -224,7 +224,7 @@ describe('Sound', function() {
 		});
 
 		it('pausing, playing and stopping should update the corresponding properties', function(done) {
-			var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
+			var sound = new Pizzicato.Sound('base/tests/audio/bird.wav', function() {
 				expect(sound.playing).toBe(false);
 				expect(sound.paused).toBe(false);
 
@@ -284,7 +284,7 @@ describe('Sound', function() {
 		it('should trigger \'end\' when buffer ended', function(done) {
 			var endCallback = jasmine.createSpy('endCallback');
 
-			var sound = new Pizzicato.Sound('base/tests/click.wav', function() {
+			var sound = new Pizzicato.Sound('base/tests/audio/click.wav', function() {
 				
 				sound.on('end', endCallback);
 				sound.play();
@@ -301,7 +301,7 @@ describe('Sound', function() {
 			var clipDuration = 4;
 			var offset = 3;
 
-			var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
+			var sound = new Pizzicato.Sound('base/tests/audio/bird.wav', function() {
 				
 				sound.on('end', endCallback);
 				sound.play(0, offset);
@@ -318,7 +318,7 @@ describe('Sound', function() {
 			var clipDuration = 4;
 			var when = 2;
 
-			var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
+			var sound = new Pizzicato.Sound('base/tests/audio/bird.wav', function() {
 				
 				sound.on('end', endCallback);
 				sound.play(when, 0);
@@ -344,7 +344,7 @@ describe('Sound', function() {
 		});
 
 		it('should stop automatically when file sound is over', function(done) {
-			var click = new Pizzicato.Sound('base/tests/click.wav', function() {
+			var click = new Pizzicato.Sound('base/tests/audio/click.wav', function() {
 				click.play();
 
 				setTimeout(function() {
@@ -386,7 +386,7 @@ describe('Sound', function() {
 
 	describe('effects', function() {
 		it('should be added and removed', function(done) {
-			var sound = new Pizzicato.Sound('base/tests/bird.wav', function() {
+			var sound = new Pizzicato.Sound('base/tests/audio/bird.wav', function() {
 				var delay = new Pizzicato.Effects.Delay();
 				
 				sound.addEffect(delay);
@@ -402,7 +402,7 @@ describe('Sound', function() {
 		it('should continue playing when effects are added', function(done) {
 			var endCallback = jasmine.createSpy('endCallback');
 
-			var sound = new Pizzicato.Sound('base/tests/click.wav', function() {
+			var sound = new Pizzicato.Sound('base/tests/audio/click.wav', function() {
 
 				var delay = new Pz.Effects.Delay();
 
@@ -424,7 +424,7 @@ describe('Sound', function() {
 			var endCallback = jasmine.createSpy('endCallback');
 			var delay = new Pz.Effects.Delay();
 
-			var sound = new Pizzicato.Sound('base/tests/click.wav', function() {
+			var sound = new Pizzicato.Sound('base/tests/audio/click.wav', function() {
 
 				sound.play();
 				sound.removeEffect(delay);

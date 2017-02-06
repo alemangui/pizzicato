@@ -38,7 +38,7 @@ describe('Effects.Convolver', function() {
 	it('Should execute the callback when loading an impulse file', function(done) {
 		var options = {
 			mix: 0,
-			impulse: 'base/tests/scala-milan.wav'
+			impulse: 'base/tests/audio/scala-milan.wav'
 		};
 		var convolver = new Pizzicato.Effects.Convolver(options, function(error) {
 			expect(error).toBe(undefined);
@@ -50,7 +50,7 @@ describe('Effects.Convolver', function() {
 	it('Should execute the callback with an error if the file does not exist', function(done) {
 		var options = {
 			mix: 0,
-			impulse: 'base/tests/non-existent.wav'
+			impulse: 'base/tests/audio/non-existent.wav'
 		};
 		var convolver = new Pizzicato.Effects.Convolver(options, function(error) {
 			expect(error).not.toBe(undefined);

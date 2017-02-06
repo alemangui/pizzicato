@@ -9,7 +9,7 @@ module.exports = function(config) {
 			'distr/Pizzicato.js',
 			'tests/**/*.js',
 			{ 
-				pattern:  'tests/*.*',
+				pattern:  'tests/**/*.*',
 				watched:  false,
 				served:   true,
 				included: false 
