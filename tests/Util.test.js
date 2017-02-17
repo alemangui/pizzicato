@@ -113,6 +113,18 @@ describe('Util', function() {
 	});
 
 
+	it('contains a working isSound function', function() {
+		var isSound = Pizzicato.Util.isSound;
+		var delay = new Pizzicato.Effects.Delay();
+		var sound = new Pizzicato.Sound();
+
+		expect(isSound(delay)).toBe(false);
+		expect(isSound(true)).toBe(false);
+		expect(isSound(false)).toBe(false);
+		expect(isSound(sound)).toBe(true);
+	});
+
+
 	it('returns a normalized version of a number', function() {
 		var normalize = Pizzicato.Util.normalize;
 

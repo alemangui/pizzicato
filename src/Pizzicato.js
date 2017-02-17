@@ -55,6 +55,7 @@
 	
 	//= require ./Events.js
 	//= require ./Sound.js
+	//= require ./Group.js
 	//= require ./Effects.js
 	//= require ./Effects/Delay.js
 	//= require ./Effects/Compressor.js

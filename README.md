@@ -30,6 +30,16 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
   - [release](#sounds-release)
   - [frequency](#sounds-frequency)
   - [Connecting sounds to AudioNodes](#sounds-connect)
+- [Grouping sounds](#groups)
+  - [Create a group](#create-a-group)
+  - [addSound()](#group-add-sound)
+  - [removeSound()](#group-remove-sound)
+  - [addEffect()](#group-add-effect)
+  - [removeEffect()](#group-remove-effect)
+  - [play()](#group-play)
+  - [pause()](#group-pause)
+  - [stop()](#group-stop)
+  - [volume](#group-volume)
 - [Effects](#effects)
   - [Delay](#delay)
   - [Ping Pong Delay](#pingpongdelay)
@@ -383,9 +393,157 @@ sound.play();
 sound.frequency = 880; // a5
 ```
 
-<a name="sounds-connect">
+<a name="sounds-connect" />
 ###Connecting sounds to AudioNodes
 It is possible to connect AudioNodes to sound objects by using the ```connect``` method. More details in the [advanced section of this file](#using-graph-sound).
+
+<a name="groups" />
+## Grouping sounds ([example](https://alemangui.github.io/pizzicato/#create-group))
+Groups are a way to handle multiple ```Pz.Sound``` objects at the same time.
+
+<a name="create-a-group" />
+### Create a group ([example](https://alemangui.github.io/pizzicato/#create-group))
+
+The ```Pizzicato.Group``` constructor takes an optional array of sound objects. Please note these sounds must be detached for them to be usable inside a group (more details about detached sounds [here](#using-graph-sound-detached)).
+
+* ```sounds``` _(array, defaults to [])_: The sounds to be added to the group.
+
+Example:
+```javascript
+var drums = new Pizzicato.Sound('./audio/drums.mp3');
+var guitar = new Pizzicato.Sound('./audio/guitar.mp3');
+
+var group = new Pizzicato.Group([drums, guitar]);
+```
+
+<a name="group-add-sound"/>
+### addSound()
+
+To add a sound to a group, use the function ```addSound()```, which receives one parameter:
+
+* ```sound``` _(Pz.Sound, mandatory)_: The sound to be added to the group.
+
+Example:
+```javascript
+var drums = new Pizzicato.Sound('./audio/drums.mp3');
+var guitar = new Pizzicato.Sound('./audio/guitar.mp3');
+var group = new Pizzicato.Group();
+
+group.addSound(drums)
+group.addSound(guitar)
+```
+
+<a name="group-remove-sound"/>
+### removeSound()
+
+To remove a sound to a group, use the function ```removeSound()```, which receives one parameter:
+
+* ```sound``` _(Pz.Sound, mandatory)_: The sound to be removed from the group.
+
+Example:
+```javascript
+var drums = new Pizzicato.Sound('./audio/drums.mp3');
+var guitar = new Pizzicato.Sound('./audio/guitar.mp3');
+var group = new Pizzicato.Group([guitar, drums]);
+
+group.removeSound(drums)
+group.removeSound(guitar)
+```
+
+<a name="group-add-effect"/>
+### addEffect()
+
+To add an effect to a group, use the function ```addEffect()```. Please note all sounds inside the group will be affected by the added effect. The function receives one parameter:
+
+* ```effect``` _(Pz.Effect, mandatory)_: The effect to be added to the group.
+
+Example:
+```javascript
+var bass = new Pizzicato.Sound('./audio/bass.mp3');
+var guitar = new Pizzicato.Sound('./audio/guitar.mp3');
+var delay = new Pizzicato.Effects.Delay();
+var group = new Pizzicato.Group([guitar, drums]);
+
+group.addEffect(delay)
+```
+
+<a name="group-remove-effect"/>
+### removeEffect()
+
+To remove an effect to a group, use the function ```removeEffect()```. The function receives one parameter:
+
+* ```effect``` _(Pz.Effect, mandatory)_: The effect to be removed from the group.
+
+Example:
+```javascript
+var bass = new Pizzicato.Sound('./audio/bass.mp3');
+var guitar = new Pizzicato.Sound('./audio/guitar.mp3');
+var delay = new Pizzicato.Effects.Delay();
+var group = new Pizzicato.Group([guitar, drums]);
+
+group.addEffect(delay)
+
+group.removeEffect(delay)
+```
+
+<a name="group-play"/>
+### play()
+
+You can play all sounds of a group simultaneously using the function ```play```, which takes no parameters.
+
+Example:
+```javascript
+var drums = new Pizzicato.Sound('./audio/drums.mp3');
+var guitar = new Pizzicato.Sound('./audio/guitar.mp3');
+var group = new Pizzicato.Group([guitar, drums]);
+
+group.play();
+```
+
+<a name="group-pause"/>
+### pause()
+
+You can pause all sounds of a group simultaneously using the function ```pause```, which takes no parameters. Next time the group is played, it will continue from where it left off.
+
+Example:
+```javascript
+var drums = new Pizzicato.Sound('./audio/drums.mp3');
+var guitar = new Pizzicato.Sound('./audio/guitar.mp3');
+var group = new Pizzicato.Group([guitar, drums]);
+
+group.play();
+group.pause();
+```
+
+<a name="group-stop"/>
+### stop()
+You can stop all sounds of a group simultaneously using the function ```stop```, which takes no parameters. Next time the group is played, it will continue from the start of the sounds composing it.
+
+Example:
+```javascript
+var drums = new Pizzicato.Sound('./audio/drums.mp3');
+var guitar = new Pizzicato.Sound('./audio/guitar.mp3');
+var group = new Pizzicato.Group([guitar, drums]);
+
+group.play();
+group.stop();
+```
+
+<a name="group-volume"/>
+### volume
+
+Use the group's ```volume``` property to modify the volume of all the group.
+
+* ```volume``` _(min: 0, max: 1, defaults to 1)_: The sound's volume
+
+Example:
+```javascript
+var drums = new Pizzicato.Sound('./audio/drums.mp3');
+var guitar = new Pizzicato.Sound('./audio/guitar.mp3');
+var group = new Pizzicato.Group([guitar, drums]);
+
+group.volume = 0.5;
+```
 
 <a name="effects"/>
 ## Effects

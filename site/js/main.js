@@ -164,9 +164,6 @@ var tremoloGuitar = new Pz.Sound({
 	tremoloGuitar.addEffect(tremolo); 
 });
 
-
-
-
 var whiteNoise = new Pz.Sound(function(e) {
   var output = e.outputBuffer.getChannelData(0);
   for (var i = 0; i < e.outputBuffer.length; i++)
@@ -191,6 +188,20 @@ var countdown = new Pz.Sound({
 	countdown.addEffect(ringModulator); 
 });
 
+var guitarGroup = new Pz.Sound({ source: 'file', options: {
+	path: './audio/guitar-group.mp3',
+	loop: true
+}});
+var bassGroup = new Pz.Sound({ source: 'file', options: {
+	path: './audio/bass-group.mp3',
+	loop: true
+}});
+var drumsGroup = new Pz.Sound({ source: 'file', options: {
+	path: './audio/drums-group.mp3',
+	loop: true
+}});
+
+var group = new Pz.Group([guitarGroup, drumsGroup, bassGroup]);
 
 var segments = [
 	{
@@ -224,6 +235,12 @@ var segments = [
 		volumeSlider: document.getElementById('volume-release'),
 		releaseSlider: document.getElementById('value-release'),
 		attackSlider: document.getElementById('value-attack')
+	},
+	{
+		audio: group,
+		playButton: document.getElementById('play-group-1'),
+		stopButton: document.getElementById('stop-group-1'),
+		volumeSlider: document.getElementById('volume-group-1')
 	},
 	{
 		audio: timba,

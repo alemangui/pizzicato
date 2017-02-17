@@ -187,29 +187,6 @@ describe('Sound', function() {
 		});
 	});
 
-	describe('analyser', function() {
-
-		it('should lazy load upon request', function() {
-			var sound = new Pizzicato.Sound();
-
-			expect(sound.analyser).toBe(undefined);
-
-			var analyser = sound.getAnalyser();
-			
-			expect(sound.analyser).toBe(analyser);
-			expect(analyser.toString()).toContain('object AnalyserNode');
-		});
-
-		it('should raise deprecation warning', function() {
-			spyOn(console, 'warn');
-
-			var sound = new Pizzicato.Sound();
-			var analyser = sound.getAnalyser();
-			
-			expect(console.warn).toHaveBeenCalled();
-		});
-	});
-
 	describe('actions', function() {
 
 		it('should change the oscillator frequency when modifying the frequency in a wave based sound', function() {

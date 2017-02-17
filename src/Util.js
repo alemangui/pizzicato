@@ -39,6 +39,10 @@ Pizzicato.Util = {
 		return (audioNode && audioNode.toString() === "[object AudioBufferSourceNode]");
 	},
 
+	isSound: function(sound) {
+		return sound instanceof Pz.Sound;
+	},
+
 	isEffect: function(effect) {
 		for (var key in Pizzicato.Effects)
 			if (effect instanceof Pizzicato.Effects[key])
