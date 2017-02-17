@@ -29,6 +29,8 @@
             <a href="#sound-from-file" class="menu-item">From a file</a>
             <a href="#sound-from-input" class="menu-item">From your microphone</a>
             <a href="#sound-from-function" class="menu-item">From a function</a>
+            <div class="menu-subtitle">Group sounds</div>
+            <a href="#create-group" class="menu-item">Create a group</a>
             <div class="menu-subtitle">Add effects</div>
             <a href="#attack-release" class="menu-item">Attack-release</a>
             <a href="#delay" class="menu-item">Delay</a>
@@ -184,6 +186,35 @@ var whiteNoise = new Pizzicato.Sound(function(e) {
                 <div class="controls">
                     <button id="stop-white" class="stop action"></button>
                     <button id="play-white" class="play action"></button>
+                </div>
+
+                <h3>Group sounds</h3>
+
+                <h4 id="create-group">Create a group</h4>
+
+                <pre><code class="language-javascript">
+var drums = new Pz.Sound('./audio/drums.mp3');
+var guitar = new Pz.Sound('./audio/guitar.mp3');
+var bass = new Pz.Sound('./audio/bass.mp3');
+
+var group = new Pizzicato.Group([drums, guitar]);
+
+group.addSound(bass);
+group.addEffect(reverb);
+group.play();
+                </code></pre>
+                
+                <div class="slider-group">
+                    <div class="slider">
+                        <label for="volume-group-1">Volume</label>
+                        <input type="range" min="0" max="1" step="0.01" value="1" id="volume-group-1" />
+                        <div class="slider-value">1</div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button id="stop-group-1" class="stop action"></button>
+                    <button id="play-group-1" class="play action"></button>
                 </div>
 
                 <h3>Add effects</h3>
