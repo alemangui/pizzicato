@@ -54,12 +54,12 @@ var ringModulator = new Pizzicato.Effects.RingModulator({
 // Sounds
 var sineWave = new Pz.Sound();
 var sineWaveRelease = new Pz.Sound({ source: 'wave', options: { frequency: 220, release: 1, attack:0.5 } });
-var acoustic = new Pz.Sound(dolbySupported ? './audio/acoustic_Dolby.mp4' : './audio/acoustic.m4a');
+var acoustic = new Pz.Sound(dolbySupported ? './audio/acoustic_Dolby.mp4' : './audio/acoustic.mp3');
 
 var timba = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: dolbySupported ? './audio/timba_Dolby.mp4' : './audio/timba.m4a', 
+		path: dolbySupported ? './audio/timba_Dolby.mp4' : './audio/timba.mp3', 
 		loop: true 
 	}
 }, function() { timba.addEffect(delay); });
@@ -67,7 +67,7 @@ var timba = new Pz.Sound({
 var electro = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: dolbySupported ? './audio/electro_Dolby.mp4' : './audio/electro.m4a', 
+		path: dolbySupported ? './audio/electro_Dolby.mp4' : './audio/electro.mp3', 
 		loop: true 
 	}
 }, function() { electro.addEffect(compressor); });
@@ -75,7 +75,7 @@ var electro = new Pz.Sound({
 var synth = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: dolbySupported ? './audio/synth_Dolby.mp4' : './audio/synth.m4a', 
+		path: dolbySupported ? './audio/synth_Dolby.mp4' : './audio/synth.mp3', 
 		loop: true 
 	}
 }, function() { synth.addEffect(lowPassFilter); });
@@ -83,7 +83,7 @@ var synth = new Pz.Sound({
 var synth2 = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: dolbySupported ? './audio/synth2_Dolby.mp4' : './audio/synth2.m4a', 
+		path: dolbySupported ? './audio/synth2_Dolby.mp4' : './audio/synth2.mp3', 
 		loop: true 
 	}
 }, function() { synth2.addEffect(highPassFilter); });
@@ -91,7 +91,7 @@ var synth2 = new Pz.Sound({
 var guitar = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: dolbySupported ? './audio/guitar_Dolby.mp4' : './audio/guitar.m4a', 
+		path: dolbySupported ? './audio/guitar_Dolby.mp4' : './audio/guitar.mp3', 
 		loop: true 
 	}
 }, function() { guitar.addEffect(distortion); });
@@ -99,7 +99,7 @@ var guitar = new Pz.Sound({
 var walkGuitar = new Pz.Sound({
 	source: 'file',
 	options: {
-		path: './audio/uttl.m4a',
+		path: './audio/uttl.mp3',
 		loop: true
 	}
 }, function() { walkGuitar.addEffect(quadrafuzz); });
@@ -107,7 +107,7 @@ var walkGuitar = new Pz.Sound({
 var electricGuitar = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: dolbySupported ? './audio/electric-guitar_Dolby.mp4' : './audio/electric-guitar.m4a', 
+		path: dolbySupported ? './audio/electric-guitar_Dolby.mp4' : './audio/electric-guitar.mp3', 
 		loop: true 
 	}
 }, function() { electricGuitar.addEffect(flanger); });
@@ -115,7 +115,7 @@ var electricGuitar = new Pz.Sound({
 var wah = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: './audio/wah.m4a', 
+		path: './audio/wah.mp3', 
 		loop: true 
 	}
 }, function() { wah.addEffect(pingPongDelay); });
@@ -131,7 +131,7 @@ var chop = new Pz.Sound({
 var stanceBass = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: './audio/stance-bass.m4a', 
+		path: './audio/stance-bass.mp3', 
 		loop: true 
 	}
 }, function() { stanceBass.addEffect(stereoPanner); });
@@ -139,7 +139,7 @@ var stanceBass = new Pz.Sound({
 var cavaquinho = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: './audio/cavaquinho.m4a', 
+		path: './audio/cavaquinho.mp3', 
 		loop: true 
 	}
 }, function() { cavaquinho.addEffect(reverb); });
@@ -147,7 +147,7 @@ var cavaquinho = new Pz.Sound({
 var drums = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: './audio/drums.m4a', 
+		path: './audio/drums.mp3', 
 		loop: true 
 	}
 }, function() { 
@@ -157,7 +157,7 @@ var drums = new Pz.Sound({
 var tremoloGuitar = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: './audio/tremolo-guitar.m4a', 
+		path: './audio/tremolo-guitar.mp3', 
 		loop: true
 	}
 }, function() { 
@@ -181,7 +181,7 @@ var voice = new Pizzicato.Sound({ source: 'input' }, function(err) {
 var countdown = new Pz.Sound({ 
 	source: 'file', 
 	options: { 
-		path: './audio/countdown.m4a', 
+		path: './audio/countdown.mp3', 
 		loop: true 
 	}
 }, function() { 
