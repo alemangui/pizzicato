@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/alemangui/pizzicato.svg?branch=master)](https://travis-ci.org/alemangui/pizzicato) [![npm](https://img.shields.io/npm/v/pizzicato.svg)](https://www.npmjs.com/package/pizzicato) [![Bower](https://img.shields.io/bower/v/pizzicato.svg)](https://bower.io/) [![CDNJS](https://img.shields.io/cdnjs/v/pizzicato.svg)](https://cdnjs.com/libraries/pizzicato)
 
-##A Web Audio library
+## A Web Audio library
 
 Pizzicato aims to simplify the way you create and manipulate sounds via the Web Audio API. Take a look at the [demo site here](https://alemangui.github.io/pizzicato/).
 
@@ -65,9 +65,11 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
   - [Audio formats](#audio-formats)
 
 <a name="get-pizzicato"/>
+
 ## Get Pizzicato
 
 <a name="npm"/>
+
 ### npm
 
 ```
@@ -75,6 +77,7 @@ npm install pizzicato
 ```
 
 <a name="bower"/>
+
 ### bower
 
 ```
@@ -82,6 +85,7 @@ bower install pizzicato
 ```
 
 <a name="cdnjs"/>
+
 ### cdnjs
 
 Full source code:
@@ -95,6 +99,7 @@ Minified:
 ```
 
 <a name="installing-and-testing"/>
+
 ### Installing and testing
 
 Or checkout the project, install dependencies with 
@@ -111,6 +116,7 @@ Or to build without tests:
 ```gulp scripts``` or ```gulp watch```
 
 <a name="tldr"/>
+
 ## TL;DR: How does it work?
 Include Pizzicato in your site
 ```html
@@ -139,6 +145,7 @@ sawtoothWave.play();
 ```
 
 <a name="create-a-sound"/>
+
 ## Create a sound
 To create a new sound, use the ```Pizzicato.Sound``` constructor, which takes an object with the sound's ```description``` as argument and a callback that will be executed when the sound is ready to be used. If an error occurs, the callback will be called with the error as a parameter.
 ```javascript
@@ -168,6 +175,7 @@ For example, this objects describes a sine waveform with a frequency of 440:
 Sounds can be created from a variety of sources.
 
 <a name="sounds-from-a-wave"/>
+
 ### Sounds from a wave ([example](https://alemangui.github.io/pizzicato/#sound-from-waveform))
 To create a sound from an oscillator with a certain waveform, use the ```source: wave``` in your description. Additionally, the following optional parameters are possible inside the ```options``` object:
 * ```type``` _(Optional; ```sine```, ```square```, ```triangle``` or ```sawtooth```, defaults to ```sine```)_: Specifies the type of waveform.
@@ -191,6 +199,7 @@ var sound = new Pizzicato.Sound();
 ```
 
 <a name="sounds-from-a-file"/>
+
 ### Sounds from a file ([example](https://alemangui.github.io/pizzicato/#sound-from-file))
 In order to load a sound from a file, include the ```source: file``` in your description. Additionally, the following  parameters are possible inside the ```options``` object:
 * ```path``` _(Mandatory; string or array of strings)_: Specifies the path of the sound file. It is also possible to have an array of paths to fallback on. Pizzicato will attempt to load the paths in order, passing on to the next one in case of failure.
@@ -225,6 +234,7 @@ var sound = new Pizzicato.Sound('./audio/sound.wav', function() {...});
 Check the [supported audio files](#audio-formats) that can be played with Pizzicato.
 
 <a name="sounds-from-input"/>
+
 ### Sounds from the user input ([example](https://alemangui.github.io/pizzicato/#sound-from-input))
 It is also possible to use the sound input from the computer. This is usually the microphone, but it could also be a line-in input. To use this, add ```source: input``` in your description. The following optional parameters are possible inside ```options``` object:
 * ```volume``` _(Optional; min: 0, max: 1, defaults to 1)_: Loudness of the sound.
@@ -240,6 +250,7 @@ var voice = new Pizzicato.Sound({
 ```
 
 <a name="sounds-from-a-function"/>
+
 ### Sounds from a function ([example](https://alemangui.github.io/pizzicato/#sound-from-function))
 For more creative freedom, Pizzicato also allows direct audio processing. Sounds can be created from a Javascript function by including ```source: script``` in the description. The following parameters are possible in the ```options``` object:
 * ```audioFunction``` _(Mandatory; function(<audio processing event>))_: Function that will be called with the audio processing event.
@@ -264,9 +275,11 @@ var whiteNoise = Pizzicato.Sound({
 ```
 
 <a name="using-sounds"/>
+
 ## Using sounds
 
 <a name="sounds-play"/>
+
 ### Play ([example](https://alemangui.github.io/pizzicato/#sound-from-waveform))
 
 You can play a sound by calling it's ```play``` function. It takes two optional parameters:
@@ -281,6 +294,7 @@ sound.play(2, 4);
 ```
 
 <a name="sounds-pause"/>
+
 ### Pause
 
 You can pause a sound by calling it's ```pause``` function. Next time the sound is played, it will continue from where it left off.
@@ -290,6 +304,7 @@ sound.pause();
 ```
 
 <a name="sounds-stop"/>
+
 ### Stop
 
 You can stop a sound by calling it's ```stop``` function. Next time the sound is played, it will continue from the start of the sound.
@@ -299,6 +314,7 @@ sound.stop();
 ```
 
 <a name="sounds-clone"/>
+
 ### Clone
 
 You can clone a sound object by calling it's ```clone``` function. The object returned will have the same parameters as the original sound.
@@ -308,6 +324,7 @@ sound.clone();
 ```
 
 <a name="sounds-add-effect"/>
+
 ### Add effects ([example](https://alemangui.github.io/pizzicato/#delay))
 
 You can add effects to a sound object by calling it's ```addEffect(effect)``` function. The function gets as parameter a Pizzicato Effect (see [effects](#effects)).
@@ -322,6 +339,7 @@ sound.addEffect(delay);
 ```
 
 <a name="sounds-remove-effect"/>
+
 ### Remove effects
 
 You can remove effects that have been added to a sound object by calling it's ```removeEffect(effect)``` function. The function gets as parameter a Pizzicato Effect (see [effects](#effects)) that is already applied to the sound object.
@@ -338,6 +356,7 @@ sound.removeEffect(delay);
 ```
 
 <a name="sounds-volume"/>
+
 ### Volume
 
 Use the sound's ```volume``` property to modify its volume.
@@ -351,6 +370,7 @@ sound.volume = 0.5;
 ```
 
 <a name="sounds-attack"/>
+
 ### Attack ([example](https://alemangui.github.io/pizzicato/#attack-release))
 
 Use the sound's ```attack``` property to modify its attack (or fade-in) value. This value eases the beginning of the sound, often avoiding unwanted clicks.
@@ -364,6 +384,7 @@ sound.attack = 0.9;
 ```
 
 <a name="sounds-release"/>
+
 ### Release ([example](https://alemangui.github.io/pizzicato/#attack-release))
 
 Use the sound's ```release``` property to modify its release (or fade-out) value. This value eases the end of the sound, often avoiding unwanted clicks.
@@ -377,6 +398,7 @@ sound.release = 0.9;
 ```
 
 <a name="sounds-frequency"/>
+
 ### Frequency
 
 If you started a sound of type [wave](#sounds-from-a-wave), you can modify the frequency of the oscillator by altering the ```frequency``` property.
@@ -394,14 +416,17 @@ sound.frequency = 880; // a5
 ```
 
 <a name="sounds-connect" />
+
 ###Connecting sounds to AudioNodes
 It is possible to connect AudioNodes to sound objects by using the ```connect``` method. More details in the [advanced section of this file](#using-graph-sound).
 
 <a name="groups" />
+
 ## Grouping sounds ([example](https://alemangui.github.io/pizzicato/#create-group))
 Groups are a way to handle multiple ```Pz.Sound``` objects at the same time.
 
 <a name="create-a-group" />
+
 ### Create a group ([example](https://alemangui.github.io/pizzicato/#create-group))
 
 The ```Pizzicato.Group``` constructor takes an optional array of sound objects. Please note these sounds must be detached for them to be usable inside a group (more details about detached sounds [here](#using-graph-sound-detached)).
@@ -417,6 +442,7 @@ var group = new Pizzicato.Group([drums, guitar]);
 ```
 
 <a name="group-add-sound"/>
+
 ### addSound()
 
 To add a sound to a group, use the function ```addSound()```, which receives one parameter:
@@ -434,6 +460,7 @@ group.addSound(guitar)
 ```
 
 <a name="group-remove-sound"/>
+
 ### removeSound()
 
 To remove a sound to a group, use the function ```removeSound()```, which receives one parameter:
@@ -451,6 +478,7 @@ group.removeSound(guitar)
 ```
 
 <a name="group-add-effect"/>
+
 ### addEffect()
 
 To add an effect to a group, use the function ```addEffect()```. Please note all sounds inside the group will be affected by the added effect. The function receives one parameter:
@@ -468,6 +496,7 @@ group.addEffect(delay)
 ```
 
 <a name="group-remove-effect"/>
+
 ### removeEffect()
 
 To remove an effect to a group, use the function ```removeEffect()```. The function receives one parameter:
@@ -487,6 +516,7 @@ group.removeEffect(delay)
 ```
 
 <a name="group-play"/>
+
 ### play()
 
 You can play all sounds of a group simultaneously using the function ```play```, which takes no parameters.
@@ -501,6 +531,7 @@ group.play();
 ```
 
 <a name="group-pause"/>
+
 ### pause()
 
 You can pause all sounds of a group simultaneously using the function ```pause```, which takes no parameters. Next time the group is played, it will continue from where it left off.
@@ -516,6 +547,7 @@ group.pause();
 ```
 
 <a name="group-stop"/>
+
 ### stop()
 You can stop all sounds of a group simultaneously using the function ```stop```, which takes no parameters. Next time the group is played, it will continue from the start of the sounds composing it.
 
@@ -530,6 +562,7 @@ group.stop();
 ```
 
 <a name="group-volume"/>
+
 ### volume
 
 Use the group's ```volume``` property to modify the volume of all the group.
@@ -546,6 +579,7 @@ group.volume = 0.5;
 ```
 
 <a name="effects"/>
+
 ## Effects
 Once a sound is created you can add effects to it by using the ```addEffect``` function. To remove an effect, you can use the ```removeEffect``` function.
 ```javascript
@@ -555,6 +589,7 @@ sound.removeEffect(delay);
 ```
 
 <a name="delay"/>
+
 ### Delay ([example](https://alemangui.github.io/pizzicato/#delay))
 The delay effect plays back the sound a certain number of times in defined intervals, giving the impression of an echo. The following options are available when creating a delay effect:
 * ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
@@ -573,6 +608,7 @@ sound.play();
 ```
 
 <a name="ping-pong-delay"/>
+
 ### Ping Pong Delay ([example](https://alemangui.github.io/pizzicato/#ping-pong-delay))
 The ping pong delay effect is similar to a regular [Delay](#delay) effect, however on each feedback loop the output is swapped between left and right channels. The following options are available when creating a delay effect:
 * ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
@@ -591,6 +627,7 @@ sound.play();
 ```
 
 <a name="dubdelay"/>
+
 ### Dub Delay ([example](https://alemangui.github.io/pizzicato/#dub-delay))
 The dub delay effect is similar to a regular [Delay](#delay) effect, however on each feedback loop the output is routed through a biquad filter. 
 
@@ -615,6 +652,7 @@ sound.play();
 ```
 
 <a name="distortion"/>
+
 ### Distortion ([example](https://alemangui.github.io/pizzicato/#distortion))
 The distortion effect adds a basic "override" to the sound. The distortion effect only takes one parameter:
 * ```gain``` _(min: 0, max: 1, defaults to 0.5)_: Amount of distortion applied.
@@ -629,6 +667,7 @@ sound.play();
 ```
 
 <a name="quadrafuzz">
+
 ### Quadrafuzz ([example](https://alemangui.github.io/pizzicato/#quadrafuzz))
 The quadrafuzz effect divides the sound into separate bands and then distorts each band independently, allowing you to control which frequencies you distort and how much.
 
@@ -654,6 +693,7 @@ sound.play();
 ```
 
 <a name="flanger"/>
+
 ### Flanger ([example](https://alemangui.github.io/pizzicato/#flanger))
 The flanger produces a swirling effect by delaying a "copy" of the sound by a small, gradually changing period. The flanger effect takes the folloeing parameters:
 * ```time``` _(min: 0, max: 1, defaults to 0.45)_: Changes the small delay time applied to the copied signal.
@@ -677,6 +717,7 @@ sound.play();
 ```
 
 <a name="compressor"/>
+
 ### Compressor ([example](https://alemangui.github.io/pizzicato/#compressor))
 A compressor allows reducing the range between the loudest and the quietest parts of a sound. This is done by boosting the quiet segments and attenuating the loud ones.
 
@@ -702,6 +743,7 @@ sound.play();
 ```
 
 <a name="low-pass-filter"/>
+
 ### Low-pass filter ([example](https://alemangui.github.io/pizzicato/#low-pass-filter))
 A low-pass filter passes signals with a frequency lower than a pre-determined cutoff frequency and attenuates signals with frequencies higher than the cutoff frequency. 
 
@@ -721,6 +763,7 @@ sound.play();
 ```
 
 <a name="high-pass-filter"/>
+
 ### High-pass filter ([example](https://alemangui.github.io/pizzicato/#high-pass-filter))
 A high-pass filter is the opposite of a low-pass filter (described above). It attenuates signals with a frequency lower than a pre-determined cutoff frequency and passes signals with frequencies higher than the cutoff frequency. 
 
@@ -740,6 +783,7 @@ sound.play();
 ```
 
 <a name="stereo-panner"/>
+
 ### Stereo panner ([example](https://alemangui.github.io/pizzicato/#stereo-panner))
 The stereo panner is used to adjust the level of a sound through the left and right speakers. A ```-1``` value will channel all the sound through the left speaker, whereas a ```1``` value will do so through the right speaker.
 
@@ -756,6 +800,7 @@ sound.play();
 ```
 
 <a name="convolver"/>
+
 ### Convolver ([example](https://alemangui.github.io/pizzicato/#convolver))
 The convolver effect allows the sound to be heard with a certain ressonance or repercussion. This can be useful to simulate certain environments such as auditoriums, concert halls, or small rooms. 
 
@@ -786,6 +831,7 @@ sound.play();
 ```
 
 <a name="reverb"/>
+
 ### Reverb ([example](https://alemangui.github.io/pizzicato/#reverb))
 The reverb effect is similar to the convolver effect in that it allows the sound to be heard with a certain ressonance or repercussion. This simulates a particular physical environment in which the sound could be played (e.g., an auditorium, a concert hall, etc).
 
@@ -810,6 +856,7 @@ sound.play();
 ```
 
 <a name="ring-modulator"/>
+
 ### Ring Modulator ([example](https://alemangui.github.io/pizzicato/#ring-modulator))
 The ring modulator effect combines two input signals, where one of the inputs is a sine wave modulating the other. 
 
@@ -832,6 +879,7 @@ sound.play();
 ```
 
 <a name="tremolo"/>
+
 ### Tremolo ([example](https://alemangui.github.io/pizzicato/#tremolo))
 The tremolo effect changes the volume of the sound over time. The outcome would be similar as if you turned the volume node up and down periodically.
 
@@ -852,13 +900,16 @@ sound.play();
 ```
 
 <a name="effects-connect">
+
 ### Connecting effects to and from AudioNodes
 It is possible to connect AudioNodes to effects (and viceversa) by using the ```connect``` method. More details in the [advanced section of this file](#using-graph-effect).
 
 <a name="advanced">
+
 ## Advanced
 
 <a name="accessing-the-context">
+
 ### Accessing the audio context
 If needed, the audio context used by Pizzicato is always accessible:
 ```javascript
@@ -866,10 +917,12 @@ var context = Pizzicato.context;
 ```
 
 <a name="using-graph">
+
 ### Using Pizzicato objects in a web audio graph
 You can use effects and sounds as part of an existing web audio graph.
 
 <a name="using-graph-sound">
+
 #### Connecting nodes to a Pizzicato.Sound object
 Using the ```connect``` method, you can connect audio nodes to a Pizzicato.Sound object. For example:
 ```javascript
@@ -880,6 +933,7 @@ sound.connect(analyser);
 ```
 
 <a name="using-graph-sound-detached">
+
 #### Creating a detached Pizzicato.Sound object
 All Pizzicato.Sound objects are connected to the context's destination by default. In the example above, the ```sound``` object will be connected to an analyser node and it will also remain connected to the context's destination node.
 
@@ -898,6 +952,7 @@ sound.connect(analyser);
 ```
 
 <a name="using-graph-effect">
+
 #### Connecting nodes to effects
 Pizzicato effects can also be used in a web audio graph without the need to create Pizzicato.Sound objects by using the ```connect``` method.
 
@@ -913,6 +968,7 @@ distortion.connect(analyser);
 ```
 
 <a name="general-volume">
+
 ### General volume
 In order to change the general volume of all Pizzicato sounds, you can directly modify the property ```volume```:
 ```javascript
@@ -920,9 +976,11 @@ Pizzicato.volume = 0.3;
 ```
 
 <a name="support"/>
+
 ## Support
 
 <a name="browsers"/>
+
 ### Browsers
 Pizzicato can only work in [browsers with Web Audio support](http://caniuse.com/#feat=audio-api). This means:
 * Firefox 31+
@@ -932,5 +990,6 @@ Pizzicato can only work in [browsers with Web Audio support](http://caniuse.com/
 * Edge 13+
 
 <a name="audio-formats"/>
+
 ### Audio formats
 Pizzicato supports audio formats [supported by your browser](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility). These may vary depending on your system version and browser.
