@@ -365,12 +365,16 @@ describe('Sound', function() {
 		it('should be added and removed', function(done) {
 			var sound = new Pizzicato.Sound('base/tests/audio/bird.wav', function() {
 				var delay = new Pizzicato.Effects.Delay();
+				var distortion = new Pizzicato.Effects.Distortion();
 				
 				sound.addEffect(delay);
-				expect(sound.effects.indexOf(delay)).not.toBe(-1);
+				sound.addEffect(distortion);
 
-				sound.removeEffect(delay);
-				expect(sound.effects.indexOf(delay)).toBe(-1);
+				expect(sound.effects.indexOf(delay)).not.toBe(-1);
+				expect(sound.effects.indexOf(distortion)).not.toBe(-1);
+
+				sound.removeEffect(distortion);
+				expect(sound.effects.indexOf(distortion)).toBe(-1);
 
 				done();
 			});

@@ -583,7 +583,7 @@
 				if (shouldResumePlaying)
 					this.pause();
 	
-				var previousNode = (index === 0) ? this.fadeNode : this.effectConnectors(index - 1);
+				var previousNode = (index === 0) ? this.fadeNode : this.effectConnectors[index - 1];
 				previousNode.disconnect();
 	
 				// Disconnect connector and effect
@@ -820,6 +820,7 @@
 			}
 		}
 	});
+	
 	Pizzicato.Group = function(sounds) {
 	
 		sounds = sounds || [];
