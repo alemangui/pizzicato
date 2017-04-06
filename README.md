@@ -60,6 +60,7 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
   - [Accessing the audio context](#accessing-the-context)
   - [Using Pizzicato objects in a web audio graph](#using-graph)
   - [General volume](#general-volume)
+  - [Memory management](#memory-management)
 - [Support](#support)
   - [Browsers](#browsers)
   - [Audio formats](#audio-formats)
@@ -974,6 +975,14 @@ In order to change the general volume of all Pizzicato sounds, you can directly 
 ```javascript
 Pizzicato.volume = 0.3;
 ```
+
+<a name="memory-management">
+
+### Memory management
+
+When creating large numbers of Pizzicato objects you may experience a tipping point after which all sounds in the site are muted. This can vary depending on your browser, operating system and computer running the code.
+
+To release some of the load, you can call the ```disconnect``` function on the Pizzicato.Sound objects no longer in use. This will disconnect them from the context's destination and they will become orphaned graphs, which will be freed when necessary.
 
 <a name="support"/>
 
