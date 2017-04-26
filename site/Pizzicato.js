@@ -874,6 +874,7 @@
 				}
 				if (sound.detached) {
 					console.warn('Groups do not support detached sounds. You can manually create an audio graph to group detached sounds together.');
+					return;
 				}
 	
 				sound.disconnect(Pz.masterGainNode);

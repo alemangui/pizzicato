@@ -24,7 +24,7 @@ describe('Group', function() {
 
 	describe('sounds', function() {
 
-		it('should raise a warning if the sound is detached', function() {
+		it('should raise a warning if a detached sound is added', function() {
 			spyOn(console, 'warn');
 			
 			var sound = new Pz.Sound({ source: 'wave', options: { detached: true } });
