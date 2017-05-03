@@ -128,7 +128,7 @@ Create a sound
 ```javascript
 var sawtoothWave = new Pizzicato.Sound({ 
     source: 'wave',
-    options {
+    options: {
         type: 'sawtooth'
     }
 });
