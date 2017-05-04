@@ -696,7 +696,7 @@ sound.play();
 <a name="flanger"/>
 
 ### Flanger ([example](https://alemangui.github.io/pizzicato/#flanger))
-The flanger produces a swirling effect by delaying a "copy" of the sound by a small, gradually changing period. The flanger effect takes the folloeing parameters:
+The flanger produces a swirling effect by delaying a "copy" of the sound by a small, gradually changing period. The flanger effect takes the following parameters:
 * ```time``` _(min: 0, max: 1, defaults to 0.45)_: Changes the small delay time applied to the copied signal.
 * ```speed``` _(min: 0, max: 1, defaults to 0.2)_: Changes the speed at which the flanging occurs.
 * ```depth``` _(min: 0, max: 1, defaults to 0.1)_: Changes the depth/intensity of the swirling effect.
