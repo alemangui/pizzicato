@@ -927,7 +927,7 @@ You can use effects and sounds as part of an existing web audio graph.
 #### Connecting nodes to a Pizzicato.Sound object
 Using the ```connect``` method, you can connect audio nodes to a Pizzicato.Sound object. For example:
 ```javascript
-var analyser = Pizzicato.context.createAnaliser();
+var analyser = Pizzicato.context.createAnalyser();
 var sound = new Pizzicato.Sound();
 
 sound.connect(analyser);
