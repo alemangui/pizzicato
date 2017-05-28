@@ -447,19 +447,19 @@ describe('Sound', function() {
 		it('should connect audio nodes when using connect', function(done) {
 			var analyser = Pz.context.createAnalyser();
 			var dataArray = new Float32Array(analyser.frequencyBinCount);
-
 			var sound = new Pz.Sound();
+			
 			sound.attack = 0;
 			sound.connect(analyser);
 
 			analyser.getFloatFrequencyData(dataArray);
-			expect(dataArray[0]).toBe(analyser.minDecibels);
+			var initialValue = dataArray[0];
 
 			sound.play();
 
 			setTimeout(function() {
 				analyser.getFloatFrequencyData(dataArray);
-				expect(dataArray[0]).not.toBe(-100);
+				expect(dataArray[0]).not.toBe(initialValue);
 				sound.stop();
 				done();
 			}, 1500);
