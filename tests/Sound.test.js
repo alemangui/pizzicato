@@ -151,9 +151,9 @@ describe('Sound', function() {
 		describe('input source', function() {
 
 			it('should get the audio input when initialized with an input source', function() {
-				spyOn(navigator, 'mozGetUserMedia');
+				spyOn(navigator.mediaDevices, 'getUserMedia').and.returnValue(new Promise(function() {}));
 				var sound = new Pizzicato.Sound({ source: 'input' });
-				expect(navigator.mozGetUserMedia).toHaveBeenCalled();
+				expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalled();
 			});	
 		});
 	});

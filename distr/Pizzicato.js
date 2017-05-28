@@ -355,24 +355,28 @@
 		function initializeWithInput(options, callback) {
 			navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 	
-			if (!navigator.getUserMedia) {
+			if (!navigator.getUserMedia && !navigator.mediaDevices.getUserMedia) {
 				console.error('Your browser does not support getUserMedia');
 				return;
 			}
 	
-			navigator.getUserMedia({
-				audio: true
-			}, (function(stream) {
+			var handleStream = (function(stream) {
 				self.getRawSourceNode = function() {
 					return Pizzicato.context.createMediaStreamSource(stream);
 				};
 				if (util.isFunction(callback))
 					callback();
+			}).bind(self);
 	
-			}).bind(self), function(error) {
+			var handleError = function(error) {
 				if (util.isFunction(callback))
 					callback(error);
-			});
+			};
+	
+			if (!!navigator.mediaDevices.getUserMedia)
+				navigator.mediaDevices.getUserMedia({ audio: true }).then(handleStream).catch(handleError);
+			else
+				navigator.getUserMedia({ audio: true }, handleStream, handleError);
 		}
 	
 	
