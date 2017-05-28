@@ -3,3 +3,4 @@ logos
 *.sublime-project
 *.sublime-workspace
 *.pem
+npm-debug.log
