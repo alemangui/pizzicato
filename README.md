@@ -29,6 +29,11 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
   - [attack](#sounds-attack)
   - [release](#sounds-release)
   - [frequency](#sounds-frequency)
+  - [Events](#sounds-events)
+    - [play](#sounds-events-play)
+    - [pause](#sounds-events-pause)
+    - [stop](#sounds-events-stop)
+    - [end](#sounds-events-end)
   - [Connecting sounds to AudioNodes](#sounds-connect)
 - [Grouping sounds](#groups)
   - [Create a group](#create-a-group)
@@ -110,11 +115,11 @@ npm install
 
 And then run tests and build with
 ```
-gulp test
+gulp run test
 ```
 
 Or to build without tests:
-```gulp scripts``` or ```gulp watch```
+```npm run build``` or ```npm run watch```
 
 <a name="tldr"/>
 
@@ -415,6 +420,71 @@ sound.play();
 // go up an octave
 sound.frequency = 880; // a5
 ```
+
+<a name="sounds-events" />
+
+### Events
+
+It is possible to subscribe to the following events that will occur on the Sound object: ```play```, ```pause```, ```stop```, ```end```.
+
+<a name="sounds-events-play" />
+
+#### ```play``` event
+
+The ```play``` event will be fired when the sound is played.
+
+Example:
+```javascript
+var sound = new Pizzicato.Sound();
+
+sound.on('play', function() {
+  //...
+})
+```
+
+
+<a name="sounds-events-pause" />
+
+#### ```pause``` event
+
+Fired when the sound is paused. For example:
+
+```javascript
+var sound = new Pizzicato.Sound();
+
+sound.on('pause', function() {
+  //...
+})
+```
+
+<a name="sounds-events-stop" />
+
+#### ```stop``` event
+
+Fired when the sound is stopped. For example:
+
+```javascript
+var sound = new Pizzicato.Sound();
+
+sound.on('stop', function() {
+  //...
+})
+```
+
+<a name="sounds-events-end" />
+
+#### ```end``` event
+
+Fired when the sound has ended. This is only valid for sounds coming from a file. For example:
+
+```javascript
+var sound = new Pizzicato.Sound();
+
+sound.on('end', function() {
+  //...
+})
+```
+
 
 <a name="sounds-connect" />
 
