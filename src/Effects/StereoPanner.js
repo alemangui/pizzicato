@@ -14,8 +14,18 @@ Pizzicato.Effects.StereoPanner = function(options) {
 		this.pannerNode = Pizzicato.context.createStereoPanner();
 		this.inputNode.connect(this.pannerNode);
 		this.pannerNode.connect(this.outputNode);
-	}
-	else {
+
+	} else if (Pizzicato.context.createPanner) {
+
+		console.warn('Your browser does not support the StereoPannerNode. Will use PannerNode instead.');
+
+		this.pannerNode = Pizzicato.context.createPanner();
+		this.pannerNode.type = 'equalpower';
+		this.inputNode.connect(this.pannerNode);
+		this.pannerNode.connect(this.outputNode);
+
+	} else {
+		console.warn('Your browser does not support the Panner effect.');
 		this.inputNode.connect(this.outputNode);
 	}
 
@@ -43,8 +53,16 @@ Pizzicato.Effects.StereoPanner.prototype = Object.create(baseEffect, {
 				return;
 
 			this.options.pan = pan;
-			if (this.pannerNode) {
+
+			if (!this.pannerNode)
+				return;
+
+			var isStereoPannerNode = this.pannerNode.toString().indexOf('StereoPannerNode') > -1;
+
+			if (isStereoPannerNode) {
 				this.pannerNode.pan.value = pan;	
+			} else {
+				this.pannerNode.setPosition(pan, 0, 1 - Math.abs(pan));
 			}
 		}
 	}
