@@ -90,9 +90,17 @@ describe('Group', function() {
 
 		it('can be added and removed', function() {
 			var delay = new Pizzicato.Effects.Delay();
+			var pingPongDelay = new Pizzicato.Effects.PingPongDelay();
 			var group = new Pizzicato.Group();
 					
 			group.addEffect(delay);
+			expect(group.effects.indexOf(delay)).not.toBe(-1);
+
+			group.addEffect(pingPongDelay);
+			expect(group.effects.indexOf(pingPongDelay)).not.toBe(-1);
+
+			group.removeEffect(pingPongDelay);
+			expect(group.effects.indexOf(pingPongDelay)).toBe(-1);
 			expect(group.effects.indexOf(delay)).not.toBe(-1);
 
 			group.removeEffect(delay);

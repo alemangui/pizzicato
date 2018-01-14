@@ -186,7 +186,7 @@ Pizzicato.Group.prototype = Object.create(Pz.Events, {
 				return this;
 			}
 
-			var previousNode = (index === 0) ? this.mergeGainNode : this.effectConnectors(index - 1);
+			var previousNode = (index === 0) ? this.mergeGainNode : this.effectConnectors[index - 1];
 			previousNode.disconnect();
 
 			// Disconnect connector and effect
