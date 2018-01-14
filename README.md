@@ -108,17 +108,19 @@ Minified:
 
 ### Installing and testing
 
-Or checkout the project, install dependencies with 
+*Ensure you have gulp installed:* ```npm install -g gulp```.
+
+Checkout the project and install dependencies with :
 ```
 npm install
 ```
 
-And then run tests and build with
+Run tests with:
 ```
-gulp run test
+npm run test
 ```
 
-Or to build without tests:
+Build without tests with:
 ```npm run build``` or ```npm run watch```
 
 <a name="tldr"/>
