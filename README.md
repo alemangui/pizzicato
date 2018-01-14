@@ -1,4 +1,4 @@
-<img align="center" src="https://alemangui.github.io/pizzicato/img/horizontal-logo.svg" alt="Pizzicato.js">
+<img align="center" src="https://alemangui.github.io/pizzicato/img/horizontal-logo-outline.svg" alt="Pizzicato.js">
 
 [![Build Status](https://travis-ci.org/alemangui/pizzicato.svg?branch=master)](https://travis-ci.org/alemangui/pizzicato) [![npm](https://img.shields.io/npm/v/pizzicato.svg)](https://www.npmjs.com/package/pizzicato) [![Bower](https://img.shields.io/bower/v/pizzicato.svg)](https://bower.io/) [![CDNJS](https://img.shields.io/cdnjs/v/pizzicato.svg)](https://cdnjs.com/libraries/pizzicato)
 
