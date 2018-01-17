@@ -777,16 +777,21 @@
 			value: function() {
 				var currentValue = this.fadeNode.gain.value;
 				this.fadeNode.gain.cancelScheduledValues(Pz.context.currentTime);
-				this.fadeNode.gain.setValueAtTime(currentValue, Pz.context.currentTime);
 	
 				if (!this.attack) {
-					this.fadeNode.gain.setValueAtTime(1.0, Pizzicato.context.currentTime);
+					this.fadeNode.gain.setTargetAtTime(1.0, Pz.context.currentTime, 0.001);
 					return;
 				}
 	
-				var remainingAttackTime = (1 - this.fadeNode.gain.value) * this.attack;
-				this.fadeNode.gain.setValueAtTime(this.fadeNode.gain.value, Pizzicato.context.currentTime);
-				this.fadeNode.gain.linearRampToValueAtTime(1, Pizzicato.context.currentTime + remainingAttackTime);
+				// We can't calculate the remaining attack time 
+				// in Firefox due to https://bugzilla.mozilla.org/show_bug.cgi?id=893020
+				var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+				var remainingAttackTime = this.attack;
+	
+				if (!isFirefox)
+					remainingAttackTime = (1 - this.fadeNode.gain.value) * this.attack;
+	
+				this.fadeNode.gain.setTargetAtTime(1.0, Pz.context.currentTime, remainingAttackTime * 2);
 			}
 		},
 	
@@ -807,16 +812,22 @@
 	
 				var currentValue = this.fadeNode.gain.value;
 				this.fadeNode.gain.cancelScheduledValues(Pz.context.currentTime);
-				this.fadeNode.gain.setValueAtTime(currentValue, Pz.context.currentTime);
 	
 				if (!this.release) {
+					this.fadeNode.gain.setTargetAtTime(0.0, Pz.context.currentTime, 0.001);
 					stopSound();
 					return;
 				}
 	
-				var remainingReleaseTime = this.fadeNode.gain.value * this.release;
-				this.fadeNode.gain.setValueAtTime(this.fadeNode.gain.value, Pizzicato.context.currentTime);
-				this.fadeNode.gain.linearRampToValueAtTime(0.00001, Pizzicato.context.currentTime + remainingReleaseTime);
+				// We can't calculate the remaining attack time 
+				// in Firefox due to https://bugzilla.mozilla.org/show_bug.cgi?id=893020
+				var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+				var remainingReleaseTime = this.release;
+	
+				if (!isFirefox)
+					remainingReleaseTime = this.fadeNode.gain.value * this.release;
+	
+				this.fadeNode.gain.setTargetAtTime(0.00001, Pz.context.currentTime, remainingReleaseTime / 5);
 	
 				window.setTimeout(function() {
 					stopSound();
