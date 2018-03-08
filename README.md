@@ -804,7 +804,7 @@ The following options are available when creating a compressor effect:
 
 Example:
 ```javascript
-var compressor = new Pizzicato.Effects.Delay({
+var compressor = new Pizzicato.Effects.Compressor({
     threshold: -20,
     knee: 22,
     attack: 0.05,
