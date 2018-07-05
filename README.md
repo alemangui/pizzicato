@@ -666,7 +666,7 @@ sound.removeEffect(delay);
 ### Delay ([example](https://alemangui.github.io/pizzicato/#delay))
 The delay effect plays back the sound a certain number of times in defined intervals, giving the impression of an echo. The following options are available when creating a delay effect:
 * ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
-* ```time``` _(min: 0, max: 180, defaults to 0.3)_: Interval time in seconds.
+* ```time``` _(min: 0, max: 1, defaults to 0.3)_: Interval time in seconds.
 * ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output (the delayed sound).
 
 Example:
@@ -685,7 +685,7 @@ sound.play();
 ### Ping Pong Delay ([example](https://alemangui.github.io/pizzicato/#ping-pong-delay))
 The ping pong delay effect is similar to a regular [Delay](#delay) effect, however on each feedback loop the output is swapped between left and right channels. The following options are available when creating a delay effect:
 * ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
-* ```time``` _(min: 0, max: 180, defaults to 0.3)_: Interval time in seconds.
+* ```time``` _(min: 0, max: 1, defaults to 0.3)_: Interval time in seconds.
 * ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output (the delayed sound).
 
 Example:
@@ -708,7 +708,7 @@ This effect is based on [Chris Lowis'](https://twitter.com/chrislowis) article [
 
 The following options are available when creating a delay effect:
 * ```feedback``` _(min: 0, max: 1, defaults to 0.5)_: The intensity with which the input will echo back. A larger value will result in more echo repetitions.
-* ```time``` _(min: 0, max: 180, defaults to 0.3)_: Interval time in seconds.
+* ```time``` _(min: 0, max: 1, defaults to 0.3)_: Interval time in seconds.
 * ```cutoff``` _(min: 0, max: 4000, defaults to 700)_: Frequency value applied to each successive loop. The lower the value, the more different each repetition will be perceived.
 * ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output (the delayed sound).
 
@@ -732,7 +732,7 @@ The distortion effect adds a basic "override" to the sound. The distortion effec
 
 Example:
 ```javascript
-var distortion = new Pizzicato.Effects.Delay({
+var distortion = new Pizzicato.Effects.Distortion({
     gain: 0.4
 });
 sound.addEffect(delay);
@@ -804,7 +804,7 @@ The following options are available when creating a compressor effect:
 
 Example:
 ```javascript
-var compressor = new Pizzicato.Effects.Delay({
+var compressor = new Pizzicato.Effects.Compressor({
     threshold: -20,
     knee: 22,
     attack: 0.05,
@@ -822,7 +822,6 @@ A low-pass filter passes signals with a frequency lower than a pre-determined cu
 
 * ```frequency``` _(min: 10, max: 22050, defaults to 350)_: The cutoff frequency of the low-pass filter.
 * ```peak``` _(min: 0.0001, max: 1000, defaults to 1)_: Indicates how peaked the frequency is around the cutoff frequency. The greater the value is, the greater is the peak.
-* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output.
 
 Example:
 ```javascript
@@ -842,7 +841,6 @@ A high-pass filter is the opposite of a low-pass filter (described above). It at
 
 * ```frequency``` _(min: 10, max: 22050, defaults to 350)_: The cutoff frequency of the high-pass filter.
 * ```peak``` _(min: 0.0001, max: 1000, defaults to 1)_: Indicates how peaked the frequency is around the cutoff frequency. The greater the value is, the greater is the peak.
-* ```mix``` _(min: 0, max: 1, defaults to 0.5)_: Volume balance between the original audio and the effected output.
 
 Example:
 ```javascript
