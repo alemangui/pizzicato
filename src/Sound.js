@@ -60,6 +60,8 @@ Pizzicato.Sound = function(description, callback) {
 	else if (description.source === 'sound')
 		(initializeWithSoundObject.bind(this))(description.options, callback);
 
+	else if (description.source === 'element')
+		(initializeWithSoundElement.bind(this))(description.options, callback);
 
 	function getDescriptionError(description) {
 		var supportedSources = ['wave', 'file', 'input', 'script', 'sound'];
@@ -204,6 +206,20 @@ Pizzicato.Sound = function(description, callback) {
 			this.frequency = options.sound.frequency;
 		}
 	}
+
+	function initializeWithSoundElement(options, callback) {
+		if (options.selector) {
+			options.player = document.querySelector(options.selector);
+		}
+		if (!options.player instanceof HTMLAudioElement) {
+			console.error('Error Element Type');
+			return;
+		}
+		this.getRawSourceNode = function() {
+			return Pizzicato.context.createMediaElementSource(options.player);
+		};
+	}
+	
 };
 
 
