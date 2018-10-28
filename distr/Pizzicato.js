@@ -1977,8 +1977,22 @@
 			impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, this.decay);
 		}
 	
+	        // https://github.com/alemangui/pizzicato/issues/91
+	        // ConvolverNode can be associated with only one buffer.
+	        // Not sure what's the best way, but we are recreating ConvolverNode
+	        // when properties change to work it around.
+	        if (this.reverbNode.buffer) {
+	          this.inputNode.disconnect(this.reverbNode);
+	          this.reverbNode.disconnect(this.wetGainNode);
+	
+	          this.reverbNode = Pizzicato.context.createConvolver();
+	          this.inputNode.connect(this.reverbNode);
+	          this.reverbNode.connect(this.wetGainNode);
+	        }
+	
 		this.reverbNode.buffer = impulse;
 	}
+	
 	Pizzicato.Effects.Tremolo = function(options) {
 	
 		// adapted from
