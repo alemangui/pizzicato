@@ -83,6 +83,24 @@ describe('Group', function() {
 				expect(sounds[i].paused).toBe(false);
 			}
 		});
+		
+		it('should trigger the group end event when the last sound triggers his', function() {			
+			// Force the onEnded call of the last sound,
+			// then check if the group triggers its 'end'
+			// event
+			
+			var sound1 = new Pz.Sound();
+			var sound2 = new Pz.Sound();
+			var sound3 = new Pz.Sound();
+			var sounds = [sound1, sound2, sound3];
+			
+			var group = new Pz.Group(sounds);
+			spyOn(group, 'trigger')
+			
+			sound3.trigger('end');
+			
+			expect(group.trigger).toHaveBeenCalledWith('end');
+		});
 	});
 
 

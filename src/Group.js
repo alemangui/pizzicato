@@ -53,9 +53,15 @@ Pizzicato.Group.prototype = Object.create(Pz.Events, {
 				console.warn('Groups do not support detached sounds. You can manually create an audio graph to group detached sounds together.');
 				return;
 			}
-
+			
 			sound.disconnect(Pz.masterGainNode);
 			sound.connect(this.mergeGainNode);
+			
+			//Switches the observer of the last element
+			if (this.sounds.length > 0)
+				this.sounds[this.sounds.length-1].removeObserver(this);
+			sound.addObserver(this);
+			
 			this.sounds.push(sound);
 		}
 	},
@@ -71,9 +77,16 @@ Pizzicato.Group.prototype = Object.create(Pz.Events, {
 				console.warn('Cannot remove a sound that is not part of this group.');
 				return;
 			}
-
+			
 			sound.disconnect(this.mergeGainNode);
 			sound.connect(Pz.masterGainNode);
+			
+			// Switch the observer of the last sound
+			if (index == this.sounds.length){
+				sound.removeObserver(this);
+				this.sounds[this.sounds.length-2].addObserver(this);
+			}
+			
 			this.sounds.splice(index, 1);
 		}
 	},
@@ -122,7 +135,7 @@ Pizzicato.Group.prototype = Object.create(Pz.Events, {
 
 	pause: {
 		enumerable: true,
-
+		
 		value: function() {
 			for (var i = 0; i < this.sounds.length; i++)
 				this.sounds[i].pause();
@@ -132,6 +145,28 @@ Pizzicato.Group.prototype = Object.create(Pz.Events, {
 
 	},
 
+	onEnded: {
+		enumerable: true,
+		
+		value: function() {
+			this.trigger('end');
+		}		
+		
+	},
+	
+	notify: {
+		enumerable: true,
+	
+		value: function(observable, name) {
+			if (observable == null){
+				console.error("Error, observable was null when calling notify on its observers.");	
+			}
+			if (name == 'end')
+				this.onEnded();
+		}
+		
+	},
+	
 	/**
 	 * Similarly to Sound objects, adding effects will create a graph in which there will be a
 	 * gain node (effectConnector) in between every effect added. For example:

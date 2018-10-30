@@ -1,5 +1,5 @@
 Pizzicato.Events = {
-
+	
 	/**
 	 * Adds an event handler that will be treated upon
 	 * the triggering of that event.
@@ -7,10 +7,10 @@ Pizzicato.Events = {
 	on: function(name, callback, context) {
 		if (!name || !callback)
 			return;
-
+		
 		this._events = this._events || {};
 		var _event = this._events[name] || (this._events[name] = []);
-
+		
 		_event.push({
 			callback: callback,
 			context: context || this,
@@ -23,7 +23,12 @@ Pizzicato.Events = {
 	 * is linked to that event, the handler will be
 	 * executed.
 	 */
-	trigger: function(name) {
+	trigger: function(name) {	
+		this._observers = this._observers || [];
+		for (i = 0; i < this._observers.length; i++) {
+			this._observers[i].notify(this, name);	
+		}
+		
 		if (!name)
 			return;
 
@@ -42,7 +47,7 @@ Pizzicato.Events = {
 			args[i] = arguments[i + 1];
 
 		for (i = 0; i < _event.length; i++)
-			_event[i].callback.apply(_event[i].context, args);	
+			_event[i].callback.apply(_event[i].context, args);
 	},
 
 	/**
@@ -55,6 +60,25 @@ Pizzicato.Events = {
 
 		else
 			this._events = {};
-	}
+	},
 
+	addObserver: function(observer) {
+		this._observers = this._observers || [];
+		
+		if (observer == null){
+			console.error('Error adding observer, a null object was given.');	
+		}
+		
+		this._observers.push(observer);
+	},
+
+	removeObserver: function(observer) {
+		var index = this._observers.indexOf(observer);
+		
+		if (index == -1) {
+			console.error('Error removing observer, not found.');
+		}
+		
+		this._observers.splice(index, 1);
+	}
 };

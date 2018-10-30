@@ -317,8 +317,9 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 
 				if (this.playing)
 					this.stop();
-				if (!this.paused)
+				if (!this.paused) {
 					this.trigger('end');
+				}
 			};
 		}
 	},
