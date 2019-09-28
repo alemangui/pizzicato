@@ -55,6 +55,7 @@ Pizzicato aims to simplify the way you create and manipulate sounds via the Web 
   - [Compressor](#compressor)
   - [Low-pass filter](#low-pass-filter)
   - [High-pass filter](#high-pass-filter)
+  - [Notch filter](#notch-filter)
   - [Stereo Panner](#stereo-panner)
   - [Convolver](#convolver)
   - [Reverb](#reverb)
