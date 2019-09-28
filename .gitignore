@@ -4,3 +4,4 @@ logos
 *.sublime-workspace
 *.pem
 npm-debug.log
+.package-lock.json

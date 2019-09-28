@@ -15,6 +15,16 @@ Pizzicato.Effects.HighPassFilter = function(options) {
 };
 
 /**
+ * Frequencies outside the give range of 
+ * frequencies pass through;
+ * 
+ * frequencies inside it are attenuated.
+ */
+Pizzicato.Effects.NotchFilter = function(options) {
+	Filter.call(this, options, 'notch');
+};
+
+/**
  * Filters used by Pizzicato stem from the biquad filter node. This 
  * function acts as a common constructor. The only thing that changes 
  * between filters is the 'type' of the biquad filter node.
@@ -25,7 +35,8 @@ function Filter(options, type) {
 
 	var defaults = {
 		frequency: 350,
-		peak: 1
+		peak: 1,
+		gain: 0,
 	};
 
 	this.inputNode = this.filterNode = Pz.context.createBiquadFilter();
@@ -77,8 +88,28 @@ var filterPrototype = Object.create(baseEffect, {
 			if (Pizzicato.Util.isInRange(value, 0.0001, 1000))
 				this.filterNode.Q.value = value;
 		}
+	},
+
+	/**
+	 * The boost, in dB, to be applied;
+	 * if negative, it will be an attenuation.
+	 * MIN: -15.0
+	 * MAX: 15.0
+	 */
+	gain: {
+		enumerable: true,
+
+		get: function () {
+			return this.filterNode.gain.value;
+		},
+		set: function(value) {
+			// 15db used as common limit referenced from Ableton Live EQ8
+			if (Pizzicato.Util.isInRange(value, -15.0, 15.0))
+				this.filterNode.gain.value = value;
+		}
 	}
 });
 
 Pizzicato.Effects.LowPassFilter.prototype = filterPrototype;
 Pizzicato.Effects.HighPassFilter.prototype = filterPrototype;
+Pizzicato.Effects.NotchFilter.prototype = filterPrototype;

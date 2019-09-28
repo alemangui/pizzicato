@@ -853,6 +853,25 @@ sound.addEffect(highPassFilter);
 sound.play();
 ```
 
+<a name="notch-filter"/>
+
+### Notch filter ([example](https://alemangui.github.io/pizzicato/#notch-filter))
+Standard notch filter, also called a band-stop or band-rejection filter. It is the opposite of a bandpass filter: frequencies outside the give range of frequencies pass through; frequencies inside it are attenuated.
+
+* ```frequency``` _(min: 10, max: 22050, defaults to 350)_: The center of the range of frequencies.
+* ```peak``` _(min: 0.0001, max: 1000, defaults to 1)_: Controls the width of the frequency band. The greater peak value - the smaller frequency band.
+
+Example:
+```javascript
+var notchFilter = new Pizzicato.Effects.NotchFilter({
+    frequency: 1000,
+    peak: 3.0
+});
+
+sound.addEffect(notchFilter);
+sound.play();
+```
+
 <a name="stereo-panner"/>
 
 ### Stereo panner ([example](https://alemangui.github.io/pizzicato/#stereo-panner))

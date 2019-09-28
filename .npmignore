@@ -3,3 +3,4 @@ logos
 *.sublime-project
 *.sublime-workspace
 site
+.package-lock.json
