@@ -2,7 +2,7 @@ module.exports = function(config) {
 
 	var cfg = {
 
-		browsers: ['Chrome'],
+		browsers: ['Firefox'],
 
 		customLaunchers: {
 			Chrome_travis_ci: {
@@ -28,5 +28,4 @@ module.exports = function(config) {
 		cfg.browsers = ['Chrome_travis_ci'];
 
 	config.set(cfg);
-
 };
