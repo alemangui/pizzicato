@@ -120,6 +120,12 @@ Run tests with:
 npm run test
 ```
 
+By default, Firefox is used for local testing. If you'd like to use Chrome, go to ```karma.conf.js```, line 5, and change the browsers array to :
+
+```
+browsers: ['Chrome'],
+```
+
 Build without tests with:
 ```npm run build``` or ```npm run watch```
 
