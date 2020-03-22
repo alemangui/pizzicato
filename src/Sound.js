@@ -151,8 +151,8 @@ Pizzicato.Sound = function(description, callback) {
 	function initializeWithInput(options, callback) {
 		navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 
-		if (!navigator.getUserMedia && !navigator.mediaDevices.getUserMedia) {
-			console.error('Your browser does not support getUserMedia');
+		if (!navigator.getUserMedia && (!navigator.mediaDevices || ! !navigator.mediaDevices.getUserMedia)) {
+			console.error('Your browser does not support getUserMedia. Note that the current document must be loaded securely for this to work');
 			return;
 		}
 
