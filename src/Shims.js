@@ -4,8 +4,12 @@ var gainNode = Pizzicato.context.createGain();
 var audioNode = Object.getPrototypeOf(Object.getPrototypeOf(gainNode));
 var connect = audioNode.connect;
 
-audioNode.connect = function(node) {
+audioNode.connect = function(node, output, input) {
 	var endpoint = Pz.Util.isEffect(node) ? node.inputNode : node;
-	connect.call(this, endpoint);
+	if (input === undefined) {
+		connect.call(this, endpoint, output);
+	} else {
+		connect.call(this, endpoint, output, input);
+	}
 	return node;
 };
