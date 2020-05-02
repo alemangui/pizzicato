@@ -280,6 +280,18 @@ Pizzicato.Sound.prototype = Object.create(Pizzicato.Events, {
 		}
 	},
 
+	seek: {
+		enumerable: true,
+
+		value: function(offset) {
+			var playing = this.playing;
+			if (playing) this.pause();
+			this.offsetTime = offset;
+			this.trigger('seek');
+			if (playing) this.play();
+		}
+	},
+
 
 	clone: {
 		enumerable: true,

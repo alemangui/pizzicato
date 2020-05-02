@@ -84,6 +84,23 @@ Pizzicato.Group.prototype = Object.create(Pz.Events, {
 	},
 
 
+	connectSource: {
+		enumerable: true,
+
+		value: function(source) {
+			source.connect(this.mergeGainNode);
+		}
+	},
+
+	disconnectSource: {
+		enumerable: true,
+
+		value: function(source) {
+			source.disconnect(this.mergeGainNode);
+		}
+	},
+
+
 	addSound: {
 		enumerable: true,
 
@@ -187,6 +204,22 @@ Pizzicato.Group.prototype = Object.create(Pz.Events, {
 		}
 
 	},
+
+	seek: {
+		enumerable: true,
+
+		value: function(offset) {
+
+			for (var i = 0; i < this.sounds.length; i++)
+				this.sounds[i].seek(offset);
+
+			for (var j = 0; j < this.groups.length; j++)
+				this.groups[j].pause(offset);
+
+			this.trigger('seek');
+		}
+	},
+
 
 	/**
 	 * Similarly to Sound objects, adding effects will create a graph in which there will be a
