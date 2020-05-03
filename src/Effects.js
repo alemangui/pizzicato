@@ -2,6 +2,14 @@ Pizzicato.Effects = {};
 
 var baseEffect = Object.create(null, {
 
+	_isPizzicatoEffectNode: {
+		enumerable: true,
+
+		get value () {
+			return true;
+		}
+	},
+
 	connect: {
 		enumerable: true,
 

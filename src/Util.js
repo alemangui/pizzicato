@@ -38,6 +38,10 @@ Pizzicato.Util = {
 	isAudioBufferSourceNode: function(audioNode) {
 		return (audioNode && audioNode.toString() === "[object AudioBufferSourceNode]");
 	},
+	
+	isGroup: function(group) {
+		return group instanceof Pz.Group;
+	},
 
 	isSound: function(sound) {
 		return sound instanceof Pz.Sound;

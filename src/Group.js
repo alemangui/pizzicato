@@ -1,10 +1,12 @@
-Pizzicato.Group = function(sounds) {
-
+Pizzicato.Group = function(sounds, groups) {
+	
 	sounds = sounds || [];
+	groups = groups || [];
 	
 	this.mergeGainNode = Pz.context.createGain();
 	this.masterVolume = Pz.context.createGain();
 	this.sounds = [];
+	this.groups = [];
 	this.effects = [];
 	this.effectConnectors = [];
 
@@ -13,6 +15,10 @@ Pizzicato.Group = function(sounds) {
 
 	for (var i = 0; i < sounds.length; i++)
 		this.addSound(sounds[i]);
+
+	for (var j = 0; j < groups.length; j++)
+		this.addGroup(groups[j]);
+
 };
 
 Pizzicato.Group.prototype = Object.create(Pz.Events, {
@@ -33,6 +39,64 @@ Pizzicato.Group.prototype = Object.create(Pz.Events, {
 		value: function(audioNode) {
 			this.masterVolume.disconnect(audioNode);
 			return this;
+		}
+	},
+
+
+	addGroup: {
+		enumerable: true,
+
+		value: function(group) {
+			if (!Pz.Util.isGroup(group)) {
+				console.error('You can only add Pizzicato.Group objects');
+				return;
+			}
+			if (this.groups.indexOf(group) > -1) {
+				console.warn('The Pizzicato.Group object was already added to this group');
+				return;
+			}
+			if (group.detached) {
+				console.warn('Groups do not support detached groups. You can manually create an audio graph to group detached groups together.');
+				return;
+			}
+			group.masterVolume.disconnect(Pz.masterGainNode);
+			group.masterVolume.connect(this.mergeGainNode);
+			this.groups.push(group);
+		}
+	},
+
+
+	removeGroup: {
+		enumerable: true,
+
+		value: function(group) {
+			var index = this.groups.indexOf(group);
+
+			if (index === -1) {
+				console.warn('Cannot remove a group that is not part of this group.');
+				return;
+			}
+
+			group.masterVolume.disconnect(this.mergeGainNode);
+			group.masterVolume.connect(Pz.masterGainNode);
+			this.groups.splice(index, 1);
+		}
+	},
+
+
+	connectSource: {
+		enumerable: true,
+
+		value: function(source) {
+			source.connect(this.mergeGainNode);
+		}
+	},
+
+	disconnectSource: {
+		enumerable: true,
+
+		value: function(source) {
+			source.disconnect(this.mergeGainNode);
 		}
 	},
 
@@ -101,6 +165,9 @@ Pizzicato.Group.prototype = Object.create(Pz.Events, {
 			for (var i = 0; i < this.sounds.length; i++)
 				this.sounds[i].play();
 
+			for (var j = 0; j < this.groups.length; j++)
+				this.groups[j].play();
+
 			this.trigger('play');
 		}
 
@@ -113,6 +180,9 @@ Pizzicato.Group.prototype = Object.create(Pz.Events, {
 		value: function() {
 			for (var i = 0; i < this.sounds.length; i++)
 				this.sounds[i].stop();
+
+			for (var j = 0; j < this.groups.length; j++)
+				this.groups[j].stop();
 
 			this.trigger('stop');
 		}
@@ -127,10 +197,29 @@ Pizzicato.Group.prototype = Object.create(Pz.Events, {
 			for (var i = 0; i < this.sounds.length; i++)
 				this.sounds[i].pause();
 
+			for (var j = 0; j < this.groups.length; j++)
+				this.groups[j].pause();
+
 			this.trigger('pause');
 		}
 
 	},
+
+	seek: {
+		enumerable: true,
+
+		value: function(offset) {
+
+			for (var i = 0; i < this.sounds.length; i++)
+				this.sounds[i].seek(offset);
+
+			for (var j = 0; j < this.groups.length; j++)
+				this.groups[j].pause(offset);
+
+			this.trigger('seek');
+		}
+	},
+
 
 	/**
 	 * Similarly to Sound objects, adding effects will create a graph in which there will be a
