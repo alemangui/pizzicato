@@ -5,7 +5,7 @@ describe('Sound', function() {
 		it('should create by default a sinewave sound with 440 frequency', function() {
 			var sound = new Pizzicato.Sound();
 
-			expect(toString.call(sound.getSourceNode())).toBe('[object OscillatorNode]');
+			expect(['[object OscillatorNode]', '[object WebKitOscillatorNode]']).toContain(toString.call(sound.getSourceNode()));
 			expect(sound.getSourceNode().frequency.value).toBe(440);
 			expect(sound.getSourceNode().type).toBe('sine');
 		});
@@ -79,7 +79,7 @@ describe('Sound', function() {
 
 			it('should create an oscillator node', function() {
 				var sound = new Pizzicato.Sound({ source: 'wave' });
-				expect(toString.call(sound.getSourceNode())).toBe('[object OscillatorNode]');
+				expect(['[object OscillatorNode]', '[object WebKitOscillatorNode]']).toContain(toString.call(sound.getSourceNode()));
 			});
 
 			it('should execute callback function', function(done) {

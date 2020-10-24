@@ -32,7 +32,7 @@ Pizzicato.Util = {
 	},
 
 	isOscillator: function(audioNode) {
-		return (audioNode && audioNode.toString() === "[object OscillatorNode]");
+		return (audioNode && (audioNode.toString() === "[object OscillatorNode]" || audioNode.toString() === "[object WebKitOscillatorNode]"));
 	},
 
 	isAudioBufferSourceNode: function(audioNode) {
