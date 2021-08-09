@@ -13,39 +13,46 @@ Pizzicato.Effects.ThreeBandEqualizer = function(options) {
 function Equalizer(options) {
     this.options = {};
     options = options || this.options;
-
+    
     var defaults = {
-        cutoff_frequency_low: 400,
-        cutoff_frequency_high: 4000,
-        low_band_gain: 1,
-        mid_band_gain: 1,
-        high_band_gain: 1,
-        peak: 1
+	cutoff_frequency_low: 400,
+	cutoff_frequency_high: 4000,
+	low_band_gain: 1,
+	mid_band_gain: 1,
+	high_band_gain: 1,
+	peak: 1
     };
     
+    // Pre-filter gain stage
     this.inputNode = Pz.context.createGain();
+    // Post-filter master gain stage
     this.outputNode = Pz.context.createGain();
-
+    
     this.lowFilterNode = Pz.context.createBiquadFilter();
     this.lowFilterNode.type = 'lowpass';
-    this.lowFilterNode.frequency = cutoff_frequency_low;
-    this.lowFilterNode.gain = low_band_gain;
     this.inputNode.connect(this.lowFilterNode);
-
+    this.lowGainNode = Pz.context.createGain();
+    this.lowFilterNode.connect(this.lowGainNode);
+    
     this.midFilterNode = Pz.context.createBiquadFilter();
     this.midFilterNode.type = 'bandpass';
-    this.midFilterNode.frequency = 0.5 * (cutoff_frequency_low + cutoff_frequency_high);
-    this.midFilterNode.gain = mid_band_gain;
-
-
+    this.inputNode.connect(this.midFilterNode);
+    this.midGainNode = Pz.context.createGain();
+    this.midFilterNode.connect(this.midGainNode);
+    
     this.highFilterNode = Pz.context.createBiquadFilter();
     this.highFilterNode.type = 'highpass';
-    this.highFilterNode.frequency = cutoff_frequency_high;
-    this.highFilterNode.gain = high_band_gain;
     this.inputNode.connect(this.highFilterNode);
-
-    this.lowFilterNode.connect(this.outputNode);
-    this.highFilterNode.connect(this.outputNode);
+    this.highGainNode = Pz.context.createGain();
+    this.highFilterNode.connect(this.highGainNode);
+    
+    this.lowGainNode.connect(this.outputNode);
+    this.midGainNode.connect(this.outputNode);
+    this.highGainNode.connect(this.outputNode);
+    
+    // Prime the options with good values so that the mid-band center frequency can be calculated as the chosen options are set
+    this.options.cutoff_frequency_low = defaults.cutoff_frequency_low;
+    this.options.cutoff_frequency_high = defaults.cutoff_frequency_high;
 
     for (var key in defaults) {
 	this[key] = options[key];
@@ -64,14 +71,17 @@ var equalizerPrototype = Object.create(baseEffect, {
 	enumerable: true,
 	
 	get: function() {
-	    return this.lowFilterNode.frequency.value;
+	    return this.options.cutoff_frequency_low;
 	},
 	set: function(value) {
-	    if (Pizzicato.Util.isInRange(value, 10, 22050))
+	    if (Pizzicato.Util.isInRange(value, 10, 22050)) {
+                this.options.cutoff_frequency_low = value;
 		this.lowFilterNode.frequency.value = value;
+                this.midFilterNode.frequency.value = 0.5 * (this.options.cutoff_frequency_low + this.options.cutoff_frequency_high);
+            }
 	}
     },
-
+    
     /**
      * The cutoff frequency of the high band.
      * MIN: 10
@@ -81,65 +91,74 @@ var equalizerPrototype = Object.create(baseEffect, {
 	enumerable: true,
 	
 	get: function() {
-	    return this.highFilterNode.frequency.value;
+	    return this.options.cutoff_frequency_high;
 	},
 	set: function(value) {
-	    if (Pizzicato.Util.isInRange(value, 10, 22050))
+	    if (Pizzicato.Util.isInRange(value, 10, 22050)) {
+                this.options.cutoff_frequency_high = value;
 		this.highFilterNode.frequency.value = value;
+                this.midFilterNode.frequency.value = 0.5 * (this.options.cutoff_frequency_low + this.options.cutoff_frequency_high);
+            }
 	}
     },
-
+    
     /**
      * The gain of the low frequency band
-     * MIN: 0.0
-     * MAX: 2
+     * MIN: -40
+     * MAX: 15
      */
     low_band_gain: {
 	enumerable: true,
 	
 	get: function() {
-	    return this.lowFilterNode.gain.value;
+	    return this.options.low_band_gain;
 	},
 	set: function(value) {
-	    if (Pizzicato.Util.isInRange(value, 0.0, 2))
-		this.lowFilterNode.gain.value = value;
+	    if (Pizzicato.Util.isInRange(value, -40, 15)){
+                this.options.low_band_gain = value;
+		this.lowGainNode.gain.value = Math.pow(10,value/20);
+            }
 	}
     },
-
+    
     /**
-     * The gain of the mid frequency band
-     * MIN: 0.0
-     * MAX: 2
+     * The gain of the mid frequency band in dB
+     * MIN: -40
+     * MAX: 15
      */
     mid_band_gain: {
 	enumerable: true,
 	
 	get: function() {
-	    return this.midFilterNode.gain.value;
+	    return this.options.mid_band_gain;
 	},
 	set: function(value) {
-	    if (Pizzicato.Util.isInRange(value, 0.0, 2))
-		this.midFilterNode.gain.value = value;
+	    if (Pizzicato.Util.isInRange(value, -40, 15)) {
+                this.options.mid_band_gain = value;
+		this.midGainNode.gain.value = Math.pow(10,value/20);
+            }
 	}
     },
-
+    
     /**
-     * The gain of the high frequency band
-     * MIN: 0.0
-     * MAX: 2
+     * The gain of the high frequency band in dB
+     * MIN: -40
+     * MAX: 15
      */
     high_band_gain: {
 	enumerable: true,
 	
 	get: function() {
-	    return this.highFilterNode.gain.value;
+	    return this.options.high_band_gain;
 	},
 	set: function(value) {
-	    if (Pizzicato.Util.isInRange(value, 0.0, 2))
-		this.highFilterNode.gain.value = value;
+	    if (Pizzicato.Util.isInRange(value, -40, 15)) {
+                this.options.high_band_gain = value;
+		this.highGainNode.gain.value = Math.pow(10,value/20);
+            }
 	}
     },
-
+    
     /**
      * Indicates how peaked the frequency is around 
      * the cutoff. The greater the value is, the 
@@ -156,8 +175,8 @@ var equalizerPrototype = Object.create(baseEffect, {
 	set: function(value) {
 	    if (Pizzicato.Util.isInRange(value, 0.0001, 1000))
 		this.lowFilterNode.Q.value = value;
-		this.midFilterNode.Q.value = value;
-		this.highFilterNode.Q.value = value;
+	    this.midFilterNode.Q.value = value;
+	    this.highFilterNode.Q.value = value;
 	}
     }
 });
