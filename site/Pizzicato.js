@@ -2010,12 +2010,14 @@
 	    options = options || this.options;
 	    
 	    var defaults = {
-		cutoff_frequency_low: 400,
-		cutoff_frequency_high: 4000,
+		cutoff_frequency_low: 100,
+		cutoff_frequency_high: 8000,
 		low_band_gain: 1,
 		mid_band_gain: 1,
 		high_band_gain: 1,
-		peak: 1
+		low_peak: 1,
+		mid_peak: 1,
+		high_peak: 1
 	    };
 	    
 	    // Pre-filter gain stage
@@ -2041,9 +2043,16 @@
 	    this.highGainNode = Pz.context.createGain();
 	    this.highFilterNode.connect(this.highGainNode);
 	    
-	    this.lowGainNode.connect(this.outputNode);
-	    this.midGainNode.connect(this.outputNode);
-	    this.highGainNode.connect(this.outputNode);
+	    this.analyserNode = Pz.context.createAnalyser();
+	    this.lowGainNode.connect(this.analyserNode);
+	    this.midGainNode.connect(this.analyserNode);
+	    this.highGainNode.connect(this.analyserNode);
+	
+	    this.analyserNode.connect(this.outputNode);
+	    this.analyserNode.minDecibels = -90;
+	    this.analyserNode.maxDecibels = 15;
+	    this.analyserNode.smoothingTimeConstant = 0.85;
+	    this.analyserNode.fftSize = 256;
 	    
 	    // Prime the options with good values so that the mid-band center frequency can be calculated as the chosen options are set
 	    this.options.cutoff_frequency_low = defaults.cutoff_frequency_low;
@@ -2072,7 +2081,7 @@
 		    if (Pizzicato.Util.isInRange(value, 10, 22050)) {
 	                this.options.cutoff_frequency_low = value;
 			this.lowFilterNode.frequency.value = value;
-	                this.midFilterNode.frequency.value = 0.5 * (this.options.cutoff_frequency_low + this.options.cutoff_frequency_high);
+	                this.midFilterNode.frequency.value = 0.707 * (this.options.cutoff_frequency_low + this.options.cutoff_frequency_high);
 	            }
 		}
 	    },
@@ -2092,7 +2101,7 @@
 		    if (Pizzicato.Util.isInRange(value, 10, 22050)) {
 	                this.options.cutoff_frequency_high = value;
 			this.highFilterNode.frequency.value = value;
-	                this.midFilterNode.frequency.value = 0.5 * (this.options.cutoff_frequency_low + this.options.cutoff_frequency_high);
+	                this.midFilterNode.frequency.value = 0.707 * (this.options.cutoff_frequency_low + this.options.cutoff_frequency_high);
 	            }
 		}
 	    },
@@ -2159,21 +2168,104 @@
 	     * the cutoff. The greater the value is, the 
 	     * greater is the peak.
 	     * MIN: 0.0001
-	     * MAX: 1000
+	     * MAX: 100
 	     */
-	    peak: {
+	    low_peak: {
 		enumerable: true,
 		
 		get: function() {
 		    return this.lowFilterNode.Q.value;
 		},
 		set: function(value) {
-		    if (Pizzicato.Util.isInRange(value, 0.0001, 1000))
+		    if (Pizzicato.Util.isInRange(value, 0.0001, 100)) {
 			this.lowFilterNode.Q.value = value;
-		    this.midFilterNode.Q.value = value;
-		    this.highFilterNode.Q.value = value;
+		    }
+		}
+	    },
+	    
+	    /**
+	     * Indicates how peaked the frequency is around 
+	     * the cutoff. The greater the value is, the 
+	     * greater is the peak.
+	     * MIN: 0.0001
+	     * MAX: 100
+	     */
+	    mid_peak: {
+		enumerable: true,
+		
+		get: function() {
+		    return this.midFilterNode.Q.value;
+		},
+		set: function(value) {
+		    if (Pizzicato.Util.isInRange(value, 0.0001, 100)) {
+			this.midFilterNode.Q.value = value;
+		    }
+		}
+	    },
+	    
+	    /**
+	     * Indicates how peaked the frequency is around 
+	     * the cutoff. The greater the value is, the 
+	     * greater is the peak.
+	     * MIN: 0.0001
+	     * MAX: 1000
+	     */
+	    high_peak: {
+		enumerable: true,
+		
+		get: function() {
+		    return this.highFilterNode.Q.value;
+		},
+		set: function(value) {
+		    if (Pizzicato.Util.isInRange(value, 0.0001, 1000)) {
+			this.highFilterNode.Q.value = value;
+		    }
+		}
+	    },
+	    
+	    /**
+	     * The visualizer bin count, how many bars to display
+	     */
+	    visualizerBinCount: {
+		enumerable: true,
+		
+		get: function() {
+		    return this.analyserNode.frequencyBinCount;
+		},
+	        set: function(value) {
+	            if (Pizzicato.Util.isInRange(value,16,1024)) {
+	                this.analyzerNode.fftSize = value;
+	            }
+	        }
+	    },
+	
+	    /**
+	     * Expose the analyserNode so that we can grab the frequency data, needed since a Uint8Array can't be passed
+	     */
+	    analyser: {
+		enumerable: true,
+		
+		get: function() {
+		    return this.analyserNode;
+		}
+	    },
+	
+	    /**
+	     * Expose the analyserNode so that we can grab the frequency data, needed since a Uint8Array can't be passed
+	     */
+	    frequencyData: {
+		enumerable: true,
+		
+		get: function() {
+	            if (this.byteFrequencyData === undefined)
+	                this.byteFrequencyData = new Uint8Array(this.analyserNode.frequencyBinCount.value);
+	
+	            this.analyserNode.getByteFrequencyData(this.FrequencyData);
+	
+		    return this.byteFrequencyData;
 		}
 	    }
+	
 	});
 	
 	Pizzicato.Effects.ThreeBandEqualizer.prototype = equalizerPrototype;
