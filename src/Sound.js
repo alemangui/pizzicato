@@ -60,6 +60,9 @@ Pizzicato.Sound = function(description, callback) {
 	else if (description.source === 'sound')
 		(initializeWithSoundObject.bind(this))(description.options, callback);
 
+	else if (description.source === 'audioElement')
+		(initializeWithAudioElement.bind(this))(description.options, callback);
+
 
 	function getDescriptionError(description) {
 		var supportedSources = ['wave', 'file', 'input', 'script', 'sound'];
@@ -175,6 +178,20 @@ Pizzicato.Sound = function(description, callback) {
 			navigator.getUserMedia({ audio: true }, handleStream, handleError);
 	}
 
+	function initializeWithAudioElement(options, callback) {
+		this.getRawSourceNode = function() {
+			if (options.audioElement.mozCaptureStream) {
+				return Pizzicato.context.createMediaStreamSource(options.audioElement.mozCaptureStream());
+			} else {
+				return Pizzicato.context.createMediaStreamSource(options.audioElement.captureStream());
+			}
+		};
+		this.sourceNode = this.getRawSourceNode();
+		this.sourceNode.gainSuccessor = Pz.context.createGain();
+		this.sourceNode.connect(this.sourceNode.gainSuccessor);
+		if (util.isFunction(callback))
+			callback();
+	}
 
 	function initializeWithFunction(options, callback) {
 		var audioFunction = util.isFunction(options) ? options : options.audioFunction;
