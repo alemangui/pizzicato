@@ -19,7 +19,7 @@
 	"devDependencies": {
 		"gulp": "4.0.2",
 		"gulp-include": "2.3.1",
-		"gulp-jshint": "1.9.2",
+		"gulp-jshint": "2.1.0",
 		"gulp-rename": "1.2.2",
 		"gulp-uglify": "1.5.3",
 		"jasmine-core": "2.6.2",
