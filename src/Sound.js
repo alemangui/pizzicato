@@ -46,7 +46,7 @@ Pizzicato.Sound = function(description, callback) {
 		(initializeWithFunction.bind(this))(description, callback);
 
 	else if (description.source === 'file')
-		(initializeWithUrl.bind(this))(description.options.path, callback);
+		(initializeWithUrl.bind(this))(description.options.path, callback, description.options.headers);
 
 	else if (description.source === 'wave')
 		(initializeWithWave.bind(this))(description.options, callback);
@@ -100,11 +100,18 @@ Pizzicato.Sound = function(description, callback) {
 	}
 
 
-	function initializeWithUrl(paths, callback) {
+	function initializeWithUrl(paths, callback, headers) {
 		paths = util.isArray(paths) ? paths : [paths];
 
 		var request = new XMLHttpRequest();
 		request.open('GET', paths[0], true);
+		
+		if (headers) {
+			for (var key in headers) {
+				request.setRequestHeader(key, headers[key]);
+			}
+		}
+		
 		request.responseType = 'arraybuffer';
 
 		request.onload = function(progressEvent) {
