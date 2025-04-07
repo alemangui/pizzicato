@@ -1,3 +1,6 @@
+> [!NOTE]  
+> Due to lack of time to focus on this project, **I'm actively looking for maintainers** who might be interested in working on Pizzicato. Don't hesitate to contact me! In the meantime, consider the project deprecated.
+
 <img align="center" src="https://alemangui.github.io/pizzicato/img/horizontal-logo-outline.svg" alt="Pizzicato.js">
 
 [![Build Status](https://travis-ci.org/alemangui/pizzicato.svg?branch=master)](https://travis-ci.org/alemangui/pizzicato) [![npm](https://img.shields.io/npm/v/pizzicato.svg)](https://www.npmjs.com/package/pizzicato) [![Bower](https://img.shields.io/bower/v/pizzicato.svg)](https://bower.io/) [![CDNJS](https://img.shields.io/cdnjs/v/pizzicato.svg)](https://cdnjs.com/libraries/pizzicato)
