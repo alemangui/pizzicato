@@ -169,10 +169,11 @@ Pizzicato.Sound = function(description, callback) {
 				callback(error);
 		};
 
+		const audioConstraints = options && options.audioConstraints ? options.audioConstraints : true;
 		if (!!navigator.mediaDevices.getUserMedia)
-			navigator.mediaDevices.getUserMedia({ audio: true }).then(handleStream).catch(handleError);
+			navigator.mediaDevices.getUserMedia({audio: audioConstraints}).then(handleStream).catch(handleError);
 		else
-			navigator.getUserMedia({ audio: true }, handleStream, handleError);
+			navigator.getUserMedia({audio: audioConstraints}, handleStream, handleError);
 	}
 
 
