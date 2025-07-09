@@ -26,85 +26,165 @@
 	masterGainNode.connect(Pizzicato.context.destination);
 
 	Pizzicato.Util = {
+
 	
+
 		isString: function(arg) {
+
 			return toString.call(arg) === '[object String]';
+
 		},
+
 	
+
 		isObject: function(arg) {
+
 			return toString.call(arg) === '[object Object]';
+
 		},
+
 	
+
 		isFunction: function(arg) {
+
 			return toString.call(arg) === '[object Function]';
+
 		},
+
 	
+
 		isNumber: function(arg) {
+
 			return toString.call(arg) === '[object Number]' && arg === +arg;
+
 		},
+
 	
+
 		isArray: function(arg) {
+
 			return toString.call(arg) === '[object Array]';
+
 		},
+
 	
+
 		isInRange: function(arg, min, max) {
+
 			if (!Pz.Util.isNumber(arg) || !Pz.Util.isNumber(min) || !Pz.Util.isNumber(max))
+
 				return false;
+
 	
+
 			return arg >= min && arg <= max;
+
 		},
+
 	
+
 		isBool: function(arg) {
+
 			return typeof(arg) === "boolean";
+
 		},
+
 	
+
 		isOscillator: function(audioNode) {
+
 			return (audioNode && audioNode.toString() === "[object OscillatorNode]");
+
 		},
+
 	
+
 		isAudioBufferSourceNode: function(audioNode) {
+
 			return (audioNode && audioNode.toString() === "[object AudioBufferSourceNode]");
+
 		},
+
 	
+
 		isSound: function(sound) {
+
 			return sound instanceof Pz.Sound;
+
 		},
+
 	
+
 		isEffect: function(effect) {
+
 			for (var key in Pizzicato.Effects)
+
 				if (effect instanceof Pizzicato.Effects[key])
+
 					return true;
+
 	
+
 			return false;
+
 		},
+
 	
+
 		// Takes a number from 0 to 1 and normalizes it to fit within range floor to ceiling
+
 		normalize: function(num, floor, ceil) {
+
 			if (!Pz.Util.isNumber(num) || !Pz.Util.isNumber(floor) || !Pz.Util.isNumber(ceil))
+
 				return;
+
 			
+
 			return ((ceil - floor) * num) / 1 + floor;
+
 		},
+
 	
+
 		getDryLevel: function(mix) {
+
 			if (!Pz.Util.isNumber(mix) || mix > 1 || mix < 0)
+
 				return 0;
+
 	
+
 			if (mix <= 0.5)
+
 				return 1;
+
 	
+
 			return 1 - ((mix - 0.5) * 2);
+
 		},
+
 	
+
 		getWetLevel: function(mix) {
+
 			if (!Pz.Util.isNumber(mix) || mix > 1 || mix < 0)
+
 				return 0;
+
 	
+
 			if (mix >= 0.5)
+
 				return 1;
+
 	
+
 			return 1 - ((0.5 - mix) * 2);
+
 		}
+
 	};
 	/* In order to allow an AudioNode to connect to a Pizzicato 
 	Effect object, we must shim its connect method */
@@ -142,66 +222,126 @@
 			console.error('Can\'t set the master gain node');
 		}
 	});
-		Pizzicato.Events = {
-		
-			/**
-			 * Adds an event handler that will be treated upon
-			 * the triggering of that event.
-			 */
-			on: function(name, callback, context) {
-				if (!name || !callback)
-					return;
-		
-				this._events = this._events || {};
-				var _event = this._events[name] || (this._events[name] = []);
-		
-				_event.push({
-					callback: callback,
-					context: context || this,
-					handler: this
-				});
-			},
-		
-			/**
-			 * Triggers a particular event. If a handler
-			 * is linked to that event, the handler will be
-			 * executed.
-			 */
-			trigger: function(name) {
-				if (!name)
-					return;
-		
-				var _event, length, args, i;
-		
-				this._events = this._events || {};
-				_event = this._events[name] || (this._events[name] = []);
-		
-				if (!_event)
-					return;
-		
-				length = Math.max(0, arguments.length - 1);
-				args = [];
-		
-				for (i = 0; i < length; i++) 
-					args[i] = arguments[i + 1];
-		
-				for (i = 0; i < _event.length; i++)
-					_event[i].callback.apply(_event[i].context, args);	
-			},
-		
-			/**
-			 * Removes an event handler. If no name is provided,
-			 * all handlers for this object will be removed.
-			 */
-			off: function(name) {
-				if (name)
-					this._events[name] = undefined;
-		
-				else
-					this._events = {};
-			}
-		
-		};
+	
+	Pizzicato.Events = {
+	
+	
+	
+		/**
+	
+		 * Adds an event handler that will be treated upon
+	
+		 * the triggering of that event.
+	
+		 */
+	
+		on: function(name, callback, context) {
+	
+			if (!name || !callback)
+	
+				return;
+	
+	
+	
+			this._events = this._events || {};
+	
+			var _event = this._events[name] || (this._events[name] = []);
+	
+	
+	
+			_event.push({
+	
+				callback: callback,
+	
+				context: context || this,
+	
+				handler: this
+	
+			});
+	
+		},
+	
+	
+	
+		/**
+	
+		 * Triggers a particular event. If a handler
+	
+		 * is linked to that event, the handler will be
+	
+		 * executed.
+	
+		 */
+	
+		trigger: function(name) {
+	
+			if (!name)
+	
+				return;
+	
+	
+	
+			var _event, length, args, i;
+	
+	
+	
+			this._events = this._events || {};
+	
+			_event = this._events[name] || (this._events[name] = []);
+	
+	
+	
+			if (!_event)
+	
+				return;
+	
+	
+	
+			length = Math.max(0, arguments.length - 1);
+	
+			args = [];
+	
+	
+	
+			for (i = 0; i < length; i++) 
+	
+				args[i] = arguments[i + 1];
+	
+	
+	
+			for (i = 0; i < _event.length; i++)
+	
+				_event[i].callback.apply(_event[i].context, args);	
+	
+		},
+	
+	
+	
+		/**
+	
+		 * Removes an event handler. If no name is provided,
+	
+		 * all handlers for this object will be removed.
+	
+		 */
+	
+		off: function(name) {
+	
+			if (name)
+	
+				this._events[name] = undefined;
+	
+	
+	
+			else
+	
+				this._events = {};
+	
+		}
+	
+	
+	
+	};
 	Pizzicato.Sound = function(description, callback) {
 		var self = this;
 		var util = Pizzicato.Util;
@@ -250,7 +390,7 @@
 			(initializeWithFunction.bind(this))(description, callback);
 	
 		else if (description.source === 'file')
-			(initializeWithUrl.bind(this))(description.options.path, callback);
+			(initializeWithUrl.bind(this))(description.options.path, callback, description.options.headers);
 	
 		else if (description.source === 'wave')
 			(initializeWithWave.bind(this))(description.options, callback);
@@ -304,11 +444,18 @@
 		}
 	
 	
-		function initializeWithUrl(paths, callback) {
+		function initializeWithUrl(paths, callback, headers) {
 			paths = util.isArray(paths) ? paths : [paths];
 	
 			var request = new XMLHttpRequest();
 			request.open('GET', paths[0], true);
+			
+			if (headers) {
+				for (var key in headers) {
+					request.setRequestHeader(key, headers[key]);
+				}
+			}
+			
 			request.responseType = 'arraybuffer';
 	
 			request.onload = function(progressEvent) {

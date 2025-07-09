@@ -148,6 +148,20 @@ describe('Sound', function() {
 			});
 		});
 
+		describe('file source with header', function() {
+
+			it('should create an audio buffer node when initialized with a file source and with a custom header', function(done) {
+				var sound = new Pizzicato.Sound({ 
+					source: 'file',
+					options: { path: 'base/tests/audio/bird.wav', headers: { 'Authorization': 'Bearer 123456' } }
+				}, function(error) {
+					expect(error).toBe(undefined);
+					done();
+				});
+			}, 5000);
+		});
+		
+
 		describe('input source', function() {
 
 			it('should get the audio input when initialized with an input source', function() {
